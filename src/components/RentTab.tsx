@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -45,6 +45,17 @@ export default function RentTab({
   heroImages
 }: RentTabProps) {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [temperature, setTemperature] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Получаем температуру для Москвы
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173&current_weather=true')
+      .then(res => res.json())
+      .then(data => {
+        setTemperature(Math.round(data.current_weather.temperature));
+      })
+      .catch(() => setTemperature(null));
+  }, []);
 
   return (
     <div className="animate-fade-in">
@@ -63,12 +74,26 @@ export default function RentTab({
         ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
         <div className="relative z-10 text-center text-white px-6 max-w-5xl">
+          <div className="flex items-center justify-center gap-6 mb-6 fade-slide-in">
+            <h2 
+              className="text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+            >
+              УЮТНАЯ ЗИМА
+            </h2>
+            {temperature !== null && (
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
+                <Icon name="Thermometer" size={32} className="text-blue-300" />
+                <span className="text-4xl font-bold">{temperature > 0 ? '+' : ''}{temperature}°</span>
+              </div>
+            )}
+          </div>
           <h2 
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight transition-all duration-500 fade-slide-in"
-            style={{ fontFamily: 'Syne, sans-serif' }}
+            className="text-3xl md:text-4xl font-bold mb-6 tracking-tight transition-all duration-500 fade-slide-in"
+            style={{ fontFamily: 'Syne, sans-serif', animationDelay: '0.2s' }}
             dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
           />
-          <p className="text-xl md:text-2xl font-light mb-2 text-white/90 fade-slide-in" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl md:text-2xl font-light mb-2 text-white/90 fade-slide-in" style={{ animationDelay: '0.3s' }}>
             №1 в почасовой аренде
           </p>
           <p className="text-lg md:text-xl font-light mb-8 text-white/80 fade-slide-in" style={{ animationDelay: '0.3s' }}>
