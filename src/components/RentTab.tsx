@@ -48,6 +48,13 @@ export default function RentTab({
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('hotels');
+  const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
+
+  const apartmentCoordinates: Record<number, { lat: number; lon: number }> = {
+    1: { lat: 55.740700, lon: 37.597700 }, // Остоженка, 12
+    2: { lat: 55.760500, lon: 37.605300 }, // Тверская, 25
+    3: { lat: 55.742200, lon: 37.609700 }  // Болотная наб., 3
+  };
 
   const categoryConfig = {
     hotels: { title: 'Отели', placeholder: 'Найти отель по адресу или метро', icon: 'Building2' },
@@ -201,7 +208,10 @@ export default function RentTab({
           </div>
           <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
             <iframe
-              src={`https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=12&l=map&pt=37.597700,55.740700,pm2rdm~37.605300,55.760500,pm2rdm~37.609700,55.742200,pm2rdm`}
+              key={selectedApartment}
+              src={selectedApartment && apartmentCoordinates[selectedApartment]
+                ? `https://yandex.ru/map-widget/v1/?ll=${apartmentCoordinates[selectedApartment].lon}%2C${apartmentCoordinates[selectedApartment].lat}&z=15&l=map&pt=37.597700,55.740700,pm2${selectedApartment === 1 ? 'blm' : 'rdm'}~37.605300,55.760500,pm2${selectedApartment === 2 ? 'blm' : 'rdm'}~37.609700,55.742200,pm2${selectedApartment === 3 ? 'blm' : 'rdm'}`
+                : `https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=12&l=map&pt=37.597700,55.740700,pm2rdm~37.605300,55.760500,pm2rdm~37.609700,55.742200,pm2rdm`}
               width="100%"
               height="100%"
               frameBorder="0"
@@ -217,8 +227,11 @@ export default function RentTab({
             return (
               <Card 
                 key={apt.id} 
-                className="overflow-hidden border-0 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2"
-                onClick={() => trackView(apt.id)}
+                className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
+                onClick={() => {
+                  trackView(apt.id);
+                  setSelectedApartment(apt.id);
+                }}
               >
                 <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
                   <img 
