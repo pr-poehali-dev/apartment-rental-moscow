@@ -122,15 +122,15 @@ export default function Index() {
               >
                 О платформе
               </button>
-              <button 
-                onClick={() => setActiveTab('dashboard')}
-                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'dashboard' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
-              >
-                Личный кабинет
-              </button>
             </div>
           </div>
-          <Button size="sm" className="rounded-full">Войти</Button>
+          <Button 
+            size="sm" 
+            className="rounded-full"
+            onClick={() => setActiveTab('dashboard')}
+          >
+            Личный кабинет
+          </Button>
         </div>
       </nav>
 
