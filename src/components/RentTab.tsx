@@ -201,7 +201,7 @@ export default function RentTab({
           </div>
           <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
             <iframe
-              src="https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=11&l=map"
+              src={`https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=12&l=map&pt=37.597700,55.740700,pm2rdm~37.605300,55.760500,pm2rdm~37.609700,55.742200,pm2rdm`}
               width="100%"
               height="100%"
               frameBorder="0"
