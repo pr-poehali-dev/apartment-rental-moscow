@@ -92,6 +92,7 @@ export default function Index() {
   const [heroTextIndex, setHeroTextIndex] = useState(0);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [cleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const heroTexts = [
     'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - БРОНИРУЕТЕ',
@@ -152,7 +153,13 @@ export default function Index() {
                 alt="120 минут"
                 className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
               />
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>120 минут</h1>
+              <h1 
+                className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent cursor-pointer" 
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                onClick={() => { setActiveTab('rent'); setMobileMenuOpen(false); }}
+              >
+                120 минут
+              </h1>
             </div>
             <div className="hidden lg:flex gap-4">
               <button 
@@ -184,13 +191,44 @@ export default function Index() {
             <Button 
               size="sm" 
               className="rounded-full font-medium shadow-sm text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"
-              onClick={() => setActiveTab('dashboard')}
+              onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
             >
               <Icon name="LayoutDashboard" size={14} className="sm:mr-1" />
               <span className="hidden sm:inline">Личный кабинет</span>
             </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="lg:hidden h-9 w-9 p-0"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Icon name={mobileMenuOpen ? "X" : "Menu"} size={20} />
+            </Button>
           </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="lg:hidden absolute top-14 left-0 right-0 glass border-b border-gray-200 shadow-lg">
+            <div className="max-w-[1200px] mx-auto px-4 py-4 flex flex-col gap-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-base font-medium h-12"
+                onClick={() => { setActiveTab('owners'); setMobileMenuOpen(false); }}
+              >
+                <Icon name="Building" size={18} className="mr-3" />
+                Собственникам
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-base font-medium h-12"
+                onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); }}
+              >
+                <Icon name="Info" size={18} className="mr-3" />
+                О платформе
+              </Button>
+            </div>
+          </div>
+        )}
       </nav>
 
       <main className="pt-14">
