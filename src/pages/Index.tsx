@@ -58,7 +58,10 @@ export default function Index() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-12">
-            <h1 className="text-xl font-semibold tracking-tight">ЧасАренда</h1>
+            <div className="flex items-center gap-2">
+              <Icon name="Clock" size={20} className="text-primary" />
+              <h1 className="text-xl font-semibold tracking-tight">Москва на час</h1>
+            </div>
             <div className="hidden md:flex gap-8">
               <button 
                 onClick={() => setActiveTab('rent')}
@@ -96,10 +99,10 @@ export default function Index() {
               />
               <div className="relative z-10 text-center text-white px-6">
                 <h2 className="text-6xl md:text-8xl font-bold mb-4 tracking-tight">
-                  Квартиры<br/>на любой срок
+                  Москва<br/>на час
                 </h2>
                 <p className="text-xl md:text-2xl font-light mb-8 text-white/90">
-                  От часа до месяца. В центре Москвы.
+                  Квартиры от 1 часа до месяца. Без посредников.
                 </p>
                 <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12">
                   Смотреть квартиры
@@ -190,7 +193,7 @@ export default function Index() {
           <div className="animate-fade-in">
             <section className="max-w-[800px] mx-auto px-6 py-32">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-                Сдавайте свою<br/>квартиру легко
+                Сдавайте квартиру<br/>на своих условиях
               </h2>
               <p className="text-xl text-muted-foreground mb-12 text-balance">
                 Тысячи людей ищут жильё каждый день. Зарабатывайте на своей квартире с нами.
@@ -241,11 +244,11 @@ export default function Index() {
           <div className="animate-fade-in">
             <section className="max-w-[800px] mx-auto px-6 py-32">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-                Платформа<br/>гибкой аренды
+                О платформе<br/>Москва на час
               </h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-xl text-muted-foreground mb-8">
-                  ЧасАренда — это современная платформа для аренды квартир в Москве на любой срок: от нескольких часов до месяца.
+                  Современная платформа для аренды квартир в Москве на любой срок: от часа до месяца. Прямая связь с собственниками без посредников.
                 </p>
                 
                 <h3 className="text-2xl font-bold mb-4 mt-12">Преимущества</h3>
@@ -278,9 +281,10 @@ export default function Index() {
 
       <footer className="border-t border-gray-200 py-8 mt-20">
         <div className="max-w-[1200px] mx-auto px-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            ЧасАренда © 2026 • Аренда квартир в Москве
-          </p>
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Icon name="Clock" size={16} />
+            <span>Москва на час © 2026 • Почасовая аренда квартир</span>
+          </div>
         </div>
       </footer>
     </div>
