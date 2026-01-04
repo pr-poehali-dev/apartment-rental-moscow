@@ -46,6 +46,7 @@ export default function RentTab({
 }: RentTabProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
+  const [weatherCode, setWeatherCode] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTemperature = () => {
@@ -53,8 +54,25 @@ export default function RentTab({
         .then(res => res.json())
         .then(data => {
           setTemperature(Math.round(data.current_weather.temperature));
+          setWeatherCode(data.current_weather.weathercode);
         })
-        .catch(() => setTemperature(null));
+        .catch(() => {
+          setTemperature(null);
+          setWeatherCode(null);
+        });
+    };
+
+    const getWeatherIcon = (code: number | null) => {
+      if (code === null) return 'Cloud';
+      if (code === 0 || code === 1) return 'Sun'; // Ясно
+      if (code === 2 || code === 3) return 'CloudSun'; // Облачно
+      if (code >= 45 && code <= 48) return 'CloudFog'; // Туман
+      if (code >= 51 && code <= 67) return 'CloudRain'; // Дождь
+      if (code >= 71 && code <= 77) return 'CloudSnow'; // Снег
+      if (code >= 80 && code <= 82) return 'CloudDrizzle'; // Ливень
+      if (code >= 85 && code <= 86) return 'Snowflake'; // Снегопад
+      if (code >= 95 && code <= 99) return 'CloudLightning'; // Гроза
+      return 'Cloud';
     };
 
     // Получаем температуру сразу
@@ -91,9 +109,12 @@ export default function RentTab({
               УЮТНАЯ ЗИМА
             </h2>
             {temperature !== null && (
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
-                <Icon name="Thermometer" size={32} className="text-blue-300" />
-                <span className="text-4xl font-bold">{temperature > 0 ? '+' : ''}{temperature}°</span>
+              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
+                <Icon name={getWeatherIcon(weatherCode)} size={36} className="text-yellow-300" />
+                <div className="flex items-baseline gap-1">
+                  <span className="text-5xl font-bold">{temperature > 0 ? '+' : ''}{temperature}</span>
+                  <span className="text-2xl font-light">°C</span>
+                </div>
               </div>
             )}
           </div>
