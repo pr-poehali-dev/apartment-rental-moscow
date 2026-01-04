@@ -216,4 +216,29 @@
         0 5px 20px rgba(118, 75, 162, 0.5);
     }
   }
+
+  .step-fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: stepFadeIn 0.8s ease-out forwards;
+  }
+
+  .step-fade-in:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .step-fade-in:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .step-fade-in:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes stepFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

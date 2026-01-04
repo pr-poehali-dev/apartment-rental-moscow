@@ -235,7 +235,7 @@ export default function RentTab({
               { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
               { icon: 'CalendarCheck', title: 'Бронируете', desc: 'Договариваетесь и бронируете' }
             ].map((step, idx) => (
-              <div key={idx} className="text-center">
+              <div key={idx} className="text-center step-fade-in">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center">
                   <Icon name={step.icon as any} size={28} className="text-background" />
                 </div>
