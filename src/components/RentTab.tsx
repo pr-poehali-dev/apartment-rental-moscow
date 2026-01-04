@@ -129,31 +129,35 @@ export default function RentTab({
           <p className="text-lg md:text-xl font-light mb-8 text-white/80 fade-slide-in" style={{ animationDelay: '0.3s' }}>
             Без посредников / Без регистрации
           </p>
-          <div className="flex flex-wrap gap-4 justify-center fade-slide-in" style={{ animationDelay: '0.4s' }}>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
-              Смотреть отели
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto fade-slide-in px-4" style={{ animationDelay: '0.4s' }}>
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+              <Icon name="Building2" size={20} className="mr-2" />
+              Отели
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
-              Смотреть апартаменты
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+              <Icon name="Home" size={20} className="mr-2" />
+              Апартаменты
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
-              Смотреть сауны
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+              <Icon name="Droplets" size={20} className="mr-2" />
+              Сауны
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
-              Смотреть конференц-залы
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+              <Icon name="Presentation" size={20} className="mr-2" />
+              Конференц-залы
             </Button>
           </div>
         </div>
       </section>
 
-      <section className="max-w-[1200px] mx-auto px-6 py-20">
-        <div className="mb-12">
+      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <div className="mb-8 sm:mb-12">
           <Input
             type="search"
             placeholder="Найти квартиру по адресу или метро"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-2xl mx-auto h-12 rounded-full border-gray-300 px-6"
+            className="max-w-2xl mx-auto h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
           />
         </div>
 
@@ -232,11 +236,11 @@ export default function RentTab({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
               { icon: 'Search', title: 'Выбираете', desc: 'Смотрите квартиры с фото и описанием' },
-              { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
+              { icon: 'MessageCircle', title: 'Связываetесь', desc: 'Пишете собственнику в Telegram' },
               { icon: 'CalendarCheck', title: 'Бронируете', desc: 'Договариваетесь и бронируете' }
             ].map((step, idx) => (
-              <div key={idx} className="text-center step-fade-in">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center">
+              <div key={idx} className="text-center step-fade-in step-card">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center step-icon">
                   <Icon name={step.icon as any} size={28} className="text-background" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{step.title}</h3>

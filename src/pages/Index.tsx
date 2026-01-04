@@ -144,17 +144,17 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-white">
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-200">
-        <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-12">
-            <div className="flex items-center gap-3">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-4 sm:gap-12">
+            <div className="flex items-center gap-2 sm:gap-3">
               <img 
                 src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/ce30d053-d4f9-4cf6-9987-524223dff568.jpg"
                 alt="120 минут"
-                className="w-10 h-10 object-contain"
+                className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
               />
-              <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">120 минут</h1>
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>120 минут</h1>
             </div>
-            <div className="hidden md:flex gap-4">
+            <div className="hidden lg:flex gap-4">
               <button 
                 onClick={() => setActiveTab('owners')}
                 className={`${styles.navButton} ${activeTab === 'owners' ? styles.active : ''}`}
@@ -177,17 +177,17 @@ export default function Index() {
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:block px-4 py-1.5 rounded-full promo-badge">
-              <span className="text-sm font-bold text-white">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="hidden md:block px-3 sm:px-4 py-1.5 rounded-full promo-badge">
+              <span className="text-xs sm:text-sm font-bold text-white whitespace-nowrap">ПОЧАСОВАЯ АРЕНДА</span>
             </div>
             <Button 
               size="sm" 
-              className="rounded-full font-medium shadow-sm"
+              className="rounded-full font-medium shadow-sm text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"
               onClick={() => setActiveTab('dashboard')}
             >
-              <Icon name="LayoutDashboard" size={16} />
-              Личный кабинет
+              <Icon name="LayoutDashboard" size={14} className="sm:mr-1" />
+              <span className="hidden sm:inline">Личный кабинет</span>
             </Button>
           </div>
         </div>

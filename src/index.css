@@ -241,4 +241,23 @@
       transform: translateY(0);
     }
   }
+
+  .step-card {
+    transition: all 0.4s ease;
+  }
+
+  .step-card:hover {
+    transform: translateY(-8px);
+  }
+
+  .step-card:hover .step-icon {
+    transform: scale(1.15);
+    box-shadow:
+      0 10px 30px rgba(102, 126, 234, 0.4),
+      0 5px 15px rgba(118, 75, 162, 0.3);
+  }
+
+  .step-icon {
+    transition: all 0.4s ease;
+  }
 }
