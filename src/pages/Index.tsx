@@ -150,7 +150,7 @@ export default function Index() {
                   Почасовая аренда<br/>квартир в Москве
                 </h2>
                 <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
-                  Без посредников
+                  Без посредников / Без регистрации
                 </p>
                 <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}>
                   Смотреть квартиры
