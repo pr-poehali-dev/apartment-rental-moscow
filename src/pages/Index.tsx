@@ -157,12 +157,14 @@ export default function Index() {
                 onClick={() => setActiveTab('owners')}
                 className={`${styles.navButton} ${activeTab === 'owners' ? styles.active : ''}`}
               >
+                {[...Array(12)].map((_, i) => <span key={i} className={styles.buttonSpot} />)}
                 Собственникам
               </button>
               <button 
                 onClick={() => setActiveTab('about')}
                 className={`${styles.navButton} ${activeTab === 'about' ? styles.active : ''}`}
               >
+                {[...Array(12)].map((_, i) => <span key={i} className={styles.buttonSpot} />)}
                 О платформе
               </button>
             </div>
