@@ -129,9 +129,14 @@ export default function RentTab({
           <p className="text-lg md:text-xl font-light mb-8 text-white/80 fade-slide-in" style={{ animationDelay: '0.3s' }}>
             Без посредников / Без регистрации
           </p>
-          <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl fade-slide-in" style={{ animationDelay: '0.4s' }}>
-            Смотреть квартиры
-          </Button>
+          <div className="flex flex-wrap gap-4 justify-center fade-slide-in" style={{ animationDelay: '0.4s' }}>
+            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+              Смотреть отели
+            </Button>
+            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+              Смотреть апартаменты
+            </Button>
+          </div>
         </div>
       </section>
 
