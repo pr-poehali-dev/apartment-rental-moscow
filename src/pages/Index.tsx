@@ -89,11 +89,18 @@ export default function Index() {
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
   const [heroTextIndex, setHeroTextIndex] = useState(0);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [cleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
 
   const heroTexts = [
     'ПОЧАСОВАЯ АРЕНДА<br/>КВАРТИР В МОСКВЕ',
     'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - ЗАСЕЛЯЕТЕСЬ'
+  ];
+
+  const heroImages = [
+    'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg',
+    'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg',
+    'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg'
   ];
 
   const trackView = (apartmentId: number) => {
@@ -117,10 +124,17 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const textInterval = setInterval(() => {
       setHeroTextIndex((prev) => (prev + 1) % heroTexts.length);
     }, 4000);
-    return () => clearInterval(interval);
+    return () => clearInterval(textInterval);
+  }, []);
+
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(imageInterval);
   }, []);
 
   return (
@@ -128,9 +142,13 @@ export default function Index() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-12">
-            <div className="flex items-center gap-2">
-              <Icon name="Clock" size={20} className="text-primary" />
-              <h1 className="text-2xl logo-text">Москва на час</h1>
+            <div className="flex items-center gap-3">
+              <img 
+                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/5481dc79-2033-4149-a8e2-1982d13e8a53.jpg"
+                alt="Logo"
+                className="w-8 h-8 object-contain"
+              />
+              <h1 className="text-xl logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Москва на час</h1>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
@@ -175,6 +193,8 @@ export default function Index() {
             scrollY={scrollY}
             heroTextIndex={heroTextIndex}
             heroTexts={heroTexts}
+            heroImageIndex={heroImageIndex}
+            heroImages={heroImages}
           />
         )}
 

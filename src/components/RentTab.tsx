@@ -28,6 +28,8 @@ interface RentTabProps {
   scrollY: number;
   heroTextIndex: number;
   heroTexts: string[];
+  heroImageIndex: number;
+  heroImages: string[];
 }
 
 export default function RentTab({
@@ -38,29 +40,38 @@ export default function RentTab({
   trackTelegramClick,
   scrollY,
   heroTextIndex,
-  heroTexts
+  heroTexts,
+  heroImageIndex,
+  heroImages
 }: RentTabProps) {
   const heroRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="animate-fade-in">
-      <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
-        <img 
-          src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg"
-          alt="Hero"
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
-          style={{ transform: `translateY(${scrollY * 0.5}px)` }}
-        />
-        <div className="relative z-10 text-center text-white px-6">
+      <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 hero-gradient" />
+        {heroImages.map((image, idx) => (
+          <img 
+            key={idx}
+            src={image}
+            alt={`Hero ${idx + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              idx === heroImageIndex ? 'opacity-40' : 'opacity-0'
+            }`}
+            style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+        <div className="relative z-10 text-center text-white px-6 max-w-5xl">
           <h2 
-            className={`font-bold mb-6 tracking-tight uppercase transition-opacity duration-500 whitespace-nowrap ${heroTextIndex === 1 ? 'text-2xl md:text-4xl' : 'text-4xl md:text-6xl'}`}
+            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight transition-all duration-500 fade-slide-in"
+            style={{ fontFamily: 'Syne, sans-serif' }}
             dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
           />
-          <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
+          <p className="text-xl md:text-2xl font-light mb-8 text-white/90 fade-slide-in" style={{ animationDelay: '0.2s' }}>
             Без посредников / Без регистрации
           </p>
-          <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}>
+          <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl fade-slide-in" style={{ animationDelay: '0.4s' }}>
             Смотреть квартиры
           </Button>
         </div>
@@ -83,53 +94,58 @@ export default function RentTab({
             return (
               <Card 
                 key={apt.id} 
-                className="overflow-hidden border-0 shadow-sm hover-lift cursor-pointer group rounded-2xl"
+                className="overflow-hidden border-0 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2"
                 onClick={() => trackView(apt.id)}
               >
-                <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
                   <img 
                     src={apt.image} 
                     alt={apt.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
                   />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-semibold tracking-tight">{apt.title}</h3>
-                    <Badge variant="secondary" className="rounded-full font-semibold">
+                  <div className="absolute top-4 right-4">
+                    <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
                       {apt.price}₽/ч
                     </Badge>
                   </div>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Icon name="MapPin" size={16} />
-                      <span>{apt.metro}</span>
+                </div>
+                <div className="p-6 bg-gradient-to-b from-white to-gray-50">
+                  <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                  <div className="space-y-3 text-sm text-muted-foreground mb-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                        <Icon name="MapPin" size={14} className="text-purple-600" />
+                      </div>
+                      <span className="font-medium">{apt.metro}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Icon name="Home" size={16} />
-                      <span>{apt.area} м² • {apt.rooms} комн.</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                        <Icon name="Home" size={14} className="text-blue-600" />
+                      </div>
+                      <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
                     </div>
                     <a 
                       href={yandexMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-primary hover:underline"
+                      className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Icon name="Navigation" size={16} />
-                      <span className="text-xs">{apt.address}</span>
+                      <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+                        <Icon name="Navigation" size={14} className="text-purple-600" />
+                      </div>
+                      <span className="text-xs font-medium underline">{apt.address}</span>
                     </a>
                   </div>
                   <Button 
-                    className="w-full rounded-full h-10 mt-4"
-                    variant="default"
+                    className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
                     onClick={(e) => {
                       e.stopPropagation();
                       trackTelegramClick(apt.id);
                       window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
                     }}
                   >
-                    <Icon name="MessageCircle" size={16} />
+                    <Icon name="MessageCircle" size={18} />
                     Заявка в Telegram
                   </Button>
                 </div>
