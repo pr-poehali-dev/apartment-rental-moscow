@@ -145,13 +145,13 @@ export default function Index() {
           <div className="flex items-center gap-12">
             <div className="flex items-center gap-3">
               <img 
-                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/911c54f8-c4bf-44f6-9a89-eed4aa7902cd.jpg"
-                alt="A1 Logo"
+                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/ce30d053-d4f9-4cf6-9987-524223dff568.jpg"
+                alt="120 минут"
                 className="w-12 h-12 object-contain"
               />
-              <div>
-                <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none">Арена 1</h1>
-                <p className="text-[10px] text-muted-foreground leading-tight">№1 в почасовой аренде</p>
+              <div className="flex items-center gap-3">
+                <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none">120 минут</h1>
+                <p className="text-sm text-muted-foreground">№1 в почасовой аренде</p>
               </div>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
