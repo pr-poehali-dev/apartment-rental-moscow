@@ -48,13 +48,22 @@ export default function RentTab({
   const [temperature, setTemperature] = useState<number | null>(null);
 
   useEffect(() => {
-    // Получаем температуру для Москвы
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173&current_weather=true')
-      .then(res => res.json())
-      .then(data => {
-        setTemperature(Math.round(data.current_weather.temperature));
-      })
-      .catch(() => setTemperature(null));
+    const fetchTemperature = () => {
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173&current_weather=true')
+        .then(res => res.json())
+        .then(data => {
+          setTemperature(Math.round(data.current_weather.temperature));
+        })
+        .catch(() => setTemperature(null));
+    };
+
+    // Получаем температуру сразу
+    fetchTemperature();
+
+    // Обновляем каждые 10 минут (600000 мс)
+    const interval = setInterval(fetchTemperature, 600000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
