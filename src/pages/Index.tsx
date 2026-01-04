@@ -156,12 +156,6 @@ export default function Index() {
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
-                onClick={() => setActiveTab('rent')}
-                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'rent' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                Аренда
-              </button>
-              <button 
                 onClick={() => setActiveTab('owners')}
                 className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'owners' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               >
