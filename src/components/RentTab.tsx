@@ -243,8 +243,8 @@ export default function RentTab({
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { icon: 'Search', title: 'Выбираете', desc: 'Смотрите квартиры с фото и описанием' },
-              { icon: 'MessageCircle', title: 'Связываetесь', desc: 'Пишете собственнику в Telegram' },
+              { icon: 'Search', title: 'Выбираете', desc: 'Смотрите предложения с фото и описанием' },
+              { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
               { icon: 'CalendarCheck', title: 'Бронируете', desc: 'Договариваетесь и бронируете' }
             ].map((step, idx) => (
               <div key={idx} className="text-center step-fade-in step-card">
