@@ -171,4 +171,26 @@
       transform: translateY(0);
     }
   }
+
+  .promo-badge {
+    animation: pulse-glow 2s ease-in-out infinite;
+    background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #8b5cf6 100%);
+    background-size: 200% 200%;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 0 20px rgba(167, 139, 250, 0.6),
+        0 0 40px rgba(236, 72, 153, 0.4);
+      background-position: 0% 50%;
+    }
+    50% {
+      box-shadow:
+        0 0 30px rgba(167, 139, 250, 0.8),
+        0 0 60px rgba(236, 72, 153, 0.6);
+      background-position: 100% 50%;
+    }
+  }
 }

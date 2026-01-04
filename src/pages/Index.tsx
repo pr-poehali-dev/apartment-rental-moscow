@@ -178,8 +178,8 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden sm:block px-4 py-1.5 rounded-full border-2 border-purple-500 bg-purple-50">
-              <span className="text-sm font-bold text-purple-700">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
+            <div className="hidden sm:block px-4 py-1.5 rounded-full promo-badge">
+              <span className="text-sm font-bold text-white">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
             </div>
             <Button 
               size="sm" 
