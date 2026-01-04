@@ -212,27 +212,18 @@ export default function Index() {
                             <span className="text-xs">{apt.address}</span>
                           </a>
                         </div>
-                        <div className="flex gap-2 mt-4">
-                          <Button 
-                            className="flex-1 rounded-full h-10"
-                            variant="default"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              trackTelegramClick(apt.id);
-                              window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                            }}
-                          >
-                            <Icon name="MessageCircle" size={16} />
-                            Telegram
-                          </Button>
-                          <Button 
-                            className="flex-1 rounded-full h-10"
-                            variant="outline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Забронировать
-                          </Button>
-                        </div>
+                        <Button 
+                          className="w-full rounded-full h-10 mt-4"
+                          variant="default"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            trackTelegramClick(apt.id);
+                            window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                          }}
+                        >
+                          <Icon name="MessageCircle" size={16} />
+                          Заявка в Telegram
+                        </Button>
                       </div>
                     </Card>
                   );
