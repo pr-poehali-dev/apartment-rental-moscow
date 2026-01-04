@@ -94,7 +94,6 @@ export default function Index() {
   const [cleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
 
   const heroTexts = [
-    'ПОЧАСОВАЯ АРЕНДА<br/>КВАРТИР В МОСКВЕ',
     'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - ЗАСЕЛЯЕТЕСЬ',
     'УДОБНЫЙ ПОИСК ОТЕЛЕЙ И АПАРТАМЕНТОВ НА ЧАС'
   ];
