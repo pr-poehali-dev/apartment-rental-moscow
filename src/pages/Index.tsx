@@ -94,7 +94,7 @@ export default function Index() {
   const [cleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
 
   const heroTexts = [
-    'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - ЗАСЕЛЯЕТЕСЬ',
+    'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - БРОНИРУЕТЕ',
     'УДОБНЫЙ ПОИСК ОТЕЛЕЙ И АПАРТАМЕНТОВ НА ЧАС'
   ];
 
