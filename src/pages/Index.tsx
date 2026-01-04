@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 
 interface Apartment {
@@ -12,292 +11,276 @@ interface Apartment {
   image: string;
   price: number;
   metro: string;
-  metroColor: string;
   address: string;
-  description: string;
-  telegram: string;
-  views: number;
-  clicks: number;
-  requests: number;
+  area: number;
+  rooms: number;
 }
 
-const mockApartments: Apartment[] = [
+const apartments: Apartment[] = [
   {
     id: 1,
-    title: 'Студия с панорамным видом',
-    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
+    title: 'Студия с видом на реку',
+    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg',
     price: 3500,
     metro: 'Парк Культуры',
-    metroColor: 'bg-red-600',
-    address: 'ул. Остоженка, 12',
-    description: 'Уютная студия 32 м² с дизайнерским ремонтом и видом на Москву-реку',
-    telegram: 't.me/apartment_owner1',
-    views: 247,
-    clicks: 89,
-    requests: 12
+    address: 'Остоженка, 12',
+    area: 32,
+    rooms: 1
   },
   {
     id: 2,
-    title: 'Двушка в сталинке',
-    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg',
+    title: 'Двушка в центре',
+    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
     price: 5200,
     metro: 'Маяковская',
-    metroColor: 'bg-green-600',
-    address: 'ул. Тверская, 25',
-    description: 'Просторная квартира 65 м² с высокими потолками и лепниной',
-    telegram: 't.me/apartment_owner2',
-    views: 412,
-    clicks: 156,
-    requests: 28
+    address: 'Тверская, 25',
+    area: 65,
+    rooms: 2
   },
   {
     id: 3,
-    title: 'Лофт на Красном Октябре',
-    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
+    title: 'Лофт в арт-кластере',
+    image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
     price: 7800,
     metro: 'Кропоткинская',
-    metroColor: 'bg-red-600',
-    address: 'Болотная наб., 3с2',
-    description: 'Стильный лофт 85 м² в арт-кластере с террасой',
-    telegram: 't.me/apartment_owner3',
-    views: 623,
-    clicks: 234,
-    requests: 45
+    address: 'Болотная наб., 3',
+    area: 85,
+    rooms: 3
   }
 ];
 
 export default function Index() {
-  const [selectedTab, setSelectedTab] = useState('catalog');
+  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
-  const [priceFilter, setPriceFilter] = useState('all');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-      <header className="bg-white/80 backdrop-blur-md border-b border-purple-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-black gradient-text">ЧасАренда</h1>
-            <nav className="flex gap-6">
-              <button onClick={() => setSelectedTab('catalog')} className="text-sm font-semibold hover:text-primary transition-colors">Каталог</button>
-              <button onClick={() => setSelectedTab('about')} className="text-sm font-semibold hover:text-primary transition-colors">О платформе</button>
-              <button onClick={() => setSelectedTab('owners')} className="text-sm font-semibold hover:text-primary transition-colors">Собственникам</button>
-              <button onClick={() => setSelectedTab('dashboard')} className="text-sm font-semibold hover:text-primary transition-colors">Личный кабинет</button>
-            </nav>
+    <div className="min-h-screen bg-white">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-200">
+        <div className="max-w-[1200px] mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-12">
+            <h1 className="text-xl font-semibold tracking-tight">ЧасАренда</h1>
+            <div className="hidden md:flex gap-8">
+              <button 
+                onClick={() => setActiveTab('rent')}
+                className={`text-sm transition-colors ${activeTab === 'rent' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Аренда
+              </button>
+              <button 
+                onClick={() => setActiveTab('owners')}
+                className={`text-sm transition-colors ${activeTab === 'owners' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Собственникам
+              </button>
+              <button 
+                onClick={() => setActiveTab('about')}
+                className={`text-sm transition-colors ${activeTab === 'about' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                О платформе
+              </button>
+            </div>
           </div>
+          <Button size="sm" className="rounded-full">Войти</Button>
         </div>
-      </header>
+      </nav>
 
-      {selectedTab === 'catalog' && (
-        <div className="animate-fade-in">
-          <section className="py-20 bg-gradient-to-r from-primary via-secondary to-accent text-white relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-              <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-            </div>
-            <div className="container mx-auto px-4 relative z-10">
-              <h2 className="text-6xl font-black mb-6 animate-scale-in">Аренда квартир <br/>на любой срок</h2>
-              <p className="text-xl mb-8 max-w-2xl">Найди идеальную квартиру в Москве. От часа до месяца — выбирай гибкие условия.</p>
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-bold text-lg px-8 py-6 rounded-2xl hover-scale">
-                Смотреть квартиры
-              </Button>
-            </div>
-          </section>
-
-          <section className="container mx-auto px-4 py-12">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 -mt-16 relative z-20 border border-purple-100">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <Input 
-                  placeholder="Поиск по адресу или метро..." 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="text-lg py-6 rounded-xl border-2 border-purple-200 focus:border-primary"
-                />
-                <Select value={priceFilter} onValueChange={setPriceFilter}>
-                  <SelectTrigger className="text-lg py-6 rounded-xl border-2 border-purple-200">
-                    <SelectValue placeholder="Цена" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Любая цена</SelectItem>
-                    <SelectItem value="low">До 4000 ₽</SelectItem>
-                    <SelectItem value="mid">4000-6000 ₽</SelectItem>
-                    <SelectItem value="high">Более 6000 ₽</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button className="text-lg py-6 rounded-xl font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-                  <Icon name="Search" className="mr-2" />
-                  Найти
+      <main className="pt-14">
+        {activeTab === 'rent' && (
+          <div className="animate-fade-in">
+            <section className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-black">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
+              <img 
+                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg"
+                alt="Hero"
+                className="absolute inset-0 w-full h-full object-cover opacity-60"
+              />
+              <div className="relative z-10 text-center text-white px-6">
+                <h2 className="text-6xl md:text-8xl font-bold mb-4 tracking-tight">
+                  Квартиры<br/>на любой срок
+                </h2>
+                <p className="text-xl md:text-2xl font-light mb-8 text-white/90">
+                  От часа до месяца. В центре Москвы.
+                </p>
+                <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12">
+                  Смотреть квартиры
                 </Button>
               </div>
+            </section>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {mockApartments.map((apt) => (
-                  <Card key={apt.id} className="overflow-hidden hover-scale rounded-2xl border-2 border-purple-100 hover:border-primary transition-all">
-                    <div className="relative h-64 overflow-hidden">
-                      <img src={apt.image} alt={apt.title} className="w-full h-full object-cover" />
-                      <Badge className="absolute top-4 right-4 bg-white text-primary font-bold text-lg py-2 px-4">
-                        {apt.price} ₽/час
-                      </Badge>
+            <section className="max-w-[1200px] mx-auto px-6 py-20">
+              <div className="mb-12">
+                <Input
+                  type="search"
+                  placeholder="Найти квартиру по адресу или метро"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="max-w-2xl mx-auto h-12 rounded-full border-gray-300 px-6"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {apartments.map((apt) => (
+                  <Card 
+                    key={apt.id} 
+                    className="overflow-hidden border-0 shadow-sm hover-lift cursor-pointer group rounded-2xl"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                      <img 
+                        src={apt.image} 
+                        alt={apt.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
                     </div>
-                    <CardContent className="p-6">
-                      <h3 className="text-2xl font-bold mb-3">{apt.title}</h3>
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className={`w-3 h-3 rounded-full ${apt.metroColor}`}></div>
-                        <span className="font-semibold text-muted-foreground">{apt.metro}</span>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="text-xl font-semibold tracking-tight">{apt.title}</h3>
+                        <Badge variant="secondary" className="rounded-full font-semibold">
+                          {apt.price}₽/ч
+                        </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{apt.address}</p>
-                      <p className="text-sm mb-4">{apt.description}</p>
-                      <Button className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-6 rounded-xl hover:opacity-90">
-                        <Icon name="Send" className="mr-2" />
-                        Запросить бронирование
+                      <div className="space-y-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Icon name="MapPin" size={16} />
+                          <span>{apt.metro}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Icon name="Home" size={16} />
+                          <span>{apt.area} м² • {apt.rooms} комн.</span>
+                        </div>
+                        <p className="text-xs">{apt.address}</p>
+                      </div>
+                      <Button 
+                        className="w-full mt-4 rounded-full h-10"
+                        variant="outline"
+                      >
+                        Забронировать
                       </Button>
-                    </CardContent>
+                    </div>
                   </Card>
                 ))}
               </div>
-            </div>
-          </section>
-        </div>
-      )}
+            </section>
 
-      {selectedTab === 'about' && (
-        <div className="animate-fade-in">
-          <section className="container mx-auto px-4 py-20">
-            <h2 className="text-5xl font-black gradient-text mb-12 text-center">Как это работает</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { icon: 'Search', title: 'Выбираете квартиру', desc: 'Смотрите фото, описание, метро и цену' },
-                { icon: 'MessageCircle', title: 'Отправляете запрос', desc: 'Связываетесь с собственником в Telegram' },
-                { icon: 'Key', title: 'Заселяетесь', desc: 'Договариваетесь об условиях и въезжаете' }
-              ].map((step, idx) => (
-                <Card key={idx} className="p-8 text-center hover-scale rounded-3xl border-2 border-purple-100 hover:border-primary transition-all bg-white">
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-6 hover:rotate-0 transition-transform">
-                    <Icon name={step.icon as any} size={36} className="text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.desc}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
-
-          <section className="bg-gradient-to-r from-purple-100 via-pink-100 to-orange-100 py-20">
-            <div className="container mx-auto px-4">
-              <h2 className="text-5xl font-black gradient-text mb-8 text-center">Преимущества платформы</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                {[
-                  { icon: 'Shield', text: 'Проверенные собственники' },
-                  { icon: 'Clock', text: 'Аренда от часа' },
-                  { icon: 'MapPin', text: 'Удобное расположение' },
-                  { icon: 'TrendingUp', text: 'Прозрачная аналитика' }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 bg-white p-6 rounded-2xl shadow-md hover-scale">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-                      <Icon name={item.icon as any} size={24} className="text-white" />
+            <section className="bg-secondary py-20">
+              <div className="max-w-[1200px] mx-auto px-6">
+                <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 tracking-tight">
+                  Как это работает
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                  {[
+                    { icon: 'Search', title: 'Выбираете', desc: 'Смотрите квартиры с фото и описанием' },
+                    { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
+                    { icon: 'Key', title: 'Заселяетесь', desc: 'Договариваетесь и въезжаете' }
+                  ].map((step, idx) => (
+                    <div key={idx} className="text-center">
+                      <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center">
+                        <Icon name={step.icon as any} size={28} className="text-background" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                      <p className="text-muted-foreground">{step.desc}</p>
                     </div>
-                    <span className="text-xl font-semibold">{item.text}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </section>
-        </div>
-      )}
+            </section>
+          </div>
+        )}
 
-      {selectedTab === 'owners' && (
-        <div className="animate-fade-in">
-          <section className="container mx-auto px-4 py-20">
-            <h2 className="text-5xl font-black gradient-text mb-12 text-center">Для собственников</h2>
-            <div className="max-w-4xl mx-auto bg-white rounded-3xl p-12 shadow-2xl border-2 border-purple-100">
-              <h3 className="text-3xl font-bold mb-6">Условия размещения</h3>
-              <ul className="space-y-4 text-lg">
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" className="text-primary mt-1 flex-shrink-0" />
-                  <span><strong>Комиссия 10%</strong> от каждой успешной брони</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" className="text-primary mt-1 flex-shrink-0" />
-                  <span><strong>Фото квартиры</strong> минимум 5 качественных снимков</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" className="text-primary mt-1 flex-shrink-0" />
-                  <span><strong>Верификация</strong> паспортные данные собственника</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" className="text-primary mt-1 flex-shrink-0" />
-                  <span><strong>Telegram-канал</strong> для связи с клиентами</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" className="text-primary mt-1 flex-shrink-0" />
-                  <span><strong>Аналитика</strong> полная статистика по квартире</span>
-                </li>
-              </ul>
-              <Button className="w-full mt-8 bg-gradient-to-r from-primary to-secondary text-white font-bold py-6 text-lg rounded-xl hover:opacity-90">
-                Начать сдавать квартиру
-              </Button>
-            </div>
-          </section>
-        </div>
-      )}
+        {activeTab === 'owners' && (
+          <div className="animate-fade-in">
+            <section className="max-w-[800px] mx-auto px-6 py-32">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
+                Сдавайте свою<br/>квартиру легко
+              </h2>
+              <p className="text-xl text-muted-foreground mb-12 text-balance">
+                Тысячи людей ищут жильё каждый день. Зарабатывайте на своей квартире с нами.
+              </p>
 
-      {selectedTab === 'dashboard' && (
-        <div className="animate-fade-in">
-          <section className="container mx-auto px-4 py-20">
-            <h2 className="text-5xl font-black gradient-text mb-12">Личный кабинет собственника</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              {[
-                { icon: 'Eye', label: 'Просмотры', value: '1,282', color: 'from-blue-500 to-cyan-500' },
-                { icon: 'MousePointer', label: 'Клики', value: '479', color: 'from-purple-500 to-pink-500' },
-                { icon: 'MessageSquare', label: 'Запросы', value: '85', color: 'from-orange-500 to-red-500' }
-              ].map((stat, idx) => (
-                <Card key={idx} className="p-6 hover-scale rounded-2xl border-2 border-purple-100 bg-white">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mb-4`}>
-                    <Icon name={stat.icon as any} size={28} className="text-white" />
-                  </div>
-                  <p className="text-muted-foreground mb-2">{stat.label}</p>
-                  <p className="text-4xl font-black">{stat.value}</p>
-                </Card>
-              ))}
-            </div>
-
-            <Card className="p-8 rounded-3xl border-2 border-purple-100 bg-white">
-              <h3 className="text-3xl font-bold mb-6">Мои квартиры</h3>
-              <div className="space-y-4">
-                {mockApartments.map((apt) => (
-                  <div key={apt.id} className="flex items-center justify-between p-6 bg-purple-50 rounded-2xl hover-scale">
-                    <div className="flex items-center gap-6">
-                      <img src={apt.image} alt={apt.title} className="w-24 h-24 rounded-xl object-cover" />
+              <Card className="p-8 md:p-12 border-0 shadow-sm rounded-2xl">
+                <h3 className="text-2xl font-bold mb-8">Условия размещения</h3>
+                <div className="space-y-6">
+                  {[
+                    { title: 'Комиссия 10%', desc: 'От каждой успешной брони' },
+                    { title: 'Минимум 5 фото', desc: 'Качественные снимки квартиры' },
+                    { title: 'Верификация', desc: 'Подтверждение личности' },
+                    { title: 'Telegram-канал', desc: 'Для связи с арендаторами' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex gap-4">
+                      <div className="w-6 h-6 rounded-full bg-foreground flex-shrink-0 flex items-center justify-center mt-1">
+                        <Icon name="Check" size={16} className="text-background" />
+                      </div>
                       <div>
-                        <h4 className="text-xl font-bold mb-1">{apt.title}</h4>
-                        <p className="text-muted-foreground">{apt.metro}</p>
+                        <h4 className="font-semibold mb-1">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground">{item.desc}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-8">
-                      <div className="text-center">
-                        <p className="text-2xl font-bold">{apt.views}</p>
-                        <p className="text-sm text-muted-foreground">просмотров</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-bold">{apt.clicks}</p>
-                        <p className="text-sm text-muted-foreground">кликов</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-primary">{apt.requests}</p>
-                        <p className="text-sm text-muted-foreground">запросов</p>
-                      </div>
-                    </div>
+                  ))}
+                </div>
+                <Button className="w-full mt-8 h-12 rounded-full text-base">
+                  Начать сдавать
+                </Button>
+              </Card>
+
+              <div className="mt-16 grid grid-cols-3 gap-8 text-center">
+                {[
+                  { value: '1,282', label: 'Просмотров' },
+                  { value: '479', label: 'Кликов' },
+                  { value: '85', label: 'Заявок' }
+                ].map((stat, idx) => (
+                  <div key={idx}>
+                    <div className="text-4xl font-bold mb-2">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
               </div>
-            </Card>
-          </section>
-        </div>
-      )}
+            </section>
+          </div>
+        )}
 
-      <footer className="bg-gray-900 text-white py-12 mt-20">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-3xl font-black mb-4 gradient-text">ЧасАренда</h3>
-          <p className="text-gray-400">Аренда квартир в Москве — удобно, быстро, прозрачно</p>
+        {activeTab === 'about' && (
+          <div className="animate-fade-in">
+            <section className="max-w-[800px] mx-auto px-6 py-32">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
+                Платформа<br/>гибкой аренды
+              </h2>
+              <div className="prose prose-lg max-w-none">
+                <p className="text-xl text-muted-foreground mb-8">
+                  ЧасАренда — это современная платформа для аренды квартир в Москве на любой срок: от нескольких часов до месяца.
+                </p>
+                
+                <h3 className="text-2xl font-bold mb-4 mt-12">Преимущества</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                  {[
+                    { icon: 'Shield', text: 'Проверенные собственники' },
+                    { icon: 'Clock', text: 'Аренда от часа' },
+                    { icon: 'MapPin', text: 'Центр Москвы' },
+                    { icon: 'TrendingUp', text: 'Прозрачная аналитика' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <Icon name={item.icon as any} size={20} className="text-primary" />
+                      <span className="font-medium">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <h3 className="text-2xl font-bold mb-4">Как начать?</h3>
+                <p className="text-muted-foreground mb-4">
+                  Выберите квартиру из каталога, свяжитесь с собственником через Telegram и договоритесь об условиях. Никаких посредников — только вы и владелец.
+                </p>
+                <Button className="rounded-full h-12 px-8">
+                  Смотреть квартиры
+                </Button>
+              </div>
+            </section>
+          </div>
+        )}
+      </main>
+
+      <footer className="border-t border-gray-200 py-8 mt-20">
+        <div className="max-w-[1200px] mx-auto px-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            ЧасАренда © 2026 • Аренда квартир в Москве
+          </p>
         </div>
       </footer>
     </div>
