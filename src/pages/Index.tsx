@@ -177,14 +177,19 @@ export default function Index() {
               </button>
             </div>
           </div>
-          <Button 
-            size="sm" 
-            className="rounded-full font-medium shadow-sm"
-            onClick={() => setActiveTab('dashboard')}
-          >
-            <Icon name="LayoutDashboard" size={16} />
-            Личный кабинет
-          </Button>
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:block px-4 py-1.5 rounded-full border-2 border-purple-500 bg-purple-50">
+              <span className="text-sm font-bold text-purple-700">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
+            </div>
+            <Button 
+              size="sm" 
+              className="rounded-full font-medium shadow-sm"
+              onClick={() => setActiveTab('dashboard')}
+            >
+              <Icon name="LayoutDashboard" size={16} />
+              Личный кабинет
+            </Button>
+          </div>
         </div>
       </nav>
 
