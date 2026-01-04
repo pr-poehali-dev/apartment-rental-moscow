@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -52,6 +52,16 @@ const apartments: Apartment[] = [
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrollY, setScrollY] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -62,22 +72,22 @@ export default function Index() {
               <Icon name="Clock" size={20} className="text-primary" />
               <h1 className="text-2xl logo-text">Москва на час</h1>
             </div>
-            <div className="hidden md:flex gap-8">
+            <div className="hidden md:flex gap-2">
               <button 
                 onClick={() => setActiveTab('rent')}
-                className={`text-sm transition-colors ${activeTab === 'rent' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'rent' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
               >
                 Аренда
               </button>
               <button 
                 onClick={() => setActiveTab('owners')}
-                className={`text-sm transition-colors ${activeTab === 'owners' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'owners' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
               >
                 Собственникам
               </button>
               <button 
                 onClick={() => setActiveTab('about')}
-                className={`text-sm transition-colors ${activeTab === 'about' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'about' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
               >
                 О платформе
               </button>
@@ -90,12 +100,13 @@ export default function Index() {
       <main className="pt-14">
         {activeTab === 'rent' && (
           <div className="animate-fade-in">
-            <section className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-black">
+            <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-black">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
               <img 
                 src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg"
                 alt="Hero"
                 className="absolute inset-0 w-full h-full object-cover opacity-60"
+                style={{ transform: `translateY(${scrollY * 0.5}px)` }}
               />
               <div className="relative z-10 text-center text-white px-6">
                 <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase animate-fade-up-big">
