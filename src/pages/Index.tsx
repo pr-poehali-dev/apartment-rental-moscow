@@ -103,22 +103,22 @@ export default function Index() {
               <Icon name="Clock" size={20} className="text-primary" />
               <h1 className="text-2xl logo-text">Москва на час</h1>
             </div>
-            <div className="hidden md:flex gap-2">
+            <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
                 onClick={() => setActiveTab('rent')}
-                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'rent' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
+                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'rent' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 Аренда
               </button>
               <button 
                 onClick={() => setActiveTab('owners')}
-                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'owners' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
+                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'owners' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 Собственникам
               </button>
               <button 
                 onClick={() => setActiveTab('about')}
-                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'about' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
+                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'about' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 О платформе
               </button>
@@ -126,9 +126,10 @@ export default function Index() {
           </div>
           <Button 
             size="sm" 
-            className="rounded-full"
+            className="rounded-full font-medium shadow-sm"
             onClick={() => setActiveTab('dashboard')}
           >
+            <Icon name="LayoutDashboard" size={16} />
             Личный кабинет
           </Button>
         </div>
