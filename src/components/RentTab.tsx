@@ -48,6 +48,19 @@ export default function RentTab({
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
 
+  const getWeatherIcon = (code: number | null) => {
+    if (code === null) return 'Cloud';
+    if (code === 0 || code === 1) return 'Sun'; // Ясно
+    if (code === 2 || code === 3) return 'CloudSun'; // Облачно
+    if (code >= 45 && code <= 48) return 'CloudFog'; // Туман
+    if (code >= 51 && code <= 67) return 'CloudRain'; // Дождь
+    if (code >= 71 && code <= 77) return 'CloudSnow'; // Снег
+    if (code >= 80 && code <= 82) return 'CloudDrizzle'; // Ливень
+    if (code >= 85 && code <= 86) return 'Snowflake'; // Снегопад
+    if (code >= 95 && code <= 99) return 'CloudLightning'; // Гроза
+    return 'Cloud';
+  };
+
   useEffect(() => {
     const fetchTemperature = () => {
       fetch('https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173&current_weather=true')
@@ -60,19 +73,6 @@ export default function RentTab({
           setTemperature(null);
           setWeatherCode(null);
         });
-    };
-
-    const getWeatherIcon = (code: number | null) => {
-      if (code === null) return 'Cloud';
-      if (code === 0 || code === 1) return 'Sun'; // Ясно
-      if (code === 2 || code === 3) return 'CloudSun'; // Облачно
-      if (code >= 45 && code <= 48) return 'CloudFog'; // Туман
-      if (code >= 51 && code <= 67) return 'CloudRain'; // Дождь
-      if (code >= 71 && code <= 77) return 'CloudSnow'; // Снег
-      if (code >= 80 && code <= 82) return 'CloudDrizzle'; // Ливень
-      if (code >= 85 && code <= 86) return 'Snowflake'; // Снегопад
-      if (code >= 95 && code <= 99) return 'CloudLightning'; // Гроза
-      return 'Cloud';
     };
 
     // Получаем температуру сразу
