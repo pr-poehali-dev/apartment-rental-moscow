@@ -152,19 +152,25 @@ export default function Index() {
               />
               <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">120 минут</h1>
             </div>
-            <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
+            <div className="hidden md:flex gap-4">
               <button 
                 onClick={() => setActiveTab('owners')}
                 className={`${styles.navButton} ${activeTab === 'owners' ? styles.active : ''}`}
               >
-                {[...Array(12)].map((_, i) => <span key={i} className={styles.buttonSpot} />)}
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
                 Собственникам
               </button>
               <button 
                 onClick={() => setActiveTab('about')}
                 className={`${styles.navButton} ${activeTab === 'about' ? styles.active : ''}`}
               >
-                {[...Array(12)].map((_, i) => <span key={i} className={styles.buttonSpot} />)}
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
                 О платформе
               </button>
             </div>
