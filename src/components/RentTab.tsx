@@ -47,6 +47,9 @@ export default function RentTab({
   const heroRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
+  const [titleIndex, setTitleIndex] = useState(0);
+
+  const titles = ['УЮТНАЯ ЗИМА', 'ПОЧАСОВАЯ АРЕНДА В МОСКВЕ'];
 
   const getWeatherIcon = (code: number | null) => {
     if (code === null) return 'Cloud';
@@ -84,6 +87,14 @@ export default function RentTab({
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const titleInterval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % titles.length);
+    }, 4000);
+
+    return () => clearInterval(titleInterval);
+  }, []);
+
   return (
     <div className="animate-fade-in">
       <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden">
@@ -103,10 +114,10 @@ export default function RentTab({
         <div className="relative z-10 text-center text-white px-6 max-w-5xl">
           <div className="flex items-center justify-center gap-6 mb-6 fade-slide-in">
             <h2 
-              className="text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
+              className="text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent transition-opacity duration-500"
               style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              УЮТНАЯ ЗИМА
+              {titles[titleIndex]}
             </h2>
             {temperature !== null && (
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
