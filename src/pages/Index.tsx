@@ -151,7 +151,9 @@ export default function Index() {
               />
               <div className="flex items-center gap-3">
                 <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none">120 минут</h1>
-                <p className="text-sm text-muted-foreground">№1 в почасовой аренде</p>
+                <span className="text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent tracking-tight">
+                  №1 в почасовой аренде
+                </span>
               </div>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
