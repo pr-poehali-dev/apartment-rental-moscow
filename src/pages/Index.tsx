@@ -161,7 +161,7 @@ export default function Index() {
               />
               <div className="relative z-10 text-center text-white px-6">
                 <h2 
-                  className={`font-bold mb-6 tracking-tight uppercase transition-opacity duration-500 ${heroTextIndex === 1 ? 'text-3xl md:text-5xl' : 'text-4xl md:text-6xl'}`}
+                  className={`font-bold mb-6 tracking-tight uppercase transition-opacity duration-500 whitespace-nowrap ${heroTextIndex === 1 ? 'text-2xl md:text-4xl' : 'text-4xl md:text-6xl'}`}
                   dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
                 />
                 <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
