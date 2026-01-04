@@ -147,14 +147,12 @@ export default function Index() {
               <img 
                 src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/ce30d053-d4f9-4cf6-9987-524223dff568.jpg"
                 alt="120 минут"
-                className="w-12 h-12 object-contain"
+                className="w-10 h-10 object-contain"
               />
-              <div className="flex items-center gap-3">
-                <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent leading-none">120 минут</h1>
-                <span className="text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent tracking-tight">
-                  №1 в почасовой аренде
-                </span>
-              </div>
+              <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">120 минут</h1>
+              <span className="text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent tracking-tight tagline-shimmer">
+                №1 в почасовой аренде
+              </span>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
