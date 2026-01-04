@@ -150,9 +150,6 @@ export default function Index() {
                 className="w-10 h-10 object-contain"
               />
               <h1 className="logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">120 минут</h1>
-              <span className="text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent tracking-tight tagline-shimmer">
-                №1 в почасовой аренде
-              </span>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
