@@ -17,6 +17,9 @@ interface Apartment {
   telegram: string;
   views: number;
   telegramClicks: number;
+  lat: number;
+  lon: number;
+  category: 'hotels' | 'apartments' | 'saunas' | 'conference';
 }
 
 interface RentTabProps {
@@ -50,11 +53,27 @@ export default function RentTab({
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('hotels');
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
 
-  const apartmentCoordinates: Record<number, { lat: number; lon: number }> = {
-    1: { lat: 55.740700, lon: 37.597700 }, // Остоженка, 12
-    2: { lat: 55.760500, lon: 37.605300 }, // Тверская, 25
-    3: { lat: 55.742200, lon: 37.609700 }  // Болотная наб., 3
-  };
+  const categoryListings: Apartment[] = [
+    // Отели
+    { id: 101, title: 'Бутик-отель "Уют"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 4500, metro: 'Арбатская', address: 'Арбат, 15', area: 25, rooms: 1, telegram: '@hotel1', views: 0, telegramClicks: 0, lat: 55.752023, lon: 37.593760, category: 'hotels' },
+    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels' },
+    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels' },
+    
+    // Апартаменты
+    { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', address: 'Остоженка, 12', area: 32, rooms: 1, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
+    { id: 202, title: 'Двушка в центре', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5200, metro: 'Маяковская', address: 'Тверская, 25', area: 65, rooms: 2, telegram: '@owner2', views: 0, telegramClicks: 0, lat: 55.760500, lon: 37.605300, category: 'apartments' },
+    { id: 203, title: 'Лофт в арт-кластере', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg', price: 7800, metro: 'Кропоткинская', address: 'Болотная наб., 3', area: 85, rooms: 3, telegram: '@owner3', views: 0, telegramClicks: 0, lat: 55.742200, lon: 37.609700, category: 'apartments' },
+    
+    // Сауны
+    { id: 301, title: 'Сауна "Релакс"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/638df8ca-c153-486e-8706-073cd19a93f2.jpg', price: 6000, metro: 'Сокол', address: 'Ленинградский пр., 45', area: 50, rooms: 2, telegram: '@sauna1', views: 0, telegramClicks: 0, lat: 55.805563, lon: 37.514996, category: 'saunas' },
+    { id: 302, title: 'Финская сауна', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg', price: 7500, metro: 'Белорусская', address: '1-я Тверская-Ямская, 8', area: 60, rooms: 3, telegram: '@sauna2', views: 0, telegramClicks: 0, lat: 55.777109, lon: 37.582039, category: 'saunas' },
+    
+    // Конференц-залы
+    { id: 401, title: 'Зал "Переговорная"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg', price: 8000, metro: 'Белорусская', address: 'Ленинградский пр., 1', area: 40, rooms: 1, telegram: '@conf1', views: 0, telegramClicks: 0, lat: 55.776556, lon: 37.583206, category: 'conference' },
+    { id: 402, title: 'Конференц-зал "Бизнес"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg', price: 10000, metro: 'Курская', address: 'Земляной вал, 27', area: 80, rooms: 2, telegram: '@conf2', views: 0, telegramClicks: 0, lat: 55.758389, lon: 37.660644, category: 'conference' }
+  ];
+
+  const filteredListings = categoryListings.filter(item => item.category === activeCategory);
 
   const categoryConfig = {
     hotels: { title: 'Отели', placeholder: 'Найти отель по адресу или метро', icon: 'Building2' },
@@ -208,10 +227,21 @@ export default function RentTab({
           </div>
           <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
             <iframe
-              key={selectedApartment}
-              src={selectedApartment && apartmentCoordinates[selectedApartment]
-                ? `https://yandex.ru/map-widget/v1/?ll=${apartmentCoordinates[selectedApartment].lon}%2C${apartmentCoordinates[selectedApartment].lat}&z=15&l=map&pt=37.597700,55.740700,pm2${selectedApartment === 1 ? 'blm' : 'rdm'}~37.605300,55.760500,pm2${selectedApartment === 2 ? 'blm' : 'rdm'}~37.609700,55.742200,pm2${selectedApartment === 3 ? 'blm' : 'rdm'}`
-                : `https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=12&l=map&pt=37.597700,55.740700,pm2rdm~37.605300,55.760500,pm2rdm~37.609700,55.742200,pm2rdm`}
+              key={`${activeCategory}-${selectedApartment}`}
+              src={(() => {
+                const selectedListing = filteredListings.find(item => item.id === selectedApartment);
+                const markers = filteredListings.map(item => 
+                  `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
+                ).join('~');
+                
+                if (selectedListing) {
+                  return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
+                }
+                
+                const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
+                const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
+                return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
+              })()}
               width="100%"
               height="100%"
               frameBorder="0"
@@ -221,12 +251,73 @@ export default function RentTab({
           </div>
         </div>
 
-        <div className="text-center py-16">
-          <div className="inline-block p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-3xl">
-            <Icon name={categoryConfig[activeCategory].icon as any} size={64} className="mx-auto mb-4 text-purple-600" />
-            <h3 className="text-2xl font-bold mb-2">Скоро здесь появятся предложения</h3>
-            <p className="text-muted-foreground">Раздел "{categoryConfig[activeCategory].title}" в разработке</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredListings.map((apt) => {
+            const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
+            return (
+              <Card 
+                key={apt.id} 
+                className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
+                onClick={() => {
+                  trackView(apt.id);
+                  setSelectedApartment(apt.id);
+                }}
+              >
+                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
+                  <img 
+                    src={apt.image} 
+                    alt={apt.title}
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
+                      {apt.price}₽/ч
+                    </Badge>
+                  </div>
+                </div>
+                <div className="p-6 bg-gradient-to-b from-white to-gray-50">
+                  <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                  <div className="space-y-3 text-sm text-muted-foreground mb-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                        <Icon name="MapPin" size={14} className="text-purple-600" />
+                      </div>
+                      <span className="font-medium">{apt.metro}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                        <Icon name="Home" size={14} className="text-blue-600" />
+                      </div>
+                      <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
+                    </div>
+                    <a 
+                      href={yandexMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+                        <Icon name="Navigation" size={14} className="text-purple-600" />
+                      </div>
+                      <span className="text-xs font-medium underline">{apt.address}</span>
+                    </a>
+                  </div>
+                  <Button 
+                    className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      trackTelegramClick(apt.id);
+                      window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                    }}
+                  >
+                    <Icon name="MessageCircle" size={18} />
+                    Заявка в Telegram
+                  </Button>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
