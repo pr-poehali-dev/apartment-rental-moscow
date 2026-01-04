@@ -98,13 +98,13 @@ export default function Index() {
                 className="absolute inset-0 w-full h-full object-cover opacity-60"
               />
               <div className="relative z-10 text-center text-white px-6">
-                <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase">
+                <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase animate-fade-up-big">
                   Почасовая аренда<br/>квартир в Москве
                 </h2>
-                <p className="text-xl md:text-2xl font-light mb-8 text-white/90">
+                <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
                   Без посредников
                 </p>
-                <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12">
+                <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}>
                   Смотреть квартиры
                 </Button>
               </div>
