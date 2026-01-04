@@ -221,73 +221,12 @@ export default function RentTab({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {apartmentStats.map((apt) => {
-            const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
-            return (
-              <Card 
-                key={apt.id} 
-                className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
-                onClick={() => {
-                  trackView(apt.id);
-                  setSelectedApartment(apt.id);
-                }}
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
-                  <img 
-                    src={apt.image} 
-                    alt={apt.title}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
-                      {apt.price}₽/ч
-                    </Badge>
-                  </div>
-                </div>
-                <div className="p-6 bg-gradient-to-b from-white to-gray-50">
-                  <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
-                  <div className="space-y-3 text-sm text-muted-foreground mb-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                        <Icon name="MapPin" size={14} className="text-purple-600" />
-                      </div>
-                      <span className="font-medium">{apt.metro}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <Icon name="Home" size={14} className="text-blue-600" />
-                      </div>
-                      <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
-                    </div>
-                    <a 
-                      href={yandexMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
-                        <Icon name="Navigation" size={14} className="text-purple-600" />
-                      </div>
-                      <span className="text-xs font-medium underline">{apt.address}</span>
-                    </a>
-                  </div>
-                  <Button 
-                    className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      trackTelegramClick(apt.id);
-                      window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                    }}
-                  >
-                    <Icon name="MessageCircle" size={18} />
-                    Заявка в Telegram
-                  </Button>
-                </div>
-              </Card>
-            );
-          })}
+        <div className="text-center py-16">
+          <div className="inline-block p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-3xl">
+            <Icon name={categoryConfig[activeCategory].icon as any} size={64} className="mx-auto mb-4 text-purple-600" />
+            <h3 className="text-2xl font-bold mb-2">Скоро здесь появятся предложения</h3>
+            <p className="text-muted-foreground">Раздел "{categoryConfig[activeCategory].title}" в разработке</p>
+          </div>
         </div>
       </section>
 
