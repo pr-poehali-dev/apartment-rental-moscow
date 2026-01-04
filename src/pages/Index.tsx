@@ -14,6 +14,15 @@ interface Apartment {
   address: string;
   area: number;
   rooms: number;
+  telegram: string;
+  views: number;
+  telegramClicks: number;
+}
+
+interface OwnerStats {
+  apartmentId: number;
+  views: number;
+  telegramClicks: number;
 }
 
 const apartments: Apartment[] = [
@@ -25,7 +34,10 @@ const apartments: Apartment[] = [
     metro: 'Парк Культуры',
     address: 'Остоженка, 12',
     area: 32,
-    rooms: 1
+    rooms: 1,
+    telegram: '@owner1',
+    views: 0,
+    telegramClicks: 0
   },
   {
     id: 2,
@@ -35,7 +47,10 @@ const apartments: Apartment[] = [
     metro: 'Маяковская',
     address: 'Тверская, 25',
     area: 65,
-    rooms: 2
+    rooms: 2,
+    telegram: '@owner2',
+    views: 0,
+    telegramClicks: 0
   },
   {
     id: 3,
@@ -45,15 +60,31 @@ const apartments: Apartment[] = [
     metro: 'Кропоткинская',
     address: 'Болотная наб., 3',
     area: 85,
-    rooms: 3
+    rooms: 3,
+    telegram: '@owner3',
+    views: 0,
+    telegramClicks: 0
   }
 ];
 
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about'>('rent');
+  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about' | 'dashboard'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
+  const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  const trackView = (apartmentId: number) => {
+    setApartmentStats(prev => prev.map(apt => 
+      apt.id === apartmentId ? { ...apt, views: apt.views + 1 } : apt
+    ));
+  };
+
+  const trackTelegramClick = (apartmentId: number) => {
+    setApartmentStats(prev => prev.map(apt => 
+      apt.id === apartmentId ? { ...apt, telegramClicks: apt.telegramClicks + 1 } : apt
+    ));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,6 +121,12 @@ export default function Index() {
                 className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'about' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
               >
                 О платформе
+              </button>
+              <button 
+                onClick={() => setActiveTab('dashboard')}
+                className={`text-sm px-4 py-2 rounded-full transition-all ${activeTab === 'dashboard' ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
+              >
+                Личный кабинет
               </button>
             </div>
           </div>
@@ -133,45 +170,73 @@ export default function Index() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {apartments.map((apt) => (
-                  <Card 
-                    key={apt.id} 
-                    className="overflow-hidden border-0 shadow-sm hover-lift cursor-pointer group rounded-2xl"
-                  >
-                    <div className="aspect-[4/3] overflow-hidden bg-gray-100">
-                      <img 
-                        src={apt.image} 
-                        alt={apt.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="text-xl font-semibold tracking-tight">{apt.title}</h3>
-                        <Badge variant="secondary" className="rounded-full font-semibold">
-                          {apt.price}₽/ч
-                        </Badge>
+                {apartmentStats.map((apt) => {
+                  const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
+                  return (
+                    <Card 
+                      key={apt.id} 
+                      className="overflow-hidden border-0 shadow-sm hover-lift cursor-pointer group rounded-2xl"
+                      onClick={() => trackView(apt.id)}
+                    >
+                      <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+                        <img 
+                          src={apt.image} 
+                          alt={apt.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
                       </div>
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                          <Icon name="MapPin" size={16} />
-                          <span>{apt.metro}</span>
+                      <div className="p-6">
+                        <div className="flex items-start justify-between mb-3">
+                          <h3 className="text-xl font-semibold tracking-tight">{apt.title}</h3>
+                          <Badge variant="secondary" className="rounded-full font-semibold">
+                            {apt.price}₽/ч
+                          </Badge>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Icon name="Home" size={16} />
-                          <span>{apt.area} м² • {apt.rooms} комн.</span>
+                        <div className="space-y-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2">
+                            <Icon name="MapPin" size={16} />
+                            <span>{apt.metro}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Icon name="Home" size={16} />
+                            <span>{apt.area} м² • {apt.rooms} комн.</span>
+                          </div>
+                          <a 
+                            href={yandexMapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-primary hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Icon name="Navigation" size={16} />
+                            <span className="text-xs">{apt.address}</span>
+                          </a>
                         </div>
-                        <p className="text-xs">{apt.address}</p>
+                        <div className="flex gap-2 mt-4">
+                          <Button 
+                            className="flex-1 rounded-full h-10"
+                            variant="default"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              trackTelegramClick(apt.id);
+                              window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                            }}
+                          >
+                            <Icon name="MessageCircle" size={16} />
+                            Telegram
+                          </Button>
+                          <Button 
+                            className="flex-1 rounded-full h-10"
+                            variant="outline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Забронировать
+                          </Button>
+                        </div>
                       </div>
-                      <Button 
-                        className="w-full mt-4 rounded-full h-10"
-                        variant="outline"
-                      >
-                        Забронировать
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             </section>
 
@@ -284,6 +349,102 @@ export default function Index() {
                 <Button className="rounded-full h-12 px-8">
                   Смотреть квартиры
                 </Button>
+              </div>
+            </section>
+          </div>
+        )}
+
+        {activeTab === 'dashboard' && (
+          <div className="animate-fade-in">
+            <section className="max-w-[1200px] mx-auto px-6 py-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">
+                Личный кабинет собственника
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                <Card className="p-6 border-0 shadow-sm rounded-2xl">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon name="Eye" size={24} className="text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">
+                        {apartmentStats.reduce((sum, apt) => sum + apt.views, 0)}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Всего просмотров</div>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 border-0 shadow-sm rounded-2xl">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon name="MessageCircle" size={24} className="text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">
+                        {apartmentStats.reduce((sum, apt) => sum + apt.telegramClicks, 0)}
+                      </div>
+                      <div className="text-sm text-muted-foreground">Переходов в Telegram</div>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 border-0 shadow-sm rounded-2xl">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon name="TrendingUp" size={24} className="text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">
+                        {apartmentStats.length > 0 
+                          ? Math.round((apartmentStats.reduce((sum, apt) => sum + apt.telegramClicks, 0) / apartmentStats.reduce((sum, apt) => sum + apt.views, 0) || 0) * 100)
+                          : 0}%
+                      </div>
+                      <div className="text-sm text-muted-foreground">Конверсия</div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <h3 className="text-2xl font-bold mb-6">Статистика по квартирам</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {apartmentStats.map((apt) => (
+                  <Card key={apt.id} className="p-6 border-0 shadow-sm rounded-2xl hover-lift">
+                    <div className="flex items-center gap-6">
+                      <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img 
+                          src={apt.image} 
+                          alt={apt.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-lg font-semibold mb-1">{apt.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-3">{apt.address}</p>
+                        <div className="flex gap-6">
+                          <div className="flex items-center gap-2">
+                            <Icon name="Eye" size={16} className="text-muted-foreground" />
+                            <span className="text-sm font-medium">{apt.views} просмотров</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Icon name="MessageCircle" size={16} className="text-muted-foreground" />
+                            <span className="text-sm font-medium">{apt.telegramClicks} переходов в TG</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Icon name="TrendingUp" size={16} className="text-muted-foreground" />
+                            <span className="text-sm font-medium">
+                              {apt.views > 0 ? Math.round((apt.telegramClicks / apt.views) * 100) : 0}% конверсия
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <Badge variant="secondary" className="rounded-full font-semibold text-base px-4 py-2">
+                        {apt.price}₽/ч
+                      </Badge>
+                    </div>
+                  </Card>
+                ))}
               </div>
             </section>
           </div>
