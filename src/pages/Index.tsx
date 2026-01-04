@@ -72,7 +72,13 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
+  const [heroTextIndex, setHeroTextIndex] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  const heroTexts = [
+    'ПОЧАСОВАЯ АРЕНДА<br/>КВАРТИР В МОСКВЕ',
+    'ВЫБИРАЕТЕ - СВЯЗЫВАЕТЕСЬ - ЗАСЕЛЯЕТЕСЬ'
+  ];
 
   const trackView = (apartmentId: number) => {
     setApartmentStats(prev => prev.map(apt => 
@@ -92,6 +98,13 @@ export default function Index() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroTextIndex((prev) => (prev + 1) % heroTexts.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -147,9 +160,10 @@ export default function Index() {
                 style={{ transform: `translateY(${scrollY * 0.5}px)` }}
               />
               <div className="relative z-10 text-center text-white px-6">
-                <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase animate-fade-up-big">
-                  Почасовая аренда<br/>квартир в Москве
-                </h2>
+                <h2 
+                  className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase transition-opacity duration-500"
+                  dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
+                />
                 <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
                   Без посредников / Без регистрации
                 </p>
