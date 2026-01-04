@@ -233,7 +233,7 @@ export default function RentTab({
             {[
               { icon: 'Search', title: 'Выбираете', desc: 'Смотрите квартиры с фото и описанием' },
               { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
-              { icon: 'Key', title: 'Заселяетесь', desc: 'Договариваетесь и въезжаете' }
+              { icon: 'Key', title: 'Бронируете', desc: 'Договариваетесь и бронируете' }
             ].map((step, idx) => (
               <div key={idx} className="text-center">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center">
