@@ -47,6 +47,14 @@ export default function RentTab({
   const heroRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('hotels');
+
+  const categoryConfig = {
+    hotels: { title: 'Отели', placeholder: 'Найти отель по адресу или метро', icon: 'Building2' },
+    apartments: { title: 'Апартаменты', placeholder: 'Найти апартаменты по адресу или метро', icon: 'Home' },
+    saunas: { title: 'Сауны', placeholder: 'Найти сауну по адресу или метро', icon: 'Droplets' },
+    conference: { title: 'Конференц-залы', placeholder: 'Найти конференц-зал по адресу или метро', icon: 'Presentation' }
+  };
 
   const getWeatherIcon = (code: number | null) => {
     if (code === null) return 'Cloud';
@@ -138,19 +146,35 @@ export default function RentTab({
             Без посредников / Без регистрации
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto fade-slide-in px-4" style={{ animationDelay: '0.4s' }}>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+            <Button 
+              size="lg" 
+              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'hotels' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
+              onClick={() => setActiveCategory('hotels')}
+            >
               <Icon name="Building2" size={20} className="mr-2" />
               Отели
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+            <Button 
+              size="lg" 
+              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'apartments' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
+              onClick={() => setActiveCategory('apartments')}
+            >
               <Icon name="Home" size={20} className="mr-2" />
               Апартаменты
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+            <Button 
+              size="lg" 
+              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'saunas' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
+              onClick={() => setActiveCategory('saunas')}
+            >
               <Icon name="Droplets" size={20} className="mr-2" />
               Сауны
             </Button>
-            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full">
+            <Button 
+              size="lg" 
+              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'conference' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
+              onClick={() => setActiveCategory('conference')}
+            >
               <Icon name="Presentation" size={20} className="mr-2" />
               Конференц-залы
             </Button>
@@ -158,15 +182,33 @@ export default function RentTab({
         </div>
       </section>
 
-      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
-        <div className="mb-8 sm:mb-12">
-          <Input
-            type="search"
-            placeholder="Найти квартиру по адресу или метро"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-2xl mx-auto h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
-          />
+      <section className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <div className="mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+            <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
+            {categoryConfig[activeCategory].title}
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div>
+            <Input
+              type="search"
+              placeholder={categoryConfig[activeCategory].placeholder}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
+            />
+          </div>
+          <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
+            <iframe
+              src="https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755800&z=11&l=map"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              allowFullScreen
+              style={{ position: 'relative' }}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
