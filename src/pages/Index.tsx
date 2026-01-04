@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import styles from '@/components/NavButton.module.scss';
 import RentTab from '@/components/RentTab';
 import OwnersTab from '@/components/OwnersTab';
 import AboutTab from '@/components/AboutTab';
@@ -154,13 +155,13 @@ export default function Index() {
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
                 onClick={() => setActiveTab('owners')}
-                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'owners' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`${styles.navButton} ${activeTab === 'owners' ? styles.active : ''}`}
               >
                 Собственникам
               </button>
               <button 
                 onClick={() => setActiveTab('about')}
-                className={`text-sm px-5 py-1.5 rounded-full transition-all font-medium ${activeTab === 'about' ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`${styles.navButton} ${activeTab === 'about' ? styles.active : ''}`}
               >
                 О платформе
               </button>

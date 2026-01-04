@@ -1,0 +1,21 @@
+.navButton {
+  font-size: 0.875rem;
+  padding: 0.375rem 1.25rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: hsl(var(--foreground));
+  }
+
+  &.active {
+    background: white;
+    color: hsl(var(--foreground));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+}
