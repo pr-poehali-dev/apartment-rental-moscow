@@ -93,8 +93,8 @@ export default function RentTab({
             key={idx}
             src={image}
             alt={`Hero ${idx + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              idx === heroImageIndex ? 'opacity-40' : 'opacity-0'
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${
+              idx === heroImageIndex ? 'opacity-40 scale-100' : 'opacity-0 scale-105'
             }`}
             style={{ transform: `translateY(${scrollY * 0.3}px)` }}
           />
