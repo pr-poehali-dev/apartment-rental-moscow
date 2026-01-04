@@ -68,7 +68,10 @@ export default function RentTab({
             style={{ fontFamily: 'Syne, sans-serif' }}
             dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
           />
-          <p className="text-xl md:text-2xl font-light mb-8 text-white/90 fade-slide-in" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl md:text-2xl font-light mb-2 text-white/90 fade-slide-in" style={{ animationDelay: '0.2s' }}>
+            №1 в почасовой аренде
+          </p>
+          <p className="text-lg md:text-xl font-light mb-8 text-white/80 fade-slide-in" style={{ animationDelay: '0.3s' }}>
             Без посредников / Без регистрации
           </p>
           <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl fade-slide-in" style={{ animationDelay: '0.4s' }}>

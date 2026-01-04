@@ -145,11 +145,14 @@ export default function Index() {
           <div className="flex items-center gap-12">
             <div className="flex items-center gap-3">
               <img 
-                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/5481dc79-2033-4149-a8e2-1982d13e8a53.jpg"
+                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4629db7c-da60-42c7-8908-372c3cb3b6c6.jpg"
                 alt="Logo"
-                className="w-8 h-8 object-contain"
+                className="w-10 h-10 object-contain"
               />
-              <h1 className="text-xl logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Москва на час</h1>
+              <div>
+                <h1 className="text-2xl font-bold logo-text bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Арена 1</h1>
+                <p className="text-[10px] text-muted-foreground -mt-1">№1 в почасовой аренде</p>
+              </div>
             </div>
             <div className="hidden md:flex gap-1 bg-secondary/50 rounded-full p-1">
               <button 
@@ -215,7 +218,7 @@ export default function Index() {
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Icon name="Clock" size={16} />
-            <span>Москва на час © 2026 • Почасовая аренда квартир</span>
+            <span>Арена 1 © 2026 • Почасовая аренда квартир</span>
           </div>
         </div>
       </footer>

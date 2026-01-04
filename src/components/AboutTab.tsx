@@ -6,7 +6,7 @@ export default function AboutTab() {
     <div className="animate-fade-in">
       <section className="max-w-[800px] mx-auto px-6 py-32">
         <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-          О платформе<br/>Москва на час
+          О платформе<br/>Арена 1
         </h2>
         <div className="prose prose-lg max-w-none">
           <p className="text-xl text-muted-foreground mb-8">
