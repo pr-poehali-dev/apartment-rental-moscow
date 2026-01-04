@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,300,700,500,400italic,500italic,700italic,300italic");
+@use "sass:math";
 
 .navButton {
   position: relative;
@@ -23,7 +23,12 @@
     .buttonSpots {
       @for $i from 1 through 20 {
         &:nth-of-type(#{$i}) {
-          animation: spot-#{$i} 0.7s #{0.4 + random(10) / 10}s linear infinite;
+          animation: spot-#{$i}
+            0.7s
+            #{0.4 +
+            math.div(math.random(10), 10)}s
+            linear
+            infinite;
         }
       }
     }
@@ -44,10 +49,10 @@
 
   @for $i from 1 through 20 {
     &:nth-of-type(#{$i}) {
-      padding: #{random(3) + 2}px;
+      padding: #{math.random(3) + 2}px;
       left: #{-25 + ($i * 3)}px;
-      top: #{random(20) - 10}px;
-      background: hsla(#{200 + random(100)}, #{57% - random(10)}, 65%, 1);
+      top: #{math.random(20) - 10}px;
+      background: hsl(#{200 + math.random(100)}, #{57 - math.random(10)}%, 65%);
       box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.12);
     }
   }
