@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import RentTab from '@/components/RentTab';
+import OwnersTab from '@/components/OwnersTab';
+import AboutTab from '@/components/AboutTab';
+import DashboardTab from '@/components/DashboardTab';
 
 interface Apartment {
   id: number;
@@ -15,12 +16,6 @@ interface Apartment {
   area: number;
   rooms: number;
   telegram: string;
-  views: number;
-  telegramClicks: number;
-}
-
-interface OwnerStats {
-  apartmentId: number;
   views: number;
   telegramClicks: number;
 }
@@ -94,8 +89,7 @@ export default function Index() {
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
   const [heroTextIndex, setHeroTextIndex] = useState(0);
-  const [cleaningTasks, setCleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [cleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
 
   const heroTexts = [
     'ПОЧАСОВАЯ АРЕНДА<br/>КВАРТИР В МОСКВЕ',
@@ -172,421 +166,27 @@ export default function Index() {
 
       <main className="pt-14">
         {activeTab === 'rent' && (
-          <div className="animate-fade-in">
-            <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-black">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60" />
-              <img 
-                src="https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg"
-                alt="Hero"
-                className="absolute inset-0 w-full h-full object-cover opacity-60"
-                style={{ transform: `translateY(${scrollY * 0.5}px)` }}
-              />
-              <div className="relative z-10 text-center text-white px-6">
-                <h2 
-                  className={`font-bold mb-6 tracking-tight uppercase transition-opacity duration-500 whitespace-nowrap ${heroTextIndex === 1 ? 'text-2xl md:text-4xl' : 'text-4xl md:text-6xl'}`}
-                  dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
-                />
-                <p className="text-xl md:text-2xl font-light mb-8 text-white/90 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
-                  Без посредников / Без регистрации
-                </p>
-                <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}>
-                  Смотреть квартиры
-                </Button>
-              </div>
-            </section>
-
-            <section className="max-w-[1200px] mx-auto px-6 py-20">
-              <div className="mb-12">
-                <Input
-                  type="search"
-                  placeholder="Найти квартиру по адресу или метро"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="max-w-2xl mx-auto h-12 rounded-full border-gray-300 px-6"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {apartmentStats.map((apt) => {
-                  const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
-                  return (
-                    <Card 
-                      key={apt.id} 
-                      className="overflow-hidden border-0 shadow-sm hover-lift cursor-pointer group rounded-2xl"
-                      onClick={() => trackView(apt.id)}
-                    >
-                      <div className="aspect-[4/3] overflow-hidden bg-gray-100">
-                        <img 
-                          src={apt.image} 
-                          alt={apt.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="p-6">
-                        <div className="flex items-start justify-between mb-3">
-                          <h3 className="text-xl font-semibold tracking-tight">{apt.title}</h3>
-                          <Badge variant="secondary" className="rounded-full font-semibold">
-                            {apt.price}₽/ч
-                          </Badge>
-                        </div>
-                        <div className="space-y-2 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Icon name="MapPin" size={16} />
-                            <span>{apt.metro}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Icon name="Home" size={16} />
-                            <span>{apt.area} м² • {apt.rooms} комн.</span>
-                          </div>
-                          <a 
-                            href={yandexMapsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-primary hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Icon name="Navigation" size={16} />
-                            <span className="text-xs">{apt.address}</span>
-                          </a>
-                        </div>
-                        <Button 
-                          className="w-full rounded-full h-10 mt-4"
-                          variant="default"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            trackTelegramClick(apt.id);
-                            window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                          }}
-                        >
-                          <Icon name="MessageCircle" size={16} />
-                          Заявка в Telegram
-                        </Button>
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section className="bg-secondary py-20">
-              <div className="max-w-[1200px] mx-auto px-6">
-                <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 tracking-tight">
-                  Как это работает
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                  {[
-                    { icon: 'Search', title: 'Выбираете', desc: 'Смотрите квартиры с фото и описанием' },
-                    { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
-                    { icon: 'Key', title: 'Заселяетесь', desc: 'Договариваетесь и въезжаете' }
-                  ].map((step, idx) => (
-                    <div key={idx} className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center">
-                        <Icon name={step.icon as any} size={28} className="text-background" />
-                      </div>
-                      <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                      <p className="text-muted-foreground">{step.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          </div>
+          <RentTab
+            apartmentStats={apartmentStats}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            trackView={trackView}
+            trackTelegramClick={trackTelegramClick}
+            scrollY={scrollY}
+            heroTextIndex={heroTextIndex}
+            heroTexts={heroTexts}
+          />
         )}
 
-        {activeTab === 'owners' && (
-          <div className="animate-fade-in">
-            <section className="max-w-[800px] mx-auto px-6 py-32">
-              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-                Сдавайте квартиру<br/>на своих условиях
-              </h2>
-              <p className="text-xl text-muted-foreground mb-12 text-balance">
-                Тысячи людей ищут жильё каждый день. Зарабатывайте на своей квартире с нами.
-              </p>
+        {activeTab === 'owners' && <OwnersTab />}
 
-              <Card className="p-8 md:p-12 border-0 shadow-sm rounded-2xl">
-                <h3 className="text-2xl font-bold mb-8">Условия размещения</h3>
-                <div className="space-y-6">
-                  {[
-                    { title: 'Комиссия 10%', desc: 'От каждой успешной брони' },
-                    { title: 'Минимум 5 фото', desc: 'Качественные снимки квартиры' },
-                    { title: 'Верификация', desc: 'Подтверждение личности' },
-                    { title: 'Telegram-канал', desc: 'Для связи с арендаторами' }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex gap-4">
-                      <div className="w-6 h-6 rounded-full bg-foreground flex-shrink-0 flex items-center justify-center mt-1">
-                        <Icon name="Check" size={16} className="text-background" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-1">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Button className="w-full mt-8 h-12 rounded-full text-base">
-                  Начать сдавать
-                </Button>
-              </Card>
-
-              <div className="mt-16 grid grid-cols-3 gap-8 text-center">
-                {[
-                  { value: '1,282', label: 'Просмотров' },
-                  { value: '479', label: 'Кликов' },
-                  { value: '85', label: 'Заявок' }
-                ].map((stat, idx) => (
-                  <div key={idx}>
-                    <div className="text-4xl font-bold mb-2">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-
-        {activeTab === 'about' && (
-          <div className="animate-fade-in">
-            <section className="max-w-[800px] mx-auto px-6 py-32">
-              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-                О платформе<br/>Москва на час
-              </h2>
-              <div className="prose prose-lg max-w-none">
-                <p className="text-xl text-muted-foreground mb-8">
-                  Современная платформа для аренды квартир в Москве на любой срок: от часа до месяца. Прямая связь с собственниками без посредников.
-                </p>
-                
-                <h3 className="text-2xl font-bold mb-4 mt-12">Преимущества</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                  {[
-                    { icon: 'Shield', text: 'Проверенные собственники' },
-                    { icon: 'Clock', text: 'Аренда от часа' },
-                    { icon: 'MapPin', text: 'Центр Москвы' },
-                    { icon: 'TrendingUp', text: 'Прозрачная аналитика' }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <Icon name={item.icon as any} size={20} className="text-primary" />
-                      <span className="font-medium">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <h3 className="text-2xl font-bold mb-4">Как начать?</h3>
-                <p className="text-muted-foreground mb-4">
-                  Выберите квартиру из каталога, свяжитесь с собственником через Telegram и договоритесь об условиях. Никаких посредников — только вы и владелец.
-                </p>
-                <Button className="rounded-full h-12 px-8">
-                  Смотреть квартиры
-                </Button>
-              </div>
-            </section>
-          </div>
-        )}
+        {activeTab === 'about' && <AboutTab />}
 
         {activeTab === 'dashboard' && (
-          <div className="animate-fade-in">
-            <section className="max-w-[1200px] mx-auto px-6 py-20">
-              <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">
-                Личный кабинет собственника
-              </h2>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-                <Card className="p-6 border-0 shadow-sm rounded-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Icon name="Eye" size={24} className="text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold">
-                        {apartmentStats.reduce((sum, apt) => sum + apt.views, 0)}
-                      </div>
-                      <div className="text-sm text-muted-foreground">Всего просмотров</div>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-6 border-0 shadow-sm rounded-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Icon name="MessageCircle" size={24} className="text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold">
-                        {apartmentStats.reduce((sum, apt) => sum + apt.telegramClicks, 0)}
-                      </div>
-                      <div className="text-sm text-muted-foreground">Переходов в Telegram</div>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-6 border-0 shadow-sm rounded-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Icon name="TrendingUp" size={24} className="text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold">
-                        {apartmentStats.length > 0 
-                          ? Math.round((apartmentStats.reduce((sum, apt) => sum + apt.telegramClicks, 0) / apartmentStats.reduce((sum, apt) => sum + apt.views, 0) || 0) * 100)
-                          : 0}%
-                      </div>
-                      <div className="text-sm text-muted-foreground">Конверсия</div>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-
-              <h3 className="text-2xl font-bold mb-6">Статистика по квартирам</h3>
-              <div className="grid grid-cols-1 gap-4">
-                {apartmentStats.map((apt) => (
-                  <Card key={apt.id} className="p-6 border-0 shadow-sm rounded-2xl hover-lift">
-                    <div className="flex items-center gap-6">
-                      <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                        <img 
-                          src={apt.image} 
-                          alt={apt.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-lg font-semibold mb-1">{apt.title}</h4>
-                        <p className="text-sm text-muted-foreground mb-3">{apt.address}</p>
-                        <div className="flex gap-6">
-                          <div className="flex items-center gap-2">
-                            <Icon name="Eye" size={16} className="text-muted-foreground" />
-                            <span className="text-sm font-medium">{apt.views} просмотров</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Icon name="MessageCircle" size={16} className="text-muted-foreground" />
-                            <span className="text-sm font-medium">{apt.telegramClicks} переходов в TG</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Icon name="TrendingUp" size={16} className="text-muted-foreground" />
-                            <span className="text-sm font-medium">
-                              {apt.views > 0 ? Math.round((apt.telegramClicks / apt.views) * 100) : 0}% конверсия
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <Badge variant="secondary" className="rounded-full font-semibold text-base px-4 py-2">
-                        {apt.price}₽/ч
-                      </Badge>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-
-              <h3 className="text-2xl font-bold mb-6 mt-12">График уборки и начисление ЗП</h3>
-              
-              <Card className="p-6 border-0 shadow-sm rounded-2xl mb-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
-                    <div className="text-2xl font-bold text-green-600">
-                      {cleaningTasks.filter(t => t.status === 'completed').length}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Выполнено</div>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
-                    <div className="text-2xl font-bold text-blue-600">
-                      {cleaningTasks.filter(t => t.status === 'in_progress').length}
-                    </div>
-                    <div className="text-sm text-muted-foreground">В процессе</div>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
-                    <div className="text-2xl font-bold text-orange-600">
-                      {cleaningTasks.filter(t => t.status === 'pending').length}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Запланировано</div>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
-                    <div className="text-2xl font-bold text-primary">
-                      {cleaningTasks.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.price, 0).toLocaleString()}₽
-                    </div>
-                    <div className="text-sm text-muted-foreground">Начислено ЗП</div>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Дата</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Время</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Квартира</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Клинер</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Статус</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Длительность</th>
-                        <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">ЗП</th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Примечания</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cleaningTasks.map((task) => {
-                        const apartment = apartmentStats.find(a => a.id === task.apartmentId);
-                        return (
-                          <tr key={task.id} className="border-b border-gray-100 hover:bg-secondary/30 transition-colors">
-                            <td className="py-4 px-4 text-sm">
-                              {new Date(task.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })}
-                            </td>
-                            <td className="py-4 px-4 text-sm">{task.time}</td>
-                            <td className="py-4 px-4 text-sm font-medium">{apartment?.title}</td>
-                            <td className="py-4 px-4 text-sm">{task.cleaner}</td>
-                            <td className="py-4 px-4">
-                              <Badge 
-                                variant={task.status === 'completed' ? 'default' : task.status === 'in_progress' ? 'secondary' : 'outline'}
-                                className="rounded-full text-xs"
-                              >
-                                {task.status === 'completed' ? 'Выполнено' : task.status === 'in_progress' ? 'В работе' : 'Ожидает'}
-                              </Badge>
-                            </td>
-                            <td className="py-4 px-4 text-sm">
-                              {task.duration > 0 ? `${task.duration} мин` : '—'}
-                            </td>
-                            <td className="py-4 px-4 text-right">
-                              <span className={`text-sm font-semibold ${task.status === 'completed' ? 'text-green-600' : 'text-muted-foreground'}`}>
-                                {task.status === 'completed' ? `${task.price.toLocaleString()}₽` : `${task.price.toLocaleString()}₽`}
-                              </span>
-                            </td>
-                            <td className="py-4 px-4 text-sm text-muted-foreground">
-                              {task.notes || '—'}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot>
-                      <tr className="border-t-2 border-gray-300 font-semibold">
-                        <td colSpan={6} className="py-4 px-4 text-right text-sm">
-                          Итого начислено:
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <span className="text-lg font-bold text-primary">
-                            {cleaningTasks.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.price, 0).toLocaleString()}₽
-                          </span>
-                        </td>
-                        <td></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-
-                <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-                  <div className="flex items-start gap-3">
-                    <Icon name="Info" size={20} className="text-blue-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-sm mb-1 text-blue-900">Расчёт зарплаты</h4>
-                      <p className="text-xs text-blue-800">
-                        • Студия (1 комн.) — 1,500₽ за уборку<br/>
-                        • Двушка (2 комн.) — 2,200₽ за уборку<br/>
-                        • Трёшка (3 комн.) — 2,500₽ за уборку<br/>
-                        • Генеральная уборка: +500₽ к базовой ставке<br/>
-                        • Оплата производится после подтверждения выполнения
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </section>
-          </div>
+          <DashboardTab
+            apartmentStats={apartmentStats}
+            cleaningTasks={cleaningTasks}
+          />
         )}
       </main>
 
