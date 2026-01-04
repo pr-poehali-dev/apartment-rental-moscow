@@ -136,6 +136,12 @@ export default function RentTab({
             <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
               Смотреть апартаменты
             </Button>
+            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+              Смотреть сауны
+            </Button>
+            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+              Смотреть конференц-залы
+            </Button>
           </div>
         </div>
       </section>
