@@ -185,9 +185,6 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <div className="hidden md:block px-3 sm:px-4 py-1.5 rounded-full promo-badge">
-              <span className="text-xs sm:text-sm font-bold text-white whitespace-nowrap">ПОЧАСОВАЯ АРЕНДА</span>
-            </div>
             <Button 
               size="sm" 
               className="rounded-full font-medium shadow-sm text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"

@@ -100,10 +100,15 @@ export default function RentTab({
           />
         ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
-        <div className="relative z-10 text-center text-white px-6 max-w-5xl">
-          <div className="flex items-center justify-center gap-6 mb-6 fade-slide-in">
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 max-w-5xl">
+          <div className="mb-4 sm:mb-6 fade-slide-in">
+            <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full promo-badge">
+              <span className="text-sm sm:text-base md:text-lg font-bold text-white whitespace-nowrap">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 fade-slide-in" style={{ animationDelay: '0.1s' }}>
             <h2 
-              className="text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
+              className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
               style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               УЮТНАЯ ЗИМА
