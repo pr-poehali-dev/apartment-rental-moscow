@@ -130,16 +130,16 @@ export default function RentTab({
             Без посредников / Без регистрации
           </p>
           <div className="flex flex-wrap gap-4 justify-center fade-slide-in" style={{ animationDelay: '0.4s' }}>
-            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
               Смотреть отели
             </Button>
-            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
               Смотреть апартаменты
             </Button>
-            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
               Смотреть сауны
             </Button>
-            <Button size="lg" className="hero-gradient text-white hover:opacity-90 rounded-full px-10 h-14 text-lg font-semibold shadow-2xl">
+            <Button size="lg" className="hero-gradient hero-button text-white rounded-full px-10 h-14 text-lg font-semibold">
               Смотреть конференц-залы
             </Button>
           </div>

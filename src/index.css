@@ -193,4 +193,27 @@
       background-position: 100% 50%;
     }
   }
+
+  .hero-button {
+    animation: button-glow 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+  }
+
+  .hero-button:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  @keyframes button-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 5px 25px rgba(102, 126, 234, 0.5),
+        0 3px 15px rgba(118, 75, 162, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 8px 35px rgba(102, 126, 234, 0.7),
+        0 5px 20px rgba(118, 75, 162, 0.5);
+    }
+  }
 }
