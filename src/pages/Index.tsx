@@ -25,6 +25,18 @@ interface OwnerStats {
   telegramClicks: number;
 }
 
+interface CleaningTask {
+  id: number;
+  apartmentId: number;
+  date: string;
+  time: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  cleaner: string;
+  price: number;
+  duration: number;
+  notes: string;
+}
+
 const apartments: Apartment[] = [
   {
     id: 1,
@@ -67,12 +79,22 @@ const apartments: Apartment[] = [
   }
 ];
 
+const initialCleaningTasks: CleaningTask[] = [
+  { id: 1, apartmentId: 1, date: '2026-01-05', time: '10:00', status: 'completed', cleaner: 'Анна И.', price: 1500, duration: 120, notes: 'Стандартная уборка' },
+  { id: 2, apartmentId: 1, date: '2026-01-06', time: '14:00', status: 'completed', cleaner: 'Мария С.', price: 1500, duration: 110, notes: '' },
+  { id: 3, apartmentId: 2, date: '2026-01-05', time: '11:00', status: 'completed', cleaner: 'Анна И.', price: 2200, duration: 150, notes: 'Генеральная уборка' },
+  { id: 4, apartmentId: 1, date: '2026-01-07', time: '10:00', status: 'in_progress', cleaner: 'Анна И.', price: 1500, duration: 0, notes: '' },
+  { id: 5, apartmentId: 3, date: '2026-01-07', time: '15:00', status: 'pending', cleaner: 'Мария С.', price: 2500, duration: 0, notes: 'Трёхкомнатная' },
+  { id: 6, apartmentId: 2, date: '2026-01-08', time: '12:00', status: 'pending', cleaner: 'Анна И.', price: 2200, duration: 0, notes: '' },
+];
+
 export default function Index() {
   const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about' | 'dashboard'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
   const [heroTextIndex, setHeroTextIndex] = useState(0);
+  const [cleaningTasks, setCleaningTasks] = useState<CleaningTask[]>(initialCleaningTasks);
   const heroRef = useRef<HTMLDivElement>(null);
 
   const heroTexts = [
@@ -452,6 +474,117 @@ export default function Index() {
                   </Card>
                 ))}
               </div>
+
+              <h3 className="text-2xl font-bold mb-6 mt-12">График уборки и начисление ЗП</h3>
+              
+              <Card className="p-6 border-0 shadow-sm rounded-2xl mb-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
+                    <div className="text-2xl font-bold text-green-600">
+                      {cleaningTasks.filter(t => t.status === 'completed').length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Выполнено</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {cleaningTasks.filter(t => t.status === 'in_progress').length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">В процессе</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
+                    <div className="text-2xl font-bold text-orange-600">
+                      {cleaningTasks.filter(t => t.status === 'pending').length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Запланировано</div>
+                  </div>
+                  <div className="text-center p-4 bg-secondary/50 rounded-xl">
+                    <div className="text-2xl font-bold text-primary">
+                      {cleaningTasks.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.price, 0).toLocaleString()}₽
+                    </div>
+                    <div className="text-sm text-muted-foreground">Начислено ЗП</div>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Дата</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Время</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Квартира</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Клинер</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Статус</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Длительность</th>
+                        <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">ЗП</th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Примечания</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cleaningTasks.map((task) => {
+                        const apartment = apartmentStats.find(a => a.id === task.apartmentId);
+                        return (
+                          <tr key={task.id} className="border-b border-gray-100 hover:bg-secondary/30 transition-colors">
+                            <td className="py-4 px-4 text-sm">
+                              {new Date(task.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })}
+                            </td>
+                            <td className="py-4 px-4 text-sm">{task.time}</td>
+                            <td className="py-4 px-4 text-sm font-medium">{apartment?.title}</td>
+                            <td className="py-4 px-4 text-sm">{task.cleaner}</td>
+                            <td className="py-4 px-4">
+                              <Badge 
+                                variant={task.status === 'completed' ? 'default' : task.status === 'in_progress' ? 'secondary' : 'outline'}
+                                className="rounded-full text-xs"
+                              >
+                                {task.status === 'completed' ? 'Выполнено' : task.status === 'in_progress' ? 'В работе' : 'Ожидает'}
+                              </Badge>
+                            </td>
+                            <td className="py-4 px-4 text-sm">
+                              {task.duration > 0 ? `${task.duration} мин` : '—'}
+                            </td>
+                            <td className="py-4 px-4 text-right">
+                              <span className={`text-sm font-semibold ${task.status === 'completed' ? 'text-green-600' : 'text-muted-foreground'}`}>
+                                {task.status === 'completed' ? `${task.price.toLocaleString()}₽` : `${task.price.toLocaleString()}₽`}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 text-sm text-muted-foreground">
+                              {task.notes || '—'}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t-2 border-gray-300 font-semibold">
+                        <td colSpan={6} className="py-4 px-4 text-right text-sm">
+                          Итого начислено:
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <span className="text-lg font-bold text-primary">
+                            {cleaningTasks.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.price, 0).toLocaleString()}₽
+                          </span>
+                        </td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <div className="flex items-start gap-3">
+                    <Icon name="Info" size={20} className="text-blue-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-sm mb-1 text-blue-900">Расчёт зарплаты</h4>
+                      <p className="text-xs text-blue-800">
+                        • Студия (1 комн.) — 1,500₽ за уборку<br/>
+                        • Двушка (2 комн.) — 2,200₽ за уборку<br/>
+                        • Трёшка (3 комн.) — 2,500₽ за уборку<br/>
+                        • Генеральная уборка: +500₽ к базовой ставке<br/>
+                        • Оплата производится после подтверждения выполнения
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </section>
           </div>
         )}
