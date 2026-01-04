@@ -60,7 +60,7 @@ export default function Index() {
           <div className="flex items-center gap-12">
             <div className="flex items-center gap-2">
               <Icon name="Clock" size={20} className="text-primary" />
-              <h1 className="text-xl font-semibold tracking-tight">Москва на час</h1>
+              <h1 className="text-2xl logo-text">Москва на час</h1>
             </div>
             <div className="hidden md:flex gap-8">
               <button 
@@ -98,11 +98,11 @@ export default function Index() {
                 className="absolute inset-0 w-full h-full object-cover opacity-60"
               />
               <div className="relative z-10 text-center text-white px-6">
-                <h2 className="text-6xl md:text-8xl font-bold mb-4 tracking-tight">
-                  Москва<br/>на час
+                <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight uppercase">
+                  Почасовая аренда<br/>квартир в Москве
                 </h2>
                 <p className="text-xl md:text-2xl font-light mb-8 text-white/90">
-                  Квартиры от 1 часа до месяца. Без посредников.
+                  Без посредников
                 </p>
                 <Button size="lg" className="bg-white text-black hover:bg-gray-100 rounded-full px-8 h-12">
                   Смотреть квартиры
