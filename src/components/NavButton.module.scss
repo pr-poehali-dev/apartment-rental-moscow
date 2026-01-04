@@ -1,81 +1,24 @@
-@use "sass:math";
-
 .navButton {
   position: relative;
   font-size: 0.875rem;
   padding: 0.375rem 1.25rem;
   border-radius: 9999px;
-  transition:
-    all 0.3s,
-    box-shadow 0.2s,
-    transform 0.2s 0.2s;
+  transition: all 0.3s ease;
   font-weight: 500;
   color: hsl(var(--muted-foreground));
   background: transparent;
   border: none;
   cursor: pointer;
-  overflow: hidden;
 
   &:hover {
     color: hsl(var(--foreground));
-    box-shadow: 0px 17px 18px -14px rgba(0, 0, 0, 0.08);
-
-    .buttonSpots {
-      @for $i from 1 through 20 {
-        &:nth-of-type(#{$i}) {
-          animation: spot-#{$i}
-            0.7s
-            #{0.4 +
-            math.div(math.random(10), 10)}s
-            linear
-            infinite;
-        }
-      }
-    }
+    box-shadow: 0px 8px 12px -4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
   }
 
   &.active {
     background: white;
     color: hsl(var(--foreground));
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  }
-}
-
-.buttonSpots {
-  position: absolute;
-  border-radius: 100px;
-  opacity: 0;
-  pointer-events: none;
-
-  @for $i from 1 through 20 {
-    &:nth-of-type(#{$i}) {
-      padding: #{math.random(3) + 2}px;
-      left: #{-25 + ($i * 3)}px;
-      top: #{math.random(20) - 10}px;
-      background: hsl(#{200 + math.random(100)}, #{57 - math.random(10)}%, 65%);
-      box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.12);
-    }
-  }
-}
-
-@for $i from 1 through 20 {
-  @keyframes spot-#{$i} {
-    from {
-      opacity: 0;
-    }
-    to {
-      transform: translateY(15px) translateX(#{-10px + $i});
-      opacity: 0.6;
-    }
-  }
-}
-
-@keyframes rotate {
-  from {
-    opacity: 0.8;
-  }
-  to {
-    transform: rotate(360deg);
-    opacity: 0.8;
   }
 }
