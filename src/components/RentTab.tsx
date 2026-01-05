@@ -48,10 +48,18 @@ export default function RentTab({
   heroImages
 }: RentTabProps) {
   const heroRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
+
+  const handleCategoryClick = (category: 'hotels' | 'apartments' | 'saunas' | 'conference') => {
+    setActiveCategory(category);
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
 
   const categoryListings: Apartment[] = [
     // Отели
@@ -175,7 +183,7 @@ export default function RentTab({
             <Button 
               size="lg" 
               className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'hotels' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => setActiveCategory('hotels')}
+              onClick={() => handleCategoryClick('hotels')}
             >
               <Icon name="Building2" size={20} className="mr-2" />
               Отели
@@ -183,7 +191,7 @@ export default function RentTab({
             <Button 
               size="lg" 
               className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'apartments' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => setActiveCategory('apartments')}
+              onClick={() => handleCategoryClick('apartments')}
             >
               <Icon name="Home" size={20} className="mr-2" />
               Апартаменты
@@ -191,7 +199,7 @@ export default function RentTab({
             <Button 
               size="lg" 
               className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'saunas' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => setActiveCategory('saunas')}
+              onClick={() => handleCategoryClick('saunas')}
             >
               <Icon name="Droplets" size={20} className="mr-2" />
               Сауны
@@ -199,7 +207,7 @@ export default function RentTab({
             <Button 
               size="lg" 
               className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'conference' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => setActiveCategory('conference')}
+              onClick={() => handleCategoryClick('conference')}
             >
               <Icon name="Presentation" size={20} className="mr-2" />
               Конференц-залы
@@ -209,7 +217,7 @@ export default function RentTab({
       </section>
 
       {activeCategory && (
-        <section className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <section ref={resultsRef} className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
           <div className="mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
               <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
