@@ -260,7 +260,7 @@ export default function Index() {
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Icon name="Clock" size={16} />
-            <span>Арена 1 © 2026 • Почасовая аренда квартир</span>
+            <span>120 минут © 2026 • Почасовая аренда квартир</span>
           </div>
         </div>
       </footer>
