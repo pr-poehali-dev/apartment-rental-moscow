@@ -41,17 +41,11 @@ export default function OwnersTab() {
           </div>
         </Card>
 
-        <div className="mt-16 grid grid-cols-3 gap-8 text-center">
-          {[
-            { value: '1,282', label: 'Просмотров' },
-            { value: '479', label: 'Кликов' },
-            { value: '85', label: 'Заявок' }
-          ].map((stat, idx) => (
-            <div key={idx}>
-              <div className="text-4xl font-bold mb-2">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
+        <div className="mt-16 text-center">
+          <h3 className="text-4xl md:text-5xl font-bold mb-4">Я ПРОДАМ ВСЁ</h3>
+          <p className="text-xl text-muted-foreground">
+            Впечатляюще поднимем % загрузки Вашего объекта
+          </p>
         </div>
       </section>
     </div>
