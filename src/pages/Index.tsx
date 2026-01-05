@@ -6,6 +6,7 @@ import RentTab from '@/components/RentTab';
 import OwnersTab from '@/components/OwnersTab';
 import AboutTab from '@/components/AboutTab';
 import DashboardTab from '@/components/DashboardTab';
+import HotelsTab from '@/components/HotelsTab';
 
 interface Apartment {
   id: number;
@@ -85,7 +86,7 @@ const initialCleaningTasks: CleaningTask[] = [
 ];
 
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about' | 'dashboard'>('rent');
+  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'hotels' | 'about' | 'dashboard'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
@@ -173,6 +174,16 @@ export default function Index() {
                 Собственникам
               </button>
               <button 
+                onClick={() => setActiveTab('hotels')}
+                className={`${styles.navButton} ${activeTab === 'hotels' ? styles.active : ''}`}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Отели
+              </button>
+              <button 
                 onClick={() => setActiveTab('about')}
                 className={`${styles.navButton} ${activeTab === 'about' ? styles.active : ''}`}
               >
@@ -218,6 +229,14 @@ export default function Index() {
               <Button
                 variant="ghost"
                 className="w-full justify-start text-base font-medium h-12"
+                onClick={() => { setActiveTab('hotels'); setMobileMenuOpen(false); }}
+              >
+                <Icon name="Hotel" size={18} className="mr-3" />
+                Отели
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-base font-medium h-12"
                 onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); }}
               >
                 <Icon name="Info" size={18} className="mr-3" />
@@ -245,6 +264,8 @@ export default function Index() {
         )}
 
         {activeTab === 'owners' && <OwnersTab />}
+
+        {activeTab === 'hotels' && <HotelsTab />}
 
         {activeTab === 'about' && <AboutTab />}
 
