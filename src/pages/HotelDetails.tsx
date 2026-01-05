@@ -41,7 +41,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 3500,
         area: 20,
         description: 'Комфортный номер с двуспальной кроватью, идеально подходит для краткосрочного отдыха',
-        amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ'],
+        amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_standard',
         minHours: 2
       },
@@ -52,7 +52,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 4500,
         area: 25,
         description: 'Улучшенный номер с зоной отдыха и современными удобствами',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Диван'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Диван', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_standard_plus',
         minHours: 2
       },
@@ -63,7 +63,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 5500,
         area: 28,
         description: 'Романтический номер с красивым интерьером и джакузи',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Свечи'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Свечи', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_romantic',
         minHours: 3
       },
@@ -74,7 +74,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 6500,
         area: 35,
         description: 'Просторный номер повышенной комфортности с отдельной гостиной зоной',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Гостиная зона', 'Кофемашина'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Гостиная зона', 'Кофемашина', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_junior',
         minHours: 3
       }
@@ -94,7 +94,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 4000,
         area: 22,
         description: 'Уютный стандартный номер с необходимыми удобствами',
-        amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ'],
+        amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_standard',
         minHours: 2
       },
@@ -105,7 +105,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 5000,
         area: 28,
         description: 'Номер для деловых встреч с рабочей зоной',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Рабочий стол', 'Кофемашина'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Рабочий стол', 'Кофемашина', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_business',
         minHours: 3
       },
@@ -116,7 +116,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 7000,
         area: 40,
         description: 'Роскошный номер с панорамным видом на город',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Ванна', 'Джакузи', 'Мини-бар', 'Панорамные окна'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Ванна', 'Джакузи', 'Мини-бар', 'Панорамные окна', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_lux',
         minHours: 4
       }
@@ -136,7 +136,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 2500,
         area: 18,
         description: 'Бюджетный номер с базовыми удобствами',
-        amenities: ['Wi-Fi', 'Телевизор', 'Душ'],
+        amenities: ['Wi-Fi', 'Телевизор', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_moscow_econom',
         minHours: 2
       },
@@ -147,7 +147,7 @@ const hotelsData: Record<string, Hotel> = {
         price: 3800,
         area: 24,
         description: 'Комфортный номер с улучшенной мебелью',
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Холодильник'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Холодильник', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_moscow_comfort',
         minHours: 2
       }
