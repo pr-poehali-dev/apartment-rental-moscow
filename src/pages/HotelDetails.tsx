@@ -14,6 +14,7 @@ interface Room {
   description: string;
   amenities: string[];
   telegram: string;
+  minHours: number;
 }
 
 interface Hotel {
@@ -41,7 +42,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 20,
         description: 'Комфортный номер с двуспальной кроватью, идеально подходит для краткосрочного отдыха',
         amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ'],
-        telegram: '@hotel_uyut_standard'
+        telegram: '@hotel_uyut_standard',
+        minHours: 2
       },
       {
         id: 2,
@@ -51,7 +53,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 25,
         description: 'Улучшенный номер с зоной отдыха и современными удобствами',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Диван'],
-        telegram: '@hotel_uyut_standard_plus'
+        telegram: '@hotel_uyut_standard_plus',
+        minHours: 2
       },
       {
         id: 3,
@@ -61,7 +64,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 28,
         description: 'Романтический номер с красивым интерьером и джакузи',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Свечи'],
-        telegram: '@hotel_uyut_romantic'
+        telegram: '@hotel_uyut_romantic',
+        minHours: 3
       },
       {
         id: 4,
@@ -71,7 +75,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 35,
         description: 'Просторный номер повышенной комфортности с отдельной гостиной зоной',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Гостиная зона', 'Кофемашина'],
-        telegram: '@hotel_uyut_junior'
+        telegram: '@hotel_uyut_junior',
+        minHours: 3
       }
     ]
   },
@@ -90,7 +95,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 22,
         description: 'Уютный стандартный номер с необходимыми удобствами',
         amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ'],
-        telegram: '@hotel_central_standard'
+        telegram: '@hotel_central_standard',
+        minHours: 2
       },
       {
         id: 6,
@@ -100,7 +106,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 28,
         description: 'Номер для деловых встреч с рабочей зоной',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Рабочий стол', 'Кофемашина'],
-        telegram: '@hotel_central_business'
+        telegram: '@hotel_central_business',
+        minHours: 3
       },
       {
         id: 7,
@@ -110,7 +117,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 40,
         description: 'Роскошный номер с панорамным видом на город',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Ванна', 'Джакузи', 'Мини-бар', 'Панорамные окна'],
-        telegram: '@hotel_central_lux'
+        telegram: '@hotel_central_lux',
+        minHours: 4
       }
     ]
   },
@@ -129,7 +137,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 18,
         description: 'Бюджетный номер с базовыми удобствами',
         amenities: ['Wi-Fi', 'Телевизор', 'Душ'],
-        telegram: '@hotel_moscow_econom'
+        telegram: '@hotel_moscow_econom',
+        minHours: 2
       },
       {
         id: 9,
@@ -139,7 +148,8 @@ const hotelsData: Record<string, Hotel> = {
         area: 24,
         description: 'Комфортный номер с улучшенной мебелью',
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Холодильник'],
-        telegram: '@hotel_moscow_comfort'
+        telegram: '@hotel_moscow_comfort',
+        minHours: 2
       }
     ]
   }
@@ -248,9 +258,12 @@ export default function HotelDetails() {
                       {room.name}
                     </h3>
                     
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                      <Icon name="Maximize" size={16} />
-                      <span>{room.area} м²</span>
+                    <div className="flex items-center justify-between text-sm mb-4">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Icon name="Maximize" size={16} />
+                        <span>{room.area} м²</span>
+                      </div>
+                      <span className="text-red-600 font-semibold">от {room.minHours}ч</span>
                     </div>
 
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
