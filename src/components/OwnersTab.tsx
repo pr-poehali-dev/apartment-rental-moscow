@@ -6,11 +6,8 @@ export default function OwnersTab() {
   return (
     <div className="animate-fade-in">
       <section className="max-w-[800px] mx-auto px-6 py-32">
-        <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-          Сдавайте квартиру<br/>на своих условиях
-        </h2>
         <p className="text-xl text-muted-foreground mb-12 text-balance">
-          Тысячи людей ищут жильё каждый день. Зарабатывайте на своей квартире с нами.
+          Тысячи людей ищут объекты на короткие сроки. Начните зарабатывать с платформой, которая использует расширенное SEO продвижение в сети интернета.
         </p>
 
         <Card className="p-8 md:p-12 border-0 shadow-sm rounded-2xl">
