@@ -370,7 +370,8 @@ export default function HotelDetails() {
                     </Button>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
