@@ -33,6 +33,12 @@ export default function OwnersTab() {
           <Button className="w-full mt-8 h-12 rounded-full text-base">
             Начать сдавать
           </Button>
+          
+          <div className="mt-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Если Вам понравилась статистика продажи Вашего объекта на короткие сроки, по истечении 3х месяцев, Вы можете воспользоваться платным размещением на платформе. <strong>1 предложение — 3000 рублей в месяц.</strong> В эту стоимость уже входит еженедельное поднятие предложения в Топ 30. При размещении нескольких объектов от 5 до 10, действует специальная цена <strong>10 000 рублей в месяц.</strong> За каждый последующий объект +1000 рублей в месяц.
+            </p>
+          </div>
         </Card>
 
         <div className="mt-16 grid grid-cols-3 gap-8 text-center">
