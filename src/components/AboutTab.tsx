@@ -6,11 +6,11 @@ export default function AboutTab() {
     <div className="animate-fade-in">
       <section className="max-w-[800px] mx-auto px-6 py-32">
         <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-balance">
-          О платформе<br/>Арена 1
+          О платформе<br/>120 минут
         </h2>
         <div className="prose prose-lg max-w-none">
           <p className="text-xl text-muted-foreground mb-8">
-            Современная платформа для аренды квартир в Москве на любой срок: от часа до месяца. Прямая связь с собственниками без посредников.
+            Современная платформа по подбору предложений почасовой аренды. Прямая связь с собственниками без посредников.
           </p>
           
           <h3 className="text-2xl font-bold mb-4 mt-12">Преимущества</h3>
