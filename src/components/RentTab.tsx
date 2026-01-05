@@ -21,6 +21,7 @@ interface Apartment {
   lat: number;
   lon: number;
   category: 'hotels' | 'apartments' | 'saunas' | 'conference';
+  minHours?: number;
 }
 
 interface RentTabProps {
@@ -65,9 +66,9 @@ export default function RentTab({
 
   const categoryListings: Apartment[] = [
     // Отели
-    { id: 101, title: 'Бутик-отель "Уют"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 4500, metro: 'Арбатская', address: 'Арбат, 15', area: 25, rooms: 1, telegram: '@hotel1', views: 0, telegramClicks: 0, lat: 55.752023, lon: 37.593760, category: 'hotels' },
-    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels' },
-    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels' },
+    { id: 101, title: 'Бутик-отель "Уют"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 4500, metro: 'Арбатская', address: 'Арбат, 15', area: 25, rooms: 1, telegram: '@hotel1', views: 0, telegramClicks: 0, lat: 55.752023, lon: 37.593760, category: 'hotels', minHours: 2 },
+    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2 },
+    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2 },
     
     // Апартаменты
     { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', address: 'Остоженка, 12', area: 32, rooms: 1, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
@@ -298,11 +299,16 @@ export default function RentTab({
                         </div>
                         <span className="font-medium">{apt.metro}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                          <Icon name="Home" size={14} className="text-blue-600" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <Icon name="Home" size={14} className="text-blue-600" />
+                          </div>
+                          <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
                         </div>
-                        <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
+                        {apt.minHours && (
+                          <span className="text-red-600 font-semibold text-sm">от {apt.minHours}ч</span>
+                        )}
                       </div>
                       <a 
                         href={yandexMapsUrl}
