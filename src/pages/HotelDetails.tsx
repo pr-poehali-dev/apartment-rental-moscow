@@ -5,6 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useState } from 'react';
 
+interface RoomFeature {
+  icon: string;
+  label: string;
+}
+
 interface Room {
   id: number;
   name: string;
@@ -12,6 +17,7 @@ interface Room {
   price: number;
   area: number;
   description: string;
+  features: RoomFeature[];
   amenities: string[];
   telegram: string;
   minHours: number;
@@ -45,6 +51,13 @@ const hotelsData: Record<string, Hotel> = {
         price: 3500,
         area: 20,
         description: 'Комфортный номер с двуспальной кроватью, идеально подходит для краткосрочного отдыха',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чай, кофе, вода' }
+        ],
         amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_standard',
         minHours: 2
@@ -60,6 +73,14 @@ const hotelsData: Record<string, Hotel> = {
         price: 4500,
         area: 25,
         description: 'Улучшенный номер с зоной отдыха и современными удобствами',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'Sofa', label: 'Диван' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чай, кофе, вода, мини-бар' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Диван', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_standard_plus',
         minHours: 2
@@ -75,6 +96,14 @@ const hotelsData: Record<string, Hotel> = {
         price: 5500,
         area: 28,
         description: 'Романтический номер с красивым интерьером и джакузи',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'Bath', label: 'Джакузи' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чай, кофе, вода, мини-бар' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Свечи', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_romantic',
         minHours: 3
@@ -90,6 +119,15 @@ const hotelsData: Record<string, Hotel> = {
         price: 6500,
         area: 35,
         description: 'Просторный номер повышенной комфортности с отдельной гостиной зоной',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'Sofa', label: 'Гостиная зона с диваном' },
+          { icon: 'Bath', label: 'Джакузи' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Кофемашина, чай, вода, мини-бар' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Гостиная зона', 'Кофемашина', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_junior',
         minHours: 3
@@ -114,6 +152,13 @@ const hotelsData: Record<string, Hotel> = {
         price: 4000,
         area: 22,
         description: 'Уютный стандартный номер с необходимыми удобствами',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чай, кофе, вода' }
+        ],
         amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_standard',
         minHours: 2
@@ -129,6 +174,14 @@ const hotelsData: Record<string, Hotel> = {
         price: 5000,
         area: 28,
         description: 'Номер для деловых встреч с рабочей зоной',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'Briefcase', label: 'Рабочий стол' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Кофемашина, чай, вода' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Рабочий стол', 'Кофемашина', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_business',
         minHours: 3
@@ -144,6 +197,14 @@ const hotelsData: Record<string, Hotel> = {
         price: 7000,
         area: 40,
         description: 'Роскошный номер с панорамным видом на город',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'Bath', label: 'Ванна и джакузи' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Премиум туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Кофемашина, чай, вода, мини-бар' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Ванна', 'Джакузи', 'Мини-бар', 'Панорамные окна', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_central_lux',
         minHours: 4
@@ -168,6 +229,13 @@ const hotelsData: Record<string, Hotel> = {
         price: 2500,
         area: 18,
         description: 'Бюджетный номер с базовыми удобствами',
+        features: [
+          { icon: 'BedSingle', label: 'Односпальная кровать' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Базовые туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чайник, чай, вода' }
+        ],
         amenities: ['Wi-Fi', 'Телевизор', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_moscow_econom',
         minHours: 2
@@ -183,6 +251,13 @@ const hotelsData: Record<string, Hotel> = {
         price: 3800,
         area: 24,
         description: 'Комфортный номер с улучшенной мебелью',
+        features: [
+          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'ShowerHead', label: 'Душ' },
+          { icon: 'Shirt', label: 'Вешалки для одежды' },
+          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
+          { icon: 'Coffee', label: 'Чай, кофе, вода, холодильник' }
+        ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Холодильник', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_moscow_comfort',
         minHours: 2
@@ -331,9 +406,26 @@ export default function HotelDetails() {
                     </div>
 
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>
+                    <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
                       {room.name}
                     </h3>
+                    
+                    <div className="flex flex-wrap gap-3 mb-4">
+                      {room.features.map((feature, idx) => (
+                        <div
+                          key={idx}
+                          className="group relative"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-purple-50 hover:bg-purple-100 flex items-center justify-center cursor-help transition-colors">
+                            <Icon name={feature.icon as any} size={20} className="text-purple-600" />
+                          </div>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                            {feature.label}
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                     
                     <div className="flex items-center justify-between text-sm mb-4">
                       <div className="flex items-center gap-2 text-muted-foreground">
