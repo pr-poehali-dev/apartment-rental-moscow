@@ -343,13 +343,13 @@ export default function HotelDetails() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-8">
               Доступные номера
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
               {hotel.rooms.map((room) => {
                 const currentImageIndex = roomImageIndexes[room.id] || 0;
                 return (
                   <Card 
                     key={room.id}
-                    className={`overflow-hidden hover:shadow-lg transition-all cursor-pointer ${
+                    className={`overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col h-full ${
                       selectedRoom === room.id ? 'ring-2 ring-purple-500' : ''
                     }`}
                     onClick={() => setSelectedRoom(room.id)}
@@ -405,7 +405,7 @@ export default function HotelDetails() {
                       </div>
                     </div>
 
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-1">
                     <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'Syne, sans-serif' }}>
                       {room.name}
                     </h3>
@@ -435,7 +435,7 @@ export default function HotelDetails() {
                       <span className="text-red-600 font-semibold">от {room.minHours}ч</span>
                     </div>
 
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed flex-1">
                       {room.description}
                     </p>
 
@@ -451,7 +451,7 @@ export default function HotelDetails() {
                     </div>
 
                     <Button
-                      className="w-full rounded-full"
+                      className="w-full rounded-full mt-auto"
                       onClick={(e) => {
                         e.stopPropagation();
                         window.open(`https://t.me/${room.telegram.replace('@', '')}`, '_blank');
