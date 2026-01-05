@@ -50,7 +50,7 @@ export default function RentTab({
   const heroRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('apartments');
+  const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
 
   const categoryListings: Apartment[] = [
@@ -208,118 +208,120 @@ export default function RentTab({
         </div>
       </section>
 
-      <section className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
-        <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
-            <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
-            {categoryConfig[activeCategory].title}
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div>
-            <Input
-              type="search"
-              placeholder={categoryConfig[activeCategory].placeholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
-            />
+      {activeCategory && (
+        <section className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
+          <div className="mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+              <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
+              {categoryConfig[activeCategory].title}
+            </h2>
           </div>
-          <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
-            <iframe
-              key={`${activeCategory}-${selectedApartment}`}
-              src={(() => {
-                const selectedListing = filteredListings.find(item => item.id === selectedApartment);
-                const markers = filteredListings.map(item => 
-                  `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
-                ).join('~');
-                
-                if (selectedListing) {
-                  return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
-                }
-                
-                const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
-                const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
-                return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
-              })()}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              allowFullScreen
-              style={{ position: 'relative' }}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div>
+              <Input
+                type="search"
+                placeholder={categoryConfig[activeCategory].placeholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
+              />
+            </div>
+            <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
+              <iframe
+                key={`${activeCategory}-${selectedApartment}`}
+                src={(() => {
+                  const selectedListing = filteredListings.find(item => item.id === selectedApartment);
+                  const markers = filteredListings.map(item => 
+                    `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
+                  ).join('~');
+                  
+                  if (selectedListing) {
+                    return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
+                  }
+                  
+                  const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
+                  const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
+                  return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
+                })()}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                style={{ position: 'relative' }}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredListings.map((apt) => {
-            const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
-            return (
-              <Card 
-                key={apt.id} 
-                className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
-                onClick={() => {
-                  trackView(apt.id);
-                  setSelectedApartment(apt.id);
-                }}
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
-                  <img 
-                    src={apt.image} 
-                    alt={apt.title}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
-                      {apt.price}₽/ч
-                    </Badge>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredListings.map((apt) => {
+              const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
+              return (
+                <Card 
+                  key={apt.id} 
+                  className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
+                  onClick={() => {
+                    trackView(apt.id);
+                    setSelectedApartment(apt.id);
+                  }}
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
+                    <img 
+                      src={apt.image} 
+                      alt={apt.title}
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
+                        {apt.price}₽/ч
+                      </Badge>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6 bg-gradient-to-b from-white to-gray-50">
-                  <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
-                  <div className="space-y-3 text-sm text-muted-foreground mb-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                        <Icon name="MapPin" size={14} className="text-purple-600" />
+                  <div className="p-6 bg-gradient-to-b from-white to-gray-50">
+                    <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                    <div className="space-y-3 text-sm text-muted-foreground mb-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                          <Icon name="MapPin" size={14} className="text-purple-600" />
+                        </div>
+                        <span className="font-medium">{apt.metro}</span>
                       </div>
-                      <span className="font-medium">{apt.metro}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <Icon name="Home" size={14} className="text-blue-600" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                          <Icon name="Home" size={14} className="text-blue-600" />
+                        </div>
+                        <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
                       </div>
-                      <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
+                      <a 
+                        href={yandexMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+                          <Icon name="Navigation" size={14} className="text-purple-600" />
+                        </div>
+                        <span className="text-xs font-medium underline">{apt.address}</span>
+                      </a>
                     </div>
-                    <a 
-                      href={yandexMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
-                      onClick={(e) => e.stopPropagation()}
+                    <Button 
+                      className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        trackTelegramClick(apt.id);
+                        window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                      }}
                     >
-                      <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
-                        <Icon name="Navigation" size={14} className="text-purple-600" />
-                      </div>
-                      <span className="text-xs font-medium underline">{apt.address}</span>
-                    </a>
+                      <Icon name="MessageCircle" size={18} />
+                      Заявка в Telegram
+                    </Button>
                   </div>
-                  <Button 
-                    className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      trackTelegramClick(apt.id);
-                      window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                    }}
-                  >
-                    <Icon name="MessageCircle" size={18} />
-                    Заявка в Telegram
-                  </Button>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="bg-secondary py-20">
         <div className="max-w-[1200px] mx-auto px-6">
