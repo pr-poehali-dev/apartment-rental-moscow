@@ -50,7 +50,7 @@ export default function RentTab({
   const heroRef = useRef<HTMLDivElement>(null);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('hotels');
+  const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference'>('apartments');
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
 
   const categoryListings: Apartment[] = [
