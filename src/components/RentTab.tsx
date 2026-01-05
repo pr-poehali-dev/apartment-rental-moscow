@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -49,6 +50,7 @@ export default function RentTab({
 }: RentTabProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
@@ -270,6 +272,9 @@ export default function RentTab({
                   onClick={() => {
                     trackView(apt.id);
                     setSelectedApartment(apt.id);
+                    if (activeCategory === 'hotels') {
+                      navigate(`/hotel/${apt.id}`);
+                    }
                   }}
                 >
                   <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
