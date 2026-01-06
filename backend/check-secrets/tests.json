@@ -1,0 +1,9 @@
+{
+  "tests": [
+    {
+      "name": "Check secrets",
+      "method": "GET",
+      "expectedStatus": 200
+    }
+  ]
+}
