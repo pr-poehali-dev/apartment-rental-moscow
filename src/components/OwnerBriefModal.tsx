@@ -81,9 +81,9 @@ export default function OwnerBriefModal({ open, onClose }: OwnerBriefModalProps)
             <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
               <Icon name="Check" size={32} className="text-green-600" />
             </div>
-            <h3 className="text-2xl font-bold mb-2">Заявка отправлена!</h3>
-            <p className="text-muted-foreground">
-              Мы свяжемся с вами в ближайшее время
+            <h3 className="text-2xl font-bold mb-2">Ваша заявка отправлена</h3>
+            <p className="text-muted-foreground text-lg leading-relaxed max-w-md">
+              В течение 24 часов с Вами свяжется представитель платформы <strong>120 минут</strong>
             </p>
           </div>
         </DialogContent>
