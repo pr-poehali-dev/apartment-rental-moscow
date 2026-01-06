@@ -220,15 +220,16 @@ export default function RentTab({
       </section>
 
       {activeCategory && (
-        <section ref={resultsRef} className="max-w-[1400px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <section ref={resultsRef} className="max-w-[1600px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
           <div className="mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
               <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
               {categoryConfig[activeCategory].title}
             </h2>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
               <Input
                 type="search"
                 placeholder={categoryConfig[activeCategory].placeholder}
@@ -236,34 +237,8 @@ export default function RentTab({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
               />
-            </div>
-            <div className="h-[300px] lg:h-[400px] rounded-2xl overflow-hidden border-2 border-gray-200">
-              <iframe
-                key={`${activeCategory}-${selectedApartment}`}
-                src={(() => {
-                  const selectedListing = filteredListings.find(item => item.id === selectedApartment);
-                  const markers = filteredListings.map(item => 
-                    `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
-                  ).join('~');
-                  
-                  if (selectedListing) {
-                    return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
-                  }
-                  
-                  const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
-                  const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
-                  return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
-                })()}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                style={{ position: 'relative' }}
-              />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredListings.map((apt) => {
               const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
               return (
@@ -340,6 +315,33 @@ export default function RentTab({
                 </Card>
               );
             })}
+              </div>
+            </div>
+
+            <div className="lg:sticky lg:top-20 lg:self-start h-[400px] lg:h-[600px] rounded-2xl overflow-hidden border-2 border-gray-200 shadow-lg">
+              <iframe
+                key={`${activeCategory}-${selectedApartment}`}
+                src={(() => {
+                  const selectedListing = filteredListings.find(item => item.id === selectedApartment);
+                  const markers = filteredListings.map(item => 
+                    `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
+                  ).join('~');
+                  
+                  if (selectedListing) {
+                    return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
+                  }
+                  
+                  const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
+                  const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
+                  return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
+                })()}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                style={{ position: 'relative' }}
+              />
+            </div>
           </div>
         </section>
       )}
