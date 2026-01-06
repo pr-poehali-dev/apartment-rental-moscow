@@ -26,43 +26,44 @@ export default function OwnerBriefModal({ open, onClose }: OwnerBriefModalProps)
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Формируем сообщение для отправки в Telegram
-    const message = `
-🏢 Новая заявка на размещение
-
-📋 Категория: ${formData.category}
-🏠 Наименование: ${formData.name}
-📍 Адрес: ${formData.address}
-${formData.metro ? `🚇 Метро: ${formData.metro}` : ''}
-🔢 Количество объектов: ${formData.objectsCount}
-${formData.website ? `🌐 Сайт: ${formData.website}` : ''}
-📞 Телефон: ${formData.phone}
-${formData.telegram ? `💬 Telegram: ${formData.telegram}` : ''}
-👤 Имя собственника: ${formData.ownerName}
-    `.trim();
-
-    console.log('Отправка брифа:', message);
-    setIsSubmitted(true);
-    
-    // Через 2 секунды закрываем модалку и сбрасываем форму
-    setTimeout(() => {
-      onClose();
-      setIsSubmitted(false);
-      setFormData({
-        category: '',
-        name: '',
-        address: '',
-        metro: '',
-        objectsCount: '',
-        website: '',
-        phone: '',
-        telegram: '',
-        ownerName: ''
+    try {
+      const response = await fetch('https://functions.poehali.dev/60b9f6fd-0cf0-4c48-b4b2-259e6d35ea4a', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
       });
-    }, 2000);
+
+      if (!response.ok) {
+        throw new Error('Failed to send brief');
+      }
+
+      setIsSubmitted(true);
+      
+      // Через 2 секунды закрываем модалку и сбрасываем форму
+      setTimeout(() => {
+        onClose();
+        setIsSubmitted(false);
+        setFormData({
+          category: '',
+          name: '',
+          address: '',
+          metro: '',
+          objectsCount: '',
+          website: '',
+          phone: '',
+          telegram: '',
+          ownerName: ''
+        });
+      }, 2000);
+    } catch (error) {
+      console.error('Error sending brief:', error);
+      alert('Ошибка при отправке заявки. Попробуйте позже.');
+    }
   };
 
   const categoryOptions = [

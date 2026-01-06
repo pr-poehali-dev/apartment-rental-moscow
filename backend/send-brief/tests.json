@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "name": "Send brief with all fields",
+      "method": "POST",
+      "body": {
+        "category": "hotel",
+        "name": "Тестовый отель",
+        "address": "Тверская 1",
+        "metro": "Тверская",
+        "objectsCount": "3",
+        "website": "https://test.com",
+        "phone": "+79991234567",
+        "telegram": "@testowner",
+        "ownerName": "Иван Иванов"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Send brief with required fields only",
+      "method": "POST",
+      "body": {
+        "category": "apartment",
+        "name": "Апартаменты",
+        "address": "Арбат 10",
+        "objectsCount": "1",
+        "phone": "+79991234567",
+        "ownerName": "Петр Петров"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
