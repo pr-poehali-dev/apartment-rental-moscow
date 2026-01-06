@@ -16,6 +16,7 @@ export default function OwnerBriefModal({ open, onClose }: OwnerBriefModalProps)
     category: '',
     name: '',
     address: '',
+    metro: '',
     objectsCount: '',
     website: '',
     phone: '',
@@ -35,6 +36,7 @@ export default function OwnerBriefModal({ open, onClose }: OwnerBriefModalProps)
 📋 Категория: ${formData.category}
 🏠 Наименование: ${formData.name}
 📍 Адрес: ${formData.address}
+🚇 Метро: ${formData.metro}
 🔢 Количество объектов: ${formData.objectsCount}
 ${formData.website ? `🌐 Сайт: ${formData.website}` : ''}
 📞 Телефон: ${formData.phone}
@@ -53,6 +55,7 @@ ${formData.telegram ? `💬 Telegram: ${formData.telegram}` : ''}
         category: '',
         name: '',
         address: '',
+        metro: '',
         objectsCount: '',
         website: '',
         phone: '',
@@ -139,6 +142,19 @@ ${formData.telegram ? `💬 Telegram: ${formData.telegram}` : ''}
               placeholder="Улица, дом"
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="metro">
+              Метро <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="metro"
+              placeholder="Например: Арбатская"
+              value={formData.metro}
+              onChange={(e) => setFormData({ ...formData, metro: e.target.value })}
               required
             />
           </div>
