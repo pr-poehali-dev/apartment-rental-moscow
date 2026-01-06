@@ -36,7 +36,7 @@ export default function OwnerBriefModal({ open, onClose }: OwnerBriefModalProps)
 📋 Категория: ${formData.category}
 🏠 Наименование: ${formData.name}
 📍 Адрес: ${formData.address}
-🚇 Метро: ${formData.metro}
+${formData.metro ? `🚇 Метро: ${formData.metro}` : ''}
 🔢 Количество объектов: ${formData.objectsCount}
 ${formData.website ? `🌐 Сайт: ${formData.website}` : ''}
 📞 Телефон: ${formData.phone}
@@ -148,14 +148,13 @@ ${formData.telegram ? `💬 Telegram: ${formData.telegram}` : ''}
 
           <div className="space-y-2">
             <Label htmlFor="metro">
-              Метро <span className="text-red-500">*</span>
+              Метро (необязательно)
             </Label>
             <Input
               id="metro"
               placeholder="Например: Арбатская"
               value={formData.metro}
               onChange={(e) => setFormData({ ...formData, metro: e.target.value })}
-              required
             />
           </div>
 
