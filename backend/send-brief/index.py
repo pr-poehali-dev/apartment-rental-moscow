@@ -33,7 +33,17 @@ def handler(event: dict, context) -> dict:
         data = json.loads(event.get('body', '{}'))
         
         bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-        chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+        chat_id_str = os.environ.get('TELEGRAM_CHAT_ID')
+        
+        print(f'Bot token exists: {bool(bot_token)}')
+        print(f'Chat ID exists: {bool(chat_id_str)}')
+        print(f'Request data: {data}')
+        
+        # Преобразуем chat_id в число
+        try:
+            chat_id = int(chat_id_str) if chat_id_str else None
+        except ValueError:
+            chat_id = None
         
         if not bot_token or not chat_id:
             return {
@@ -79,8 +89,7 @@ def handler(event: dict, context) -> dict:
         telegram_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
         payload = {
             'chat_id': chat_id,
-            'text': message,
-            'parse_mode': 'HTML'
+            'text': message
         }
         
         req = urllib.request.Request(
@@ -89,8 +98,25 @@ def handler(event: dict, context) -> dict:
             headers={'Content-Type': 'application/json'}
         )
         
-        with urllib.request.urlopen(req) as response:
-            result = json.loads(response.read().decode('utf-8'))
+        print(f'Sending to Telegram: {telegram_url}')
+        print(f'Payload: {payload}')
+        print(f'Message: {message}')
+        
+        try:
+            with urllib.request.urlopen(req) as response:
+                result = json.loads(response.read().decode('utf-8'))
+            print(f'Telegram response: {result}')
+        except urllib.error.HTTPError as e:
+            error_body = e.read().decode('utf-8')
+            print(f'Telegram HTTP Error: {e.code} - {error_body}')
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'error': f'Telegram API error: {error_body}'})
+            }
         
         if result.get('ok'):
             return {
@@ -102,16 +128,20 @@ def handler(event: dict, context) -> dict:
                 'body': json.dumps({'success': True})
             }
         else:
+            print(f'Telegram error: {result}')
             return {
                 'statusCode': 500,
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*'
                 },
-                'body': json.dumps({'error': 'Failed to send Telegram message'})
+                'body': json.dumps({'error': 'Failed to send Telegram message', 'details': result})
             }
     
     except Exception as e:
+        print(f'Exception: {str(e)}')
+        import traceback
+        print(f'Traceback: {traceback.format_exc()}')
         return {
             'statusCode': 500,
             'headers': {
