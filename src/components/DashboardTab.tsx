@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
+import AdminPanel from './AdminPanel';
 
 interface OwnerData {
   id: number;
@@ -47,6 +48,7 @@ interface Promotion {
 
 export default function DashboardTab() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -82,8 +84,16 @@ export default function DashboardTab() {
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('owner_id', data.owner_id);
       
+      // Проверяем, админ ли это (логин admin)
+      if (username === 'admin') {
+        setIsAdmin(true);
+        localStorage.setItem('is_admin', 'true');
+      }
+      
       setIsLoggedIn(true);
-      loadDashboardData(data.owner_id);
+      if (username !== 'admin') {
+        loadDashboardData(data.owner_id);
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError('Ошибка подключения к серверу');
@@ -110,7 +120,9 @@ export default function DashboardTab() {
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('owner_id');
+    localStorage.removeItem('is_admin');
     setIsLoggedIn(false);
+    setIsAdmin(false);
     setOwnerData(null);
     setObjects([]);
     setPromotions([]);
@@ -121,10 +133,15 @@ export default function DashboardTab() {
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
     const ownerId = localStorage.getItem('owner_id');
+    const adminFlag = localStorage.getItem('is_admin');
     
     if (token && ownerId) {
       setIsLoggedIn(true);
-      loadDashboardData(parseInt(ownerId));
+      if (adminFlag === 'true') {
+        setIsAdmin(true);
+      } else {
+        loadDashboardData(parseInt(ownerId));
+      }
     }
   }, []);
 
@@ -137,6 +154,11 @@ export default function DashboardTab() {
     };
     return labels[category] || category;
   };
+
+  // Если вошёл админ - показываем админ-панель
+  if (isLoggedIn && isAdmin) {
+    return <AdminPanel />;
+  }
 
   if (!isLoggedIn) {
     return (

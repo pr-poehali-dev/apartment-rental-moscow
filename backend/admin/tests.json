@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Get all owners",
+      "method": "GET",
+      "path": "/?action=get_owners",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "owners": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
