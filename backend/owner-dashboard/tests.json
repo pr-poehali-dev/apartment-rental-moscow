@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Missing owner_id parameter",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "owner_id required"
+      }
+    }
+  ]
+}

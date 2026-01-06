@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "name": "Login with missing credentials",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "username": ""
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "Username and password required"
+      }
+    }
+  ]
+}

@@ -248,12 +248,7 @@ export default function Index() {
 
         {activeTab === 'about' && <AboutTab />}
 
-        {activeTab === 'dashboard' && (
-          <DashboardTab
-            apartmentStats={apartmentStats}
-            cleaningTasks={cleaningTasks}
-          />
-        )}
+        {activeTab === 'dashboard' && <DashboardTab />}
       </main>
 
       <footer className="border-t border-gray-200 py-8 mt-20">
