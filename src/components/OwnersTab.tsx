@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import OwnerBriefModal from './OwnerBriefModal';
 
 export default function OwnersTab() {
+  const [isBriefModalOpen, setIsBriefModalOpen] = useState(false);
+
   return (
     <div className="animate-fade-in">
       <section className="max-w-[800px] mx-auto px-6 py-32">
@@ -30,9 +34,17 @@ export default function OwnersTab() {
               </div>
             ))}
           </div>
-          <Button className="w-full mt-8 h-12 rounded-full text-base">
+          <Button 
+            className="w-full mt-8 h-12 rounded-full text-base"
+            onClick={() => setIsBriefModalOpen(true)}
+          >
             Начать сдавать
           </Button>
+          
+          <OwnerBriefModal 
+            open={isBriefModalOpen} 
+            onClose={() => setIsBriefModalOpen(false)} 
+          />
           
           <div className="mt-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl">
             <p className="text-sm text-muted-foreground leading-relaxed">
