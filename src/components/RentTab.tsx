@@ -159,7 +159,7 @@ export default function RentTab({
               className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
               style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
-              УЮТНАЯ ЗИМА
+              120 МИНУТ
             </h2>
             {temperature !== null && (
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
