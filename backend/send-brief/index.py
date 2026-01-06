@@ -33,8 +33,7 @@ def handler(event: dict, context) -> dict:
         data = json.loads(event.get('body', '{}'))
         
         bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-        # Используем правильный chat_id напрямую
-        chat_id = 751169541
+        chat_id = os.environ.get('TELEGRAM_CHAT_ID')
         
         print(f'Bot token exists: {bool(bot_token)}')
         print(f'Chat ID: {chat_id}')
