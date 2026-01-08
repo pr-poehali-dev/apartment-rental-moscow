@@ -36,11 +36,10 @@ export const hotelsData: Record<string, Hotel> = {
         id: 2,
         name: 'Стандарт Плюс',
         images: [
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg'
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-12.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-18.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-44.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-37.jpeg'
         ],
         price: 1800,
         area: 18,
