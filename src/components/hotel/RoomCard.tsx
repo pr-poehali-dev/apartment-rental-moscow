@@ -161,11 +161,13 @@ export default function RoomCard({ room, currentImageIndex, isSelected, onImageC
                 className="flex-1 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.location.href = `tel:${room.phone}`;
+                  const phoneFormatted = room.phone?.replace(/^\+?7/, '8') || '';
+                  navigator.clipboard.writeText(phoneFormatted);
+                  alert(`Телефон скопирован: ${phoneFormatted}`);
                 }}
               >
                 <Icon name="Phone" size={18} className="mr-2" />
-                Позвонить
+                {room.phone.replace(/^\+?7/, '8')}
               </Button>
             )}
           </div>

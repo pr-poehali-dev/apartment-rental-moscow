@@ -371,11 +371,13 @@ export default function RentTab({
                               className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.location.href = `tel:${apt.phone}`;
+                                const phoneFormatted = apt.phone?.replace(/^\+?7/, '8') || '';
+                                navigator.clipboard.writeText(phoneFormatted);
+                                alert(`Телефон скопирован: ${phoneFormatted}`);
                               }}
                             >
                               <Icon name="Phone" size={18} />
-                              Позвонить
+                              {apt.phone.replace(/^\+?7/, '8')}
                             </Button>
                           )}
                         </div>
