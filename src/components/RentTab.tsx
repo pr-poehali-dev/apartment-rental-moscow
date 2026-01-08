@@ -287,31 +287,31 @@ export default function RentTab({
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                          <Icon name="Home" size={14} className="text-blue-600" />
-                        </div>
-                        <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`} • {apt.rooms} комн.</span>
-                      </div>
                       <div className="flex items-center justify-between">
-                        <a 
-                          href={yandexMapsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
-                            <Icon name="Navigation" size={14} className="text-purple-600" />
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <Icon name="Home" size={14} className="text-blue-600" />
                           </div>
-                          <span className="text-xs font-medium underline">{apt.address}</span>
-                        </a>
+                          <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`} • {apt.rooms} комн.</span>
+                        </div>
                         {apt.minHours && (
                           <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
                             от {apt.minHours}ч
                           </span>
                         )}
                       </div>
+                      <a 
+                        href={yandexMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+                          <Icon name="Navigation" size={14} className="text-purple-600" />
+                        </div>
+                        <span className="text-xs font-medium underline">{apt.address}</span>
+                      </a>
                     </div>
                     <Button 
                       className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
