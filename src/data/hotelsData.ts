@@ -3,7 +3,7 @@ import { Hotel } from '@/types/hotel';
 export const hotelsData: Record<string, Hotel> = {
   '101': {
     id: 101,
-    name: 'Бутик-отель "Уют"',
+    name: 'My loft Войковская',
     address: 'Арбат, 15',
     metro: 'Арбатская',
     description: 'Уютный бутик-отель в самом центре Москвы с комфортными номерами для краткосрочной аренды',
