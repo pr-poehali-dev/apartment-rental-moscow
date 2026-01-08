@@ -24,6 +24,7 @@ interface Apartment {
   lon: number;
   category: 'hotels' | 'apartments' | 'saunas' | 'conference';
   minHours?: number;
+  parking?: { available: boolean; paid: boolean; price?: number };
 }
 
 interface RentTabProps {
@@ -68,9 +69,9 @@ export default function RentTab({
 
   const categoryListings: Apartment[] = [
     // Отели
-    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2 },
-    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2 },
-    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2 },
+    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 } },
+    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false } },
+    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false } },
     
     // Апартаменты
     { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', metroWalkMinutes: 8, address: 'Остоженка, 12', area: 32, rooms: 1, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
@@ -330,6 +331,24 @@ export default function RentTab({
                         </div>
                         <span className="text-xs font-medium underline">{apt.address}</span>
                       </a>
+                      {apt.parking && (
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                            <Icon name="Car" size={14} className="text-green-600" />
+                          </div>
+                          <span className="font-medium">
+                            {apt.parking.available ? (
+                              apt.parking.paid ? (
+                                <span className="text-orange-600">Платная парковка • {apt.parking.price}₽/час</span>
+                              ) : (
+                                <span className="text-green-600">Бесплатная парковка</span>
+                              )
+                            ) : (
+                              <span className="text-gray-500">Парковки нет</span>
+                            )}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <Button 
                       className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
