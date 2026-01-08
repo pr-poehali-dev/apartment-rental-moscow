@@ -16,7 +16,6 @@ interface Apartment {
   address: string;
   area: number;
   areaRange?: string;
-  rooms: number;
   telegram: string;
   views: number;
   telegramClicks: number;
@@ -71,22 +70,22 @@ export default function RentTab({
 
   const categoryListings: Apartment[] = [
     // Отели
-    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@DmitryKelm', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 }, phone: '+79852118808' },
-    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false }, phone: '+79888888888' },
-    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false }, phone: '+79777777777' },
+    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', telegram: '@DmitryKelm', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 }, phone: '+79852118808' },
+    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false }, phone: '+79888888888' },
+    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false }, phone: '+79777777777' },
     
     // Апартаменты
-    { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', metroWalkMinutes: 8, address: 'Остоженка, 12', area: 32, rooms: 1, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
-    { id: 202, title: 'Двушка в центре', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5200, metro: 'Маяковская', metroWalkMinutes: 4, address: 'Тверская, 25', area: 65, rooms: 2, telegram: '@owner2', views: 0, telegramClicks: 0, lat: 55.760500, lon: 37.605300, category: 'apartments' },
-    { id: 203, title: 'Лофт в арт-кластере', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg', price: 7800, metro: 'Кропоткинская', metroWalkMinutes: 6, address: 'Болотная наб., 3', area: 85, rooms: 3, telegram: '@owner3', views: 0, telegramClicks: 0, lat: 55.742200, lon: 37.609700, category: 'apartments' },
+    { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', metroWalkMinutes: 8, address: 'Остоженка, 12', area: 32, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
+    { id: 202, title: 'Двушка в центре', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5200, metro: 'Маяковская', metroWalkMinutes: 4, address: 'Тверская, 25', area: 65, telegram: '@owner2', views: 0, telegramClicks: 0, lat: 55.760500, lon: 37.605300, category: 'apartments' },
+    { id: 203, title: 'Лофт в арт-кластере', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg', price: 7800, metro: 'Кропоткинская', metroWalkMinutes: 6, address: 'Болотная наб., 3', area: 85, telegram: '@owner3', views: 0, telegramClicks: 0, lat: 55.742200, lon: 37.609700, category: 'apartments' },
     
     // Сауны
-    { id: 301, title: 'Сауна "Релакс"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/638df8ca-c153-486e-8706-073cd19a93f2.jpg', price: 6000, metro: 'Сокол', metroWalkMinutes: 10, address: 'Ленинградский пр., 45', area: 50, rooms: 2, telegram: '@sauna1', views: 0, telegramClicks: 0, lat: 55.805563, lon: 37.514996, category: 'saunas' },
-    { id: 302, title: 'Финская сауна', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg', price: 7500, metro: 'Белорусская', metroWalkMinutes: 5, address: '1-я Тверская-Ямская, 8', area: 60, rooms: 3, telegram: '@sauna2', views: 0, telegramClicks: 0, lat: 55.777109, lon: 37.582039, category: 'saunas' },
+    { id: 301, title: 'Сауна "Релакс"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/638df8ca-c153-486e-8706-073cd19a93f2.jpg', price: 6000, metro: 'Сокол', metroWalkMinutes: 10, address: 'Ленинградский пр., 45', area: 50, telegram: '@sauna1', views: 0, telegramClicks: 0, lat: 55.805563, lon: 37.514996, category: 'saunas' },
+    { id: 302, title: 'Финская сауна', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg', price: 7500, metro: 'Белорусская', metroWalkMinutes: 5, address: '1-я Тверская-Ямская, 8', area: 60, telegram: '@sauna2', views: 0, telegramClicks: 0, lat: 55.777109, lon: 37.582039, category: 'saunas' },
     
     // Конференц-залы
-    { id: 401, title: 'Зал "Переговорная"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg', price: 8000, metro: 'Белорусская', metroWalkMinutes: 2, address: 'Ленинградский пр., 1', area: 40, rooms: 1, telegram: '@conf1', views: 0, telegramClicks: 0, lat: 55.776556, lon: 37.583206, category: 'conference' },
-    { id: 402, title: 'Конференц-зал "Бизнес"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg', price: 10000, metro: 'Курская', metroWalkMinutes: 4, address: 'Земляной вал, 27', area: 80, rooms: 2, telegram: '@conf2', views: 0, telegramClicks: 0, lat: 55.758389, lon: 37.660644, category: 'conference' }
+    { id: 401, title: 'Зал "Переговорная"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg', price: 8000, metro: 'Белорусская', metroWalkMinutes: 2, address: 'Ленинградский пр., 1', area: 40, telegram: '@conf1', views: 0, telegramClicks: 0, lat: 55.776556, lon: 37.583206, category: 'conference' },
+    { id: 402, title: 'Конференц-зал "Бизнес"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg', price: 10000, metro: 'Курская', metroWalkMinutes: 4, address: 'Земляной вал, 27', area: 80, telegram: '@conf2', views: 0, telegramClicks: 0, lat: 55.758389, lon: 37.660644, category: 'conference' }
   ];
 
   const filteredListings = categoryListings.filter(item => item.category === activeCategory);
@@ -313,7 +312,7 @@ export default function RentTab({
                           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                             <Icon name="Home" size={14} className="text-blue-600" />
                           </div>
-                          <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`} • {apt.rooms} комн.</span>
+                          <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`}</span>
                         </div>
                         {apt.minHours && (
                           <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
