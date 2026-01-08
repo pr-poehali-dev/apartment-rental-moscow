@@ -270,12 +270,12 @@ export default function RentTab({
                   <div className="p-6 bg-gradient-to-b from-white to-gray-50">
                     {apt.category === 'hotels' ? (
                       <div className="mb-4 group/title cursor-pointer" onClick={() => navigate(`/hotel/${apt.id}`)}>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-start gap-3">
                           {apt.id === 101 && (
                             <img 
                               src="https://cdn.poehali.dev/files/IMG_5196.jpg" 
                               alt="My loft logo" 
-                              className="w-12 h-12 object-contain flex-shrink-0"
+                              className="w-12 h-12 object-contain flex-shrink-0 mt-0.5"
                             />
                           )}
                           <div>
