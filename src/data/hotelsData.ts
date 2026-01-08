@@ -57,7 +57,7 @@ export const hotelsData: Record<string, Hotel> = {
       },
       {
         id: 3,
-        name: 'Романтик',
+        name: 'Улучшенный',
         images: [
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/b61bc81d-ca45-463a-803d-9b1d1e5dc423.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg',
@@ -67,7 +67,7 @@ export const hotelsData: Record<string, Hotel> = {
         ],
         price: 2000,
         area: 20,
-        description: 'Романтический номер с красивым интерьером и джакузи',
+        description: 'Просторный арпартамент с 3 окнами, идеально подходит для краткосрочного отдыха',
         features: [
           { icon: 'BedDouble', label: 'Двуспальная кровать' },
           { icon: 'Bath', label: 'Джакузи' },
