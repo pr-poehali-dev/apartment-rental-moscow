@@ -268,7 +268,14 @@ export default function RentTab({
                     </div>
                   </div>
                   <div className="p-6 bg-gradient-to-b from-white to-gray-50">
-                    <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                    {apt.category === 'hotels' ? (
+                      <div className="mb-4 group/title cursor-pointer" onClick={() => navigate(`/hotel/${apt.id}`)}>
+                        <h3 className="text-xl font-bold tracking-tight transition-colors group-hover/title:text-purple-600" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1 opacity-0 group-hover/title:opacity-100 transition-opacity">смотреть все предложения</p>
+                      </div>
+                    ) : (
+                      <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
+                    )}
                     <div className="space-y-3 text-sm text-muted-foreground mb-5">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
