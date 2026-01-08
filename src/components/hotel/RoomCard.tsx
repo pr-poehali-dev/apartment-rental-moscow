@@ -17,6 +17,7 @@ interface RoomCardProps {
 export default function RoomCard({ room, currentImageIndex, isSelected, onImageChange, onSelect }: RoomCardProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [phoneVisible, setPhoneVisible] = useState(false);
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -161,13 +162,17 @@ export default function RoomCard({ room, currentImageIndex, isSelected, onImageC
                 className="flex-1 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const phoneFormatted = room.phone?.replace(/^\+?7/, '8') || '';
-                  navigator.clipboard.writeText(phoneFormatted);
-                  alert(`Телефон скопирован: ${phoneFormatted}`);
+                  if (!phoneVisible) {
+                    setPhoneVisible(true);
+                  } else {
+                    const phoneFormatted = room.phone?.replace(/^\+?7/, '8') || '';
+                    navigator.clipboard.writeText(phoneFormatted);
+                    alert(`Телефон скопирован: ${phoneFormatted}`);
+                  }
                 }}
               >
                 <Icon name="Phone" size={18} className="mr-2" />
-                {room.phone.replace(/^\+?7/, '8')}
+                {phoneVisible ? room.phone.replace(/^\+?7/, '8') : 'Позвонить'}
               </Button>
             )}
           </div>

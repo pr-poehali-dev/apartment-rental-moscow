@@ -60,6 +60,7 @@ export default function RentTab({
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
+  const [phoneVisibleMap, setPhoneVisibleMap] = useState<Record<number, boolean>>({});
 
   const handleCategoryClick = (category: 'hotels' | 'apartments' | 'saunas' | 'conference') => {
     setActiveCategory(category);
@@ -371,13 +372,17 @@ export default function RentTab({
                               className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const phoneFormatted = apt.phone?.replace(/^\+?7/, '8') || '';
-                                navigator.clipboard.writeText(phoneFormatted);
-                                alert(`Телефон скопирован: ${phoneFormatted}`);
+                                if (!phoneVisibleMap[apt.id]) {
+                                  setPhoneVisibleMap(prev => ({ ...prev, [apt.id]: true }));
+                                } else {
+                                  const phoneFormatted = apt.phone?.replace(/^\+?7/, '8') || '';
+                                  navigator.clipboard.writeText(phoneFormatted);
+                                  alert(`Телефон скопирован: ${phoneFormatted}`);
+                                }
                               }}
                             >
                               <Icon name="Phone" size={18} />
-                              {apt.phone.replace(/^\+?7/, '8')}
+                              {phoneVisibleMap[apt.id] ? apt.phone.replace(/^\+?7/, '8') : 'Позвонить'}
                             </Button>
                           )}
                         </div>
