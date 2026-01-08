@@ -25,6 +25,7 @@ interface Apartment {
   category: 'hotels' | 'apartments' | 'saunas' | 'conference';
   minHours?: number;
   parking?: { available: boolean; paid: boolean; price?: number };
+  phone?: string;
 }
 
 interface RentTabProps {
@@ -69,9 +70,9 @@ export default function RentTab({
 
   const categoryListings: Apartment[] = [
     // Отели
-    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 } },
-    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false } },
-    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false } },
+    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 }, phone: '+79999999999' },
+    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false }, phone: '+79888888888' },
+    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false }, phone: '+79777777777' },
     
     // Апартаменты
     { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', metroWalkMinutes: 8, address: 'Остоженка, 12', area: 32, rooms: 1, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
@@ -350,17 +351,46 @@ export default function RentTab({
                         </div>
                       )}
                     </div>
-                    <Button 
-                      className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        trackTelegramClick(apt.id);
-                        window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                      }}
-                    >
-                      <Icon name="MessageCircle" size={18} />
-                      Заявка в Telegram
-                    </Button>
+                    {apt.category === 'hotels' ? (
+                      <div className="flex gap-2 mt-2">
+                        <Button 
+                          className="flex-1 rounded-full h-12 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            trackTelegramClick(apt.id);
+                            window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                          }}
+                        >
+                          <Icon name="MessageCircle" size={18} />
+                          Telegram
+                        </Button>
+                        {apt.phone && (
+                          <Button 
+                            variant="outline"
+                            className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `tel:${apt.phone}`;
+                            }}
+                          >
+                            <Icon name="Phone" size={18} />
+                            Позвонить
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <Button 
+                        className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          trackTelegramClick(apt.id);
+                          window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
+                        }}
+                      >
+                        <Icon name="MessageCircle" size={18} />
+                        Заявка в Telegram
+                      </Button>
+                    )}
                   </div>
                 </Card>
               );
