@@ -291,7 +291,7 @@ export default function RentTab({
                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                           <Icon name="Home" size={14} className="text-blue-600" />
                         </div>
-                        <span className="font-medium">{apt.area} м² • {apt.rooms} комн.</span>
+                        <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`} • {apt.rooms} комн.</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <a 
@@ -307,16 +307,9 @@ export default function RentTab({
                           <span className="text-xs font-medium underline">{apt.address}</span>
                         </a>
                         {apt.minHours && (
-                          <div className="flex flex-col items-end gap-1.5">
-                            <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
-                              от {apt.minHours}ч
-                            </span>
-                            {apt.areaRange && (
-                              <span className="text-sm text-gray-600 font-semibold whitespace-nowrap">
-                                {apt.areaRange} м²
-                              </span>
-                            )}
-                          </div>
+                          <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
+                            от {apt.minHours}ч
+                          </span>
                         )}
                       </div>
                     </div>
