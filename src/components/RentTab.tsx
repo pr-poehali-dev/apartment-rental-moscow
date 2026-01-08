@@ -263,7 +263,7 @@ export default function RentTab({
                     />
                     <div className="absolute top-4 right-4">
                       <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
-                        {apt.price}₽/ч
+                        {apt.minHours ? `от ${apt.price}₽/ч` : `${apt.price}₽/ч`}
                       </Badge>
                     </div>
                   </div>
