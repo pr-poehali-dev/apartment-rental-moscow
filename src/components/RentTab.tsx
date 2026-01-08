@@ -307,12 +307,12 @@ export default function RentTab({
                           <span className="text-xs font-medium underline">{apt.address}</span>
                         </a>
                         {apt.minHours && (
-                          <div className="flex flex-col items-end gap-1">
-                            <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1">
+                          <div className="flex flex-col items-end gap-1.5">
+                            <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
                               от {apt.minHours}ч
                             </span>
                             {apt.areaRange && (
-                              <span className="text-xs text-muted-foreground font-medium">
+                              <span className="text-sm text-gray-600 font-semibold whitespace-nowrap">
                                 {apt.areaRange} м²
                               </span>
                             )}
