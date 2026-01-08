@@ -273,7 +273,14 @@ export default function RentTab({
                         <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
                           <Icon name="MapPin" size={14} className="text-purple-600" />
                         </div>
-                        <span className="font-medium">{apt.metro}{apt.metroWalkMinutes && ` • ${apt.metroWalkMinutes} мин пешком`}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{apt.metro}</span>
+                          {apt.metroWalkMinutes && (
+                            <span className="flex items-center gap-1 text-muted-foreground">
+                              • <Icon name="PersonStanding" size={14} /> {apt.metroWalkMinutes} мин
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
