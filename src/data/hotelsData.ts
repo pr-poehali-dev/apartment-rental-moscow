@@ -22,13 +22,13 @@ export const hotelsData: Record<string, Hotel> = {
         area: 15,
         description: 'Комфортный номер с двуспальной кроватью, идеально подходит для краткосрочного отдыха',
         features: [
-          { icon: 'BedDouble', label: 'Двуспальная кровать' },
+          { icon: 'BedDouble', label: 'Двусп. кровать' },
           { icon: 'ShowerHead', label: 'Душ' },
           { icon: 'Shirt', label: 'Вешалки для одежды' },
           { icon: 'Sparkles', label: 'Туалетные принадлежности' },
           { icon: 'Coffee', label: 'Чай, кофе, вода' }
         ],
-        amenities: ['Wi-Fi', 'Телевизор', 'Кондиционер', 'Душ', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_standard',
         minHours: 2
       },
