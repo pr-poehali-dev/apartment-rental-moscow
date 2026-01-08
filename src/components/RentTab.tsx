@@ -68,7 +68,7 @@ export default function RentTab({
 
   const categoryListings: Apartment[] = [
     // Отели
-    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2 },
+    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', rooms: 1, telegram: '@myloft_voikovskaya', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2 },
     { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, rooms: 1, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2 },
     { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, rooms: 1, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2 },
     

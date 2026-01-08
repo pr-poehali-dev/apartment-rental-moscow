@@ -13,6 +13,7 @@ export const hotelsData: Record<string, Hotel> = {
         id: 1,
         name: 'Стандарт',
         images: [
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
