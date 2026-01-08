@@ -30,7 +30,7 @@ export const hotelsData: Record<string, Hotel> = {
           { icon: 'Coffee', label: 'Чай, кофе, вода' }
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
-        telegram: '@hotel_uyut_standard',
+        telegram: '@DmitryKelm',
         phone: '+79999999999',
         minHours: 2
       },
@@ -54,7 +54,7 @@ export const hotelsData: Record<string, Hotel> = {
           { icon: 'Coffee', label: 'Чай, кофе, вода, мини-бар' }
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
-        telegram: '@hotel_uyut_standard_plus',
+        telegram: '@DmitryKelm',
         phone: '+79999999999',
         minHours: 2
       },
@@ -79,7 +79,7 @@ export const hotelsData: Record<string, Hotel> = {
           { icon: 'Coffee', label: 'Чай, кофе, вода' }
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
-        telegram: '@hotel_uyut_romantic',
+        telegram: '@DmitryKelm',
         phone: '+79999999999',
         minHours: 3
       }
