@@ -9,9 +9,18 @@ interface HotelInfoProps {
 export default function HotelInfo({ hotel }: HotelInfoProps) {
   return (
     <div className="mb-12">
-      <h1 className="text-3xl sm:text-5xl font-bold mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>
-        {hotel.name}
-      </h1>
+      <div className="flex items-center gap-4 mb-4">
+        {hotel.id === 101 && (
+          <img 
+            src="https://cdn.poehali.dev/files/IMG_5196.jpg" 
+            alt="My loft logo" 
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+          />
+        )}
+        <h1 className="text-3xl sm:text-5xl font-bold" style={{ fontFamily: 'Syne, sans-serif' }}>
+          {hotel.name}
+        </h1>
+      </div>
       <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
         <div className="flex items-center gap-2">
           <Icon name="MapPin" size={20} />
