@@ -84,14 +84,14 @@ export default function DashboardTab() {
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('owner_id', data.owner_id);
       
-      // Проверяем, админ ли это (логин admin)
-      if (username === 'admin') {
+      // Проверяем, админ ли это (логин hab-agent@mail.ru)
+      if (username === 'hab-agent@mail.ru') {
         setIsAdmin(true);
         localStorage.setItem('is_admin', 'true');
       }
       
       setIsLoggedIn(true);
-      if (username !== 'admin') {
+      if (username !== 'hab-agent@mail.ru') {
         loadDashboardData(data.owner_id);
       }
     } catch (err) {
