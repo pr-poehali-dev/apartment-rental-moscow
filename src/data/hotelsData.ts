@@ -38,12 +38,11 @@ export const hotelsData: Record<string, Hotel> = {
         id: 2,
         name: 'Стандарт Плюс',
         images: [
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-17.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-33.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-22.jpeg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg'
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg'
         ],
         price: 1800,
         area: 18,
@@ -64,12 +63,11 @@ export const hotelsData: Record<string, Hotel> = {
         id: 3,
         name: 'Романтик',
         images: [
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-17.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-33.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-22.jpeg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/b61bc81d-ca45-463a-803d-9b1d1e5dc423.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg'
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/638df8ca-c153-486e-8706-073cd19a93f2.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg'
         ],
         price: 2000,
         area: 20,
@@ -90,12 +88,11 @@ export const hotelsData: Record<string, Hotel> = {
         id: 4,
         name: 'Полулюкс',
         images: [
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-17.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-33.jpeg',
-          'https://cdn.poehali.dev/files/image-06-01-26-02-10-22.jpeg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg'
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg',
+          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg'
         ],
         price: 2200,
         area: 20,
