@@ -352,32 +352,54 @@ export default function RentTab({
                       )}
                     </div>
                     {apt.category === 'hotels' ? (
-                      <div className="flex gap-2 mt-2">
-                        <Button 
-                          className="flex-1 rounded-full h-12 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            trackTelegramClick(apt.id);
-                            window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                          }}
-                        >
-                          <Icon name="MessageCircle" size={18} />
-                          Telegram
-                        </Button>
-                        {apt.phone && (
+                      <>
+                        <div className="flex gap-2 mt-2">
                           <Button 
-                            variant="outline"
-                            className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
+                            className="flex-1 rounded-full h-12 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
                             onClick={(e) => {
                               e.stopPropagation();
-                              window.location.href = `tel:${apt.phone}`;
+                              trackTelegramClick(apt.id);
+                              window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
                             }}
                           >
-                            <Icon name="Phone" size={18} />
-                            Позвонить
+                            <Icon name="MessageCircle" size={18} />
+                            Telegram
                           </Button>
-                        )}
-                      </div>
+                          {apt.phone && (
+                            <Button 
+                              variant="outline"
+                              className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = `tel:${apt.phone}`;
+                              }}
+                            >
+                              <Icon name="Phone" size={18} />
+                              Позвонить
+                            </Button>
+                          )}
+                        </div>
+                        <Button 
+                          variant="ghost"
+                          className="w-full rounded-full h-10 mt-2 font-medium"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (navigator.share) {
+                              navigator.share({
+                                title: apt.title,
+                                text: `${apt.title} - от ${apt.price}₽/час`,
+                                url: `${window.location.origin}/hotel/${apt.id}`
+                              });
+                            } else {
+                              navigator.clipboard.writeText(`${window.location.origin}/hotel/${apt.id}`);
+                              alert('Ссылка скопирована в буфер обмена');
+                            }
+                          }}
+                        >
+                          <Icon name="Share2" size={18} className="mr-2" />
+                          Поделиться
+                        </Button>
+                      </>
                     ) : (
                       <Button 
                         className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"

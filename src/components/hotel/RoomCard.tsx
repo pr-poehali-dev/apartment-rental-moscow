@@ -143,30 +143,52 @@ export default function RoomCard({ room, currentImageIndex, isSelected, onImageC
           ))}
         </div>
 
-        <div className="flex gap-2 mt-auto">
-          <Button
-            className="flex-1 rounded-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(`https://t.me/${room.telegram.replace('@', '')}`, '_blank');
-            }}
-          >
-            <Icon name="MessageCircle" size={18} className="mr-2" />
-            Telegram
-          </Button>
-          {room.phone && (
+        <div className="mt-auto space-y-2">
+          <div className="flex gap-2">
             <Button
-              variant="outline"
               className="flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
-                window.location.href = `tel:${room.phone}`;
+                window.open(`https://t.me/${room.telegram.replace('@', '')}`, '_blank');
               }}
             >
-              <Icon name="Phone" size={18} className="mr-2" />
-              Позвонить
+              <Icon name="MessageCircle" size={18} className="mr-2" />
+              Telegram
             </Button>
-          )}
+            {room.phone && (
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.location.href = `tel:${room.phone}`;
+                }}
+              >
+                <Icon name="Phone" size={18} className="mr-2" />
+                Позвонить
+              </Button>
+            )}
+          </div>
+          <Button
+            variant="ghost"
+            className="w-full rounded-full"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (navigator.share) {
+                navigator.share({
+                  title: room.name,
+                  text: `${room.name} - ${room.price}₽/час`,
+                  url: window.location.href
+                });
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Ссылка скопирована в буфер обмена');
+              }
+            }}
+          >
+            <Icon name="Share2" size={18} className="mr-2" />
+            Поделиться
+          </Button>
         </div>
       </div>
     </Card>
