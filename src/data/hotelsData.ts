@@ -4,7 +4,7 @@ export const hotelsData: Record<string, Hotel> = {
   '101': {
     id: 101,
     name: 'My loft Войковская',
-    address: 'ул. Клары Цеткин, 18к3',
+    address: 'Старопетровский проезд, д. 1, башня А',
     metro: 'Войковская',
     description: 'Современные лофты в районе Войковская с почасовой арендой от 1500₽/час',
 
