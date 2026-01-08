@@ -43,16 +43,15 @@ export const hotelsData: Record<string, Hotel> = {
         ],
         price: 1800,
         area: 18,
-        description: 'Улучшенный номер с зоной отдыха и современными удобствами',
+        description: 'Комфортный номер, который больше подходит для командировочных или 2х гостей не имеющих отношения к романтике, 2 Раздельные кровати',
         features: [
-          { icon: 'BedDouble', label: 'Двуспальная кровать' },
-          { icon: 'Sofa', label: 'Диван' },
+          { icon: 'BedSingle', label: '2 односпальные кровати' },
           { icon: 'ShowerHead', label: 'Душ' },
           { icon: 'Shirt', label: 'Вешалки для одежды' },
           { icon: 'Sparkles', label: 'Туалетные принадлежности' },
           { icon: 'Coffee', label: 'Чай, кофе, вода, мини-бар' }
         ],
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Диван', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Мини-бар', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
         telegram: '@hotel_uyut_standard_plus',
         minHours: 2
       },
