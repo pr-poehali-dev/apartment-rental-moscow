@@ -13,6 +13,7 @@ export interface Room {
   features: RoomFeature[];
   amenities: string[];
   telegram: string;
+  phone?: string;
   minHours: number;
 }
 
@@ -22,5 +23,6 @@ export interface Hotel {
   address: string;
   metro: string;
   description: string;
+  phone?: string;
   rooms: Room[];
 }

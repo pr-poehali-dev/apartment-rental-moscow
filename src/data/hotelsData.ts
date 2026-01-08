@@ -7,6 +7,7 @@ export const hotelsData: Record<string, Hotel> = {
     address: 'Старопетровский проезд, д. 1, стр. 1',
     metro: 'Войковская',
     description: 'Современные лофты в районе Войковская с почасовой арендой от 1500₽/час',
+    phone: '+79999999999',
 
     rooms: [
       {
@@ -30,6 +31,7 @@ export const hotelsData: Record<string, Hotel> = {
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_standard',
+        phone: '+79999999999',
         minHours: 2
       },
       {
@@ -53,6 +55,7 @@ export const hotelsData: Record<string, Hotel> = {
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_standard_plus',
+        phone: '+79999999999',
         minHours: 2
       },
       {
@@ -77,6 +80,7 @@ export const hotelsData: Record<string, Hotel> = {
         ],
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_romantic',
+        phone: '+79999999999',
         minHours: 3
       },
       {

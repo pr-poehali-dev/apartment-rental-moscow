@@ -143,16 +143,31 @@ export default function RoomCard({ room, currentImageIndex, isSelected, onImageC
           ))}
         </div>
 
-        <Button
-          className="w-full rounded-full mt-auto"
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(`https://t.me/${room.telegram.replace('@', '')}`, '_blank');
-          }}
-        >
-          <Icon name="MessageCircle" size={18} className="mr-2" />
-          Забронировать в Telegram
-        </Button>
+        <div className="flex gap-2 mt-auto">
+          <Button
+            className="flex-1 rounded-full"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(`https://t.me/${room.telegram.replace('@', '')}`, '_blank');
+            }}
+          >
+            <Icon name="MessageCircle" size={18} className="mr-2" />
+            Telegram
+          </Button>
+          {room.phone && (
+            <Button
+              variant="outline"
+              className="flex-1 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.location.href = `tel:${room.phone}`;
+              }}
+            >
+              <Icon name="Phone" size={18} className="mr-2" />
+              Позвонить
+            </Button>
+          )}
+        </div>
       </div>
     </Card>
 
