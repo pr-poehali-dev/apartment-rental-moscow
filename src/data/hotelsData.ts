@@ -4,9 +4,10 @@ export const hotelsData: Record<string, Hotel> = {
   '101': {
     id: 101,
     name: 'My loft Войковская',
-    address: 'Арбат, 15',
-    metro: 'Арбатская',
-    description: 'Уютный бутик-отель в самом центре Москвы с комфортными номерами для краткосрочной аренды',
+    address: 'ул. Клары Цеткин, 18к3',
+    metro: 'Войковская',
+    description: 'Современные лофты в районе Войковская с почасовой арендой от 1500₽/час',
+
     rooms: [
       {
         id: 1,
@@ -18,8 +19,8 @@ export const hotelsData: Record<string, Hotel> = {
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg'
         ],
-        price: 3500,
-        area: 20,
+        price: 1500,
+        area: 15,
         description: 'Комфортный номер с двуспальной кроватью, идеально подходит для краткосрочного отдыха',
         features: [
           { icon: 'BedDouble', label: 'Двуспальная кровать' },
@@ -42,8 +43,8 @@ export const hotelsData: Record<string, Hotel> = {
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/24bbf238-9489-49c2-9a1c-81a85408acaa.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg'
         ],
-        price: 4500,
-        area: 25,
+        price: 1800,
+        area: 18,
         description: 'Улучшенный номер с зоной отдыха и современными удобствами',
         features: [
           { icon: 'BedDouble', label: 'Двуспальная кровать' },
@@ -67,8 +68,8 @@ export const hotelsData: Record<string, Hotel> = {
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg'
         ],
-        price: 5500,
-        area: 28,
+        price: 2000,
+        area: 20,
         description: 'Романтический номер с красивым интерьером и джакузи',
         features: [
           { icon: 'BedDouble', label: 'Двуспальная кровать' },
@@ -92,8 +93,8 @@ export const hotelsData: Record<string, Hotel> = {
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg',
           'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg'
         ],
-        price: 6500,
-        area: 35,
+        price: 2200,
+        area: 20,
         description: 'Просторный номер повышенной комфортности с отдельной гостиной зоной',
         features: [
           { icon: 'BedDouble', label: 'Двуспальная кровать' },
