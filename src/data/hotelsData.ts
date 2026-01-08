@@ -62,11 +62,11 @@ export const hotelsData: Record<string, Hotel> = {
         id: 3,
         name: 'Улучшенный',
         images: [
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/b61bc81d-ca45-463a-803d-9b1d1e5dc423.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/638df8ca-c153-486e-8706-073cd19a93f2.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/4128894a-32d8-4d8c-8189-e74382772cf2.jpg'
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-2.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-20.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-32.jpeg',
+          'https://cdn.poehali.dev/files/image-06-01-26-02-10-7.jpeg'
         ],
         price: 2000,
         area: 20,
@@ -81,32 +81,6 @@ export const hotelsData: Record<string, Hotel> = {
         amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_romantic',
         phone: '+79999999999',
-        minHours: 3
-      },
-      {
-        id: 4,
-        name: 'Полулюкс',
-        images: [
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/a96a537d-b086-4154-a627-37ce0d73cd4f.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/54b80f43-a794-4e12-8f0f-776bee4c904a.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c987b402-c893-43d0-883d-35c77f5fbbac.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg',
-          'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/0685b5f7-0b2a-4455-95ac-befcdc828e57.jpg'
-        ],
-        price: 2200,
-        area: 20,
-        description: 'Просторный номер повышенной комфортности с отдельной гостиной зоной',
-        features: [
-          { icon: 'BedDouble', label: 'Двуспальная кровать' },
-          { icon: 'Sofa', label: 'Гостиная зона с диваном' },
-          { icon: 'Bath', label: 'Джакузи' },
-          { icon: 'ShowerHead', label: 'Душ' },
-          { icon: 'Shirt', label: 'Вешалки для одежды' },
-          { icon: 'Sparkles', label: 'Туалетные принадлежности' },
-          { icon: 'Coffee', label: 'Кофемашина, чай, вода, мини-бар' }
-        ],
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Гостиная зона', 'Кофемашина', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
-        telegram: '@hotel_uyut_junior',
         minHours: 3
       }
     ]
