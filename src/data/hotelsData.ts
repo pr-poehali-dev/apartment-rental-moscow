@@ -69,14 +69,13 @@ export const hotelsData: Record<string, Hotel> = {
         area: 20,
         description: 'Просторный арпартамент с 3 окнами, идеально подходит для краткосрочного отдыха',
         features: [
-          { icon: 'BedDouble', label: 'Двуспальная кровать' },
-          { icon: 'Bath', label: 'Джакузи' },
+          { icon: 'BedDouble', label: 'Двусп. кровать' },
           { icon: 'ShowerHead', label: 'Душ' },
           { icon: 'Shirt', label: 'Вешалки для одежды' },
           { icon: 'Sparkles', label: 'Туалетные принадлежности' },
-          { icon: 'Coffee', label: 'Чай, кофе, вода, мини-бар' }
+          { icon: 'Coffee', label: 'Чай, кофе, вода' }
         ],
-        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Джакузи', 'Мини-бар', 'Свечи', 'Своя охраняемая парковка', 'Оплата картой', 'Лобби-бар'],
+        amenities: ['Wi-Fi', 'Smart TV', 'Кондиционер', 'Душ', 'Платный паркинг 100₽/час', 'Оплата по ссылке', 'Бесконтактное заселение'],
         telegram: '@hotel_uyut_romantic',
         minHours: 3
       },
