@@ -270,7 +270,7 @@ export default function RentTab({
                   <div className="p-6 bg-gradient-to-b from-white to-gray-50">
                     {apt.category === 'hotels' ? (
                       <div className="mb-4 group/title cursor-pointer" onClick={() => navigate(`/hotel/${apt.id}`)}>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 mb-1">
                           {apt.id === 101 ? (
                             <img 
                               src="https://cdn.poehali.dev/files/IMG_5196.jpg" 
@@ -280,11 +280,9 @@ export default function RentTab({
                           ) : (
                             <div className="w-10 h-10 flex-shrink-0" />
                           )}
-                          <div>
-                            <h3 className="text-xl font-bold tracking-tight transition-colors group-hover/title:text-purple-600" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
-                            <p className="text-xs text-muted-foreground mt-1 opacity-0 group-hover/title:opacity-100 transition-opacity">смотреть все предложения</p>
-                          </div>
+                          <h3 className="text-xl font-bold tracking-tight transition-colors group-hover/title:text-purple-600" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
                         </div>
+                        <p className="text-xs text-muted-foreground opacity-0 group-hover/title:opacity-100 transition-opacity ml-[52px]">смотреть все предложения</p>
                       </div>
                     ) : (
                       <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
