@@ -103,11 +103,11 @@ export default function RoomCard({ room, currentImageIndex, isSelected, onImageC
           {room.name}
         </h3>
         
-        <div className="flex flex-wrap gap-3 mb-4">
+        <div className="flex flex-wrap justify-center gap-3 mb-4">
           {room.features.map((feature, idx) => (
             <div
               key={idx}
-              className="group relative"
+              className="group relative flex flex-col items-center"
             >
               <div className="w-10 h-10 rounded-full bg-purple-50 hover:bg-purple-100 flex items-center justify-center cursor-help transition-colors">
                 <Icon name={feature.icon as any} size={20} className="text-purple-600" />
