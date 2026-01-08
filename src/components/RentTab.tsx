@@ -276,7 +276,11 @@ export default function RentTab({
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{apt.metro}</span>
                           {apt.metroWalkMinutes && (
-                            <span className="flex items-center gap-1 text-muted-foreground">
+                            <span className={`flex items-center gap-1 font-semibold ${
+                              apt.metroWalkMinutes <= 5 ? 'text-green-600' : 
+                              apt.metroWalkMinutes <= 8 ? 'text-blue-600' : 
+                              'text-orange-600'
+                            }`}>
                               • <Icon name="PersonStanding" size={14} /> {apt.metroWalkMinutes} мин
                             </span>
                           )}
