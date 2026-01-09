@@ -58,13 +58,14 @@ export default function Admin() {
     try {
       const response = await fetch(`${API_URL}?entity=hotels`);
       const data = await response.json();
-      setHotels(data);
+      setHotels(Array.isArray(data) ? data : []);
     } catch (error) {
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить список отелей',
         variant: 'destructive'
       });
+      setHotels([]);
     }
   };
 
@@ -72,9 +73,10 @@ export default function Admin() {
     try {
       const response = await fetch(`${API_URL}?entity=owners`);
       const data = await response.json();
-      setOwners(data);
+      setOwners(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to load owners:', error);
+      setOwners([]);
     }
   };
 
