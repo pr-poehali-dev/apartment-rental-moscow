@@ -40,6 +40,8 @@ interface RentTabProps {
   heroImages: string[];
 }
 
+const API_URL = 'https://functions.poehali.dev/1961571b-26cd-4f80-9709-45455d336430';
+
 export default function RentTab({
   apartmentStats,
   searchQuery,
@@ -60,20 +62,47 @@ export default function RentTab({
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
   const [selectedApartment, setSelectedApartment] = useState<number | null>(null);
   const [phoneVisibleMap, setPhoneVisibleMap] = useState<Record<number, boolean>>({});
+  const [hotelsFromDB, setHotelsFromDB] = useState<Apartment[]>([]);
 
   const handleCategoryClick = (category: 'hotels' | 'apartments' | 'saunas' | 'conference') => {
     setActiveCategory(category);
+    if (category === 'hotels') {
+      loadHotels();
+    }
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   };
 
-  const categoryListings: Apartment[] = [
-    // Отели
-    { id: 101, title: 'My loft Войковская', image: 'https://cdn.poehali.dev/files/image-06-01-26-02-10-11.jpeg', price: 1500, metro: 'Войковская', metroWalkMinutes: 5, address: 'Старопетровский проезд, д. 1, стр. 1', area: 16, areaRange: '12-20', telegram: '@DmitryKelm', views: 0, telegramClicks: 0, lat: 55.8149, lon: 37.4964, category: 'hotels', minHours: 2, parking: { available: true, paid: true, price: 100 }, phone: '+79852118808' },
-    { id: 102, title: 'Отель "Центральный"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5000, metro: 'Тверская', metroWalkMinutes: 3, address: 'Тверская, 10', area: 30, telegram: '@hotel2', views: 0, telegramClicks: 0, lat: 55.764828, lon: 37.605074, category: 'hotels', minHours: 2, parking: { available: false, paid: false }, phone: '+79888888888' },
-    { id: 103, title: 'Мини-отель "Москва"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/c9cd164a-bdc0-4a82-9802-9c92f0bd8b04.jpg', price: 3800, metro: 'Павелецкая', metroWalkMinutes: 7, address: 'Павелецкая пл., 2', area: 22, telegram: '@hotel3', views: 0, telegramClicks: 0, lat: 55.729625, lon: 37.638869, category: 'hotels', minHours: 2, parking: { available: true, paid: false }, phone: '+79777777777' },
-    
+  const loadHotels = async () => {
+    try {
+      const response = await fetch(`${API_URL}?entity=hotels`);
+      const data = await response.json();
+      const publishedHotels = data.filter((h: any) => h.is_published && !h.is_archived);
+      const mapped: Apartment[] = publishedHotels.map((hotel: any) => ({
+        id: hotel.id,
+        title: hotel.name,
+        image: hotel.images && hotel.images[0] ? hotel.images[0] : 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
+        price: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].price : 0,
+        metro: hotel.metro,
+        address: hotel.address,
+        area: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].area : 0,
+        telegram: hotel.telegram || '',
+        views: 0,
+        telegramClicks: 0,
+        lat: 55.7558,
+        lon: 37.6173,
+        category: 'hotels' as const,
+        minHours: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].min_hours : 2,
+        phone: hotel.phone
+      }));
+      setHotelsFromDB(mapped);
+    } catch (error) {
+      console.error('Failed to load hotels:', error);
+    }
+  };
+
+  const staticListings: Apartment[] = [
     // Апартаменты
     { id: 201, title: 'Студия с видом на реку', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/e5ab91c8-b024-4279-a610-7927a666ae1a.jpg', price: 3500, metro: 'Парк Культуры', metroWalkMinutes: 8, address: 'Остоженка, 12', area: 32, telegram: '@owner1', views: 0, telegramClicks: 0, lat: 55.740700, lon: 37.597700, category: 'apartments' },
     { id: 202, title: 'Двушка в центре', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg', price: 5200, metro: 'Маяковская', metroWalkMinutes: 4, address: 'Тверская, 25', area: 65, telegram: '@owner2', views: 0, telegramClicks: 0, lat: 55.760500, lon: 37.605300, category: 'apartments' },
@@ -88,7 +117,8 @@ export default function RentTab({
     { id: 402, title: 'Конференц-зал "Бизнес"', image: 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/abf18d9f-7064-4f95-b54f-65f635715d35.jpg', price: 10000, metro: 'Курская', metroWalkMinutes: 4, address: 'Земляной вал, 27', area: 80, telegram: '@conf2', views: 0, telegramClicks: 0, lat: 55.758389, lon: 37.660644, category: 'conference' }
   ];
 
-  const filteredListings = categoryListings.filter(item => item.category === activeCategory);
+  const allListings = activeCategory === 'hotels' ? hotelsFromDB : staticListings;
+  const filteredListings = allListings.filter(item => item.category === activeCategory);
 
   const categoryConfig = {
     hotels: { title: 'Отели', placeholder: 'Найти отель по адресу или метро', icon: 'Building2' },
