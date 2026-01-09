@@ -6,7 +6,6 @@ import RentTab from '@/components/RentTab';
 import OwnersTab from '@/components/OwnersTab';
 import AboutTab from '@/components/AboutTab';
 import DashboardTab from '@/components/DashboardTab';
-import { Link } from 'react-router-dom';
 
 interface Apartment {
   id: number;
@@ -161,9 +160,6 @@ export default function Index() {
               >
                 🚀 120 минут
               </h1>
-              <Link to="/admin">
-                <Button size="sm" variant="outline">АДМИН</Button>
-              </Link>
             </div>
             <div className="hidden lg:flex gap-4">
               <button 

@@ -64,36 +64,46 @@ export default function DashboardTab() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://functions.poehali.dev/6cd51ceb-01dd-401b-a12d-f6a9c9b950bc', {
+      // Сначала проверяем, это админ?
+      const adminResponse = await fetch('https://functions.poehali.dev/ef7fca24-35ed-4ce8-94fe-6d7de475aae3', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
 
-      const data = await response.json();
+      if (adminResponse.ok) {
+        const adminData = await adminResponse.json();
+        if (adminData.success) {
+          localStorage.setItem('admin_auth', JSON.stringify({
+            admin: adminData.admin,
+            timestamp: Date.now()
+          }));
+          setIsAdmin(true);
+          setIsLoggedIn(true);
+          setLoading(false);
+          return;
+        }
+      }
 
-      if (!response.ok) {
-        setError(data.error || 'Ошибка авторизации');
+      // Если не админ, проверяем собственника
+      const ownerResponse = await fetch('https://functions.poehali.dev/6cd51ceb-01dd-401b-a12d-f6a9c9b950bc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const ownerData = await ownerResponse.json();
+
+      if (!ownerResponse.ok) {
+        setError(ownerData.error || 'Неверный логин или пароль');
         setLoading(false);
         return;
       }
 
-      // Сохраняем токен и ID собственника
-      localStorage.setItem('auth_token', data.token);
-      localStorage.setItem('owner_id', data.owner_id);
-      
-      // Проверяем, админ ли это (логин hab-agent@mail.ru)
-      if (username === 'hab-agent@mail.ru') {
-        setIsAdmin(true);
-        localStorage.setItem('is_admin', 'true');
-      }
-      
+      localStorage.setItem('auth_token', ownerData.token);
+      localStorage.setItem('owner_id', ownerData.owner_id);
       setIsLoggedIn(true);
-      if (username !== 'hab-agent@mail.ru') {
-        loadDashboardData(data.owner_id);
-      }
+      loadDashboardData(ownerData.owner_id);
     } catch (err) {
       console.error('Login error:', err);
       setError('Ошибка подключения к серверу');
@@ -120,7 +130,7 @@ export default function DashboardTab() {
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('owner_id');
-    localStorage.removeItem('is_admin');
+    localStorage.removeItem('admin_auth');
     setIsLoggedIn(false);
     setIsAdmin(false);
     setOwnerData(null);
@@ -131,17 +141,27 @@ export default function DashboardTab() {
   };
 
   useEffect(() => {
+    const adminAuth = localStorage.getItem('admin_auth');
+    if (adminAuth) {
+      try {
+        const auth = JSON.parse(adminAuth);
+        const hoursPassed = (Date.now() - auth.timestamp) / (1000 * 60 * 60);
+        if (hoursPassed < 24) {
+          setIsLoggedIn(true);
+          setIsAdmin(true);
+          return;
+        }
+      } catch (e) {
+        localStorage.removeItem('admin_auth');
+      }
+    }
+
     const token = localStorage.getItem('auth_token');
     const ownerId = localStorage.getItem('owner_id');
-    const adminFlag = localStorage.getItem('is_admin');
     
     if (token && ownerId) {
       setIsLoggedIn(true);
-      if (adminFlag === 'true') {
-        setIsAdmin(true);
-      } else {
-        loadDashboardData(parseInt(ownerId));
-      }
+      loadDashboardData(parseInt(ownerId));
     }
   }, []);
 
