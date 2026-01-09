@@ -1,10 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
+import HeroSection from '@/components/rent/HeroSection';
+import CategoryFilters from '@/components/rent/CategoryFilters';
+import ListingsGrid from '@/components/rent/ListingsGrid';
 
 interface Apartment {
   id: number;
@@ -54,9 +51,7 @@ export default function RentTab({
   heroImageIndex,
   heroImages
 }: RentTabProps) {
-  const heroRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<'hotels' | 'apartments' | 'saunas' | 'conference' | null>(null);
@@ -120,23 +115,16 @@ export default function RentTab({
   const allListings = activeCategory === 'hotels' ? hotelsFromDB : staticListings;
   const filteredListings = allListings.filter(item => item.category === activeCategory);
 
-  const categoryConfig = {
-    hotels: { title: 'Отели', placeholder: 'Найти отель по адресу или метро', icon: 'Building2' },
-    apartments: { title: 'Апартаменты', placeholder: 'Найти апартаменты по адресу или метро', icon: 'Home' },
-    saunas: { title: 'Сауны', placeholder: 'Найти сауну по адресу или метро', icon: 'Droplets' },
-    conference: { title: 'Конференц-залы', placeholder: 'Найти конференц-зал по адресу или метро', icon: 'Presentation' }
-  };
-
   const getWeatherIcon = (code: number | null) => {
     if (code === null) return 'Cloud';
-    if (code === 0 || code === 1) return 'Sun'; // Ясно
-    if (code === 2 || code === 3) return 'CloudSun'; // Облачно
-    if (code >= 45 && code <= 48) return 'CloudFog'; // Туман
-    if (code >= 51 && code <= 67) return 'CloudRain'; // Дождь
-    if (code >= 71 && code <= 77) return 'CloudSnow'; // Снег
-    if (code >= 80 && code <= 82) return 'CloudDrizzle'; // Ливень
-    if (code >= 85 && code <= 86) return 'Snowflake'; // Снегопад
-    if (code >= 95 && code <= 99) return 'CloudLightning'; // Гроза
+    if (code === 0 || code === 1) return 'Sun';
+    if (code === 2 || code === 3) return 'CloudSun';
+    if (code >= 45 && code <= 48) return 'CloudFog';
+    if (code >= 51 && code <= 67) return 'CloudRain';
+    if (code >= 71 && code <= 77) return 'CloudSnow';
+    if (code >= 80 && code <= 82) return 'CloudDrizzle';
+    if (code >= 85 && code <= 86) return 'Snowflake';
+    if (code >= 95 && code <= 99) return 'CloudLightning';
     return 'Cloud';
   };
 
@@ -154,10 +142,7 @@ export default function RentTab({
         });
     };
 
-    // Получаем температуру сразу
     fetchTemperature();
-
-    // Обновляем каждые 10 минут (600000 мс)
     const interval = setInterval(fetchTemperature, 600000);
 
     return () => clearInterval(interval);
@@ -165,347 +150,33 @@ export default function RentTab({
 
   return (
     <div className="animate-fade-in">
-      <section ref={heroRef} className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 hero-gradient" />
-        {heroImages.map((image, idx) => (
-          <img 
-            key={idx}
-            src={image}
-            alt={`Hero ${idx + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${
-              idx === heroImageIndex ? 'opacity-40 scale-100' : 'opacity-0 scale-105'
-            }`}
-            style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
-        <div className="relative z-10 text-center text-white px-4 sm:px-6 max-w-5xl">
-          <div className="mb-4 sm:mb-6 fade-slide-in flex flex-wrap items-center justify-center gap-3">
-            <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full promo-badge">
-              <span className="text-sm sm:text-base md:text-lg font-bold text-white whitespace-nowrap">ПОЧАСОВАЯ АРЕНДА В МОСКВЕ</span>
-            </div>
-            <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 rounded-full promo-badge">
-              <span className="text-sm sm:text-base md:text-lg font-bold text-white whitespace-nowrap">БЕЗ ПОСРЕДНИКОВ</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 fade-slide-in" style={{ animationDelay: '0.1s' }}>
-            <h2 
-              className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            >
-              120 МИНУТ
-            </h2>
-            {temperature !== null && (
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-3 border border-white/20">
-                <Icon name={getWeatherIcon(weatherCode)} size={36} className="text-yellow-300" />
-                <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-bold">{temperature > 0 ? '+' : ''}{temperature}</span>
-                  <span className="text-2xl font-light">°C</span>
-                </div>
-              </div>
-            )}
-          </div>
-          <h2 
-            className="text-3xl md:text-4xl font-bold mb-6 tracking-tight transition-all duration-500 fade-slide-in"
-            style={{ fontFamily: 'Syne, sans-serif', animationDelay: '0.2s' }}
-            dangerouslySetInnerHTML={{ __html: heroTexts[heroTextIndex] }}
-          />
-          <p className="text-xl md:text-2xl font-light mb-2 text-white/90 fade-slide-in" style={{ animationDelay: '0.3s' }}>
-            №1 в почасовой аренде
-          </p>
-          <p className="text-lg md:text-xl font-light mb-8 text-white/80 fade-slide-in" style={{ animationDelay: '0.3s' }}>
-            Без посредников / Без регистрации
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto fade-slide-in px-4" style={{ animationDelay: '0.4s' }}>
-            <Button 
-              size="lg" 
-              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'hotels' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => handleCategoryClick('hotels')}
-            >
-              <Icon name="Building2" size={20} className="mr-2" />
-              Отели
-            </Button>
-            <Button 
-              size="lg" 
-              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'apartments' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => handleCategoryClick('apartments')}
-            >
-              <Icon name="Home" size={20} className="mr-2" />
-              Апартаменты
-            </Button>
-            <Button 
-              size="lg" 
-              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'saunas' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => handleCategoryClick('saunas')}
-            >
-              <Icon name="Droplets" size={20} className="mr-2" />
-              Сауны
-            </Button>
-            <Button 
-              size="lg" 
-              className={`hero-button text-white rounded-full px-6 sm:px-8 h-14 text-base sm:text-lg font-semibold w-full transition-all ${activeCategory === 'conference' ? 'hero-gradient' : 'bg-white/20 hover:bg-white/30'}`}
-              onClick={() => handleCategoryClick('conference')}
-            >
-              <Icon name="Presentation" size={20} className="mr-2" />
-              Конференц-залы
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {activeCategory && (
-        <section ref={resultsRef} className="max-w-[1600px] mx-auto px-4 sm:px-6 py-12 sm:py-20">
-          <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
-              <Icon name={categoryConfig[activeCategory].icon as any} size={32} className="inline mr-3 text-purple-600" />
-              {categoryConfig[activeCategory].title}
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <Input
-                type="search"
-                placeholder={categoryConfig[activeCategory].placeholder}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 sm:h-14 rounded-full border-gray-300 px-4 sm:px-6 text-sm sm:text-base"
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredListings.map((apt) => {
-              const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(`Москва, ${apt.address}`)}`;
-              return (
-                <Card 
-                  key={apt.id} 
-                  className={`overflow-hidden border-2 shadow-lg hover:shadow-2xl cursor-pointer group rounded-3xl bg-white transition-all duration-300 hover:-translate-y-2 ${selectedApartment === apt.id ? 'border-purple-500 ring-2 ring-purple-300' : 'border-transparent'}`}
-                  onClick={() => {
-                    trackView(apt.id);
-                    setSelectedApartment(apt.id);
-                    if (activeCategory === 'hotels') {
-                      navigate(`/hotel/${apt.id}`);
-                    }
-                  }}
-                >
-                  <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 relative">
-                    <img 
-                      src={apt.image} 
-                      alt={apt.title}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <Badge className="hero-gradient text-white border-0 rounded-full font-bold text-base px-4 py-2 shadow-lg">
-                        {apt.minHours ? `от ${apt.price}₽/ч` : `${apt.price}₽/ч`}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="p-6 bg-gradient-to-b from-white to-gray-50">
-                    {apt.category === 'hotels' ? (
-                      <div className="mb-4 group/title cursor-pointer" onClick={() => navigate(`/hotel/${apt.id}`)}>
-                        <div className="flex items-center gap-3 mb-1">
-                          {apt.id === 101 ? (
-                            <img 
-                              src="https://cdn.poehali.dev/files/IMG_5196.jpg" 
-                              alt="My loft logo" 
-                              className="w-10 h-10 object-contain flex-shrink-0"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 flex-shrink-0" />
-                          )}
-                          <h3 className="text-xl font-bold tracking-tight transition-colors group-hover/title:text-purple-600" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
-                        </div>
-                        <p className="text-xs text-muted-foreground opacity-0 group-hover/title:opacity-100 transition-opacity ml-[52px]">смотреть все предложения</p>
-                      </div>
-                    ) : (
-                      <h3 className="text-xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Syne, sans-serif' }}>{apt.title}</h3>
-                    )}
-                    <div className="space-y-3 text-sm text-muted-foreground mb-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                          <Icon name="MapPin" size={14} className="text-purple-600" />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{apt.metro}</span>
-                          {apt.metroWalkMinutes && (
-                            <span className={`flex items-center gap-1 font-semibold ${
-                              apt.metroWalkMinutes <= 5 ? 'text-green-600' : 
-                              apt.metroWalkMinutes <= 8 ? 'text-blue-600' : 
-                              'text-orange-600'
-                            }`}>
-                              • <Icon name="PersonStanding" size={14} /> {apt.metroWalkMinutes} мин
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                            <Icon name="Home" size={14} className="text-blue-600" />
-                          </div>
-                          <span className="font-medium">{apt.areaRange ? `${apt.areaRange} м²` : `${apt.area} м²`}</span>
-                        </div>
-                        {apt.minHours && (
-                          <span className="text-red-600 font-bold text-base border-2 border-red-600 rounded-full px-3 py-1 whitespace-nowrap">
-                            от {apt.minHours}ч
-                          </span>
-                        )}
-                      </div>
-                      <a 
-                        href={yandexMapsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 text-primary hover:text-purple-700 transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
-                          <Icon name="Navigation" size={14} className="text-purple-600" />
-                        </div>
-                        <span className="text-xs font-medium underline">{apt.address}</span>
-                      </a>
-                      {apt.parking && (
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                            <Icon name="Car" size={14} className="text-green-600" />
-                          </div>
-                          <span className="font-medium">
-                            {apt.parking.available ? (
-                              apt.parking.paid ? (
-                                <span className="text-orange-600">Платная парковка • {apt.parking.price}₽/час</span>
-                              ) : (
-                                <span className="text-green-600">Бесплатная парковка</span>
-                              )
-                            ) : (
-                              <span className="text-gray-500">Парковки нет</span>
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    {apt.category === 'hotels' ? (
-                      <>
-                        <div className="flex gap-2 mt-2">
-                          <Button 
-                            className="flex-1 rounded-full h-12 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              trackTelegramClick(apt.id);
-                              window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                            }}
-                          >
-                            <Icon name="MessageCircle" size={18} />
-                            Telegram
-                          </Button>
-                          {apt.phone && (
-                            <Button 
-                              variant="outline"
-                              className="flex-1 rounded-full h-12 font-semibold shadow-lg hover:shadow-xl transition-all"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (!phoneVisibleMap[apt.id]) {
-                                  setPhoneVisibleMap(prev => ({ ...prev, [apt.id]: true }));
-                                } else {
-                                  const phoneFormatted = apt.phone?.replace(/^\+?7/, '8') || '';
-                                  navigator.clipboard.writeText(phoneFormatted);
-                                  alert(`Телефон скопирован: ${phoneFormatted}`);
-                                }
-                              }}
-                            >
-                              <Icon name="Phone" size={18} />
-                              {phoneVisibleMap[apt.id] ? apt.phone.replace(/^\+?7/, '8') : 'Позвонить'}
-                            </Button>
-                          )}
-                        </div>
-                        <Button 
-                          variant="ghost"
-                          className="w-full rounded-full h-10 mt-2 font-medium"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (navigator.share) {
-                              navigator.share({
-                                title: apt.title,
-                                text: `${apt.title} - от ${apt.price}₽/час`,
-                                url: `${window.location.origin}/hotel/${apt.id}`
-                              });
-                            } else {
-                              navigator.clipboard.writeText(`${window.location.origin}/hotel/${apt.id}`);
-                              alert('Ссылка скопирована в буфер обмена');
-                            }
-                          }}
-                        >
-                          <Icon name="Share2" size={18} className="mr-2" />
-                          Поделиться
-                        </Button>
-                      </>
-                    ) : (
-                      <Button 
-                        className="w-full rounded-full h-12 mt-2 hero-gradient text-white font-semibold shadow-lg hover:shadow-xl transition-all"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          trackTelegramClick(apt.id);
-                          window.open(`https://t.me/${apt.telegram.replace('@', '')}`, '_blank');
-                        }}
-                      >
-                        <Icon name="MessageCircle" size={18} />
-                        Заявка в Telegram
-                      </Button>
-                    )}
-                  </div>
-                </Card>
-              );
-            })}
-              </div>
-            </div>
-
-            <div className="lg:sticky lg:top-20 lg:self-start h-[400px] lg:h-[600px] rounded-2xl overflow-hidden border-2 border-gray-200 shadow-lg">
-              <iframe
-                key={`${activeCategory}-${selectedApartment}`}
-                src={(() => {
-                  const selectedListing = filteredListings.find(item => item.id === selectedApartment);
-                  const markers = filteredListings.map(item => 
-                    `${item.lon},${item.lat},pm2${item.id === selectedApartment ? 'blm' : 'rdm'}`
-                  ).join('~');
-                  
-                  if (selectedListing) {
-                    return `https://yandex.ru/map-widget/v1/?ll=${selectedListing.lon}%2C${selectedListing.lat}&z=15&l=map&pt=${markers}`;
-                  }
-                  
-                  const centerLat = filteredListings.reduce((sum, item) => sum + item.lat, 0) / filteredListings.length;
-                  const centerLon = filteredListings.reduce((sum, item) => sum + item.lon, 0) / filteredListings.length;
-                  return `https://yandex.ru/map-widget/v1/?ll=${centerLon}%2C${centerLat}&z=12&l=map&pt=${markers}`;
-                })()}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                style={{ position: 'relative' }}
-              />
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section className="bg-secondary py-20">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 tracking-tight">
-            Как это работает
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { icon: 'Search', title: 'Выбираете', desc: 'Смотрите предложения с фото и описанием' },
-              { icon: 'MessageCircle', title: 'Связываетесь', desc: 'Пишете собственнику в Telegram' },
-              { icon: 'CalendarCheck', title: 'Бронируете', desc: 'Договариваетесь и бронируете' }
-            ].map((step, idx) => (
-              <div key={idx} className="text-center step-fade-in step-card">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-foreground flex items-center justify-center step-icon">
-                  <Icon name={step.icon as any} size={28} className="text-background" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                <p className="text-muted-foreground">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        heroImageIndex={heroImageIndex}
+        heroImages={heroImages}
+        heroTextIndex={heroTextIndex}
+        heroTexts={heroTexts}
+        temperature={temperature}
+        weatherCode={weatherCode}
+        getWeatherIcon={getWeatherIcon}
+      />
+      
+      <CategoryFilters
+        activeCategory={activeCategory}
+        onCategoryClick={handleCategoryClick}
+      />
+      
+      <ListingsGrid
+        activeCategory={activeCategory}
+        filteredListings={filteredListings}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedApartment={selectedApartment}
+        setSelectedApartment={setSelectedApartment}
+        phoneVisibleMap={phoneVisibleMap}
+        setPhoneVisibleMap={setPhoneVisibleMap}
+        trackView={trackView}
+        trackTelegramClick={trackTelegramClick}
+      />
     </div>
   );
 }
