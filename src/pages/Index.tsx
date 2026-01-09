@@ -184,6 +184,14 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            <Button 
+              size="sm" 
+              className="rounded-full font-medium shadow-sm text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"
+              onClick={() => window.location.href = '/admin'}
+            >
+              <Icon name="ShieldCheck" size={14} className="sm:mr-1" />
+              <span className="hidden sm:inline">Личный кабинет</span>
+            </Button>
             <Button
               size="sm"
               variant="ghost"
