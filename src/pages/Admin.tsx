@@ -373,7 +373,7 @@ export default function Admin() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Управление объектами</h1>
+          <h1 className="text-4xl font-bold">🚀 Управление объектами</h1>
           <div className="flex gap-2">
             <Button onClick={() => setShowNewOwnerDialog(true)} variant="outline">
               <Icon name="UserPlus" size={18} className="mr-2" />
