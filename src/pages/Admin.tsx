@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { API_URL, Hotel, Owner, Room, ImageUpload } from '@/types/admin';
@@ -17,6 +18,7 @@ export default function Admin() {
   const [showNewRoomDialog, setShowNewRoomDialog] = useState(false);
   const [showNewOwnerDialog, setShowNewOwnerDialog] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
+  const [activeTab, setActiveTab] = useState<'hotels' | 'owners'>('hotels');
   
   const [hotelForm, setHotelForm] = useState({
     name: '',
@@ -384,7 +386,25 @@ export default function Admin() {
           </div>
         </div>
 
-        <div className="mb-4 flex gap-2">
+        <div className="mb-6 flex gap-4">
+          <Button
+            variant={activeTab === 'hotels' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('hotels')}
+          >
+            <Icon name="Building" size={16} className="mr-2" />
+            Объекты
+          </Button>
+          <Button
+            variant={activeTab === 'owners' ? 'default' : 'outline'}
+            onClick={() => setActiveTab('owners')}
+          >
+            <Icon name="Users" size={16} className="mr-2" />
+            Собственники
+          </Button>
+        </div>
+
+        {activeTab === 'hotels' && (
+          <div className="mb-4 flex gap-2">
           <Button
             variant={showArchived ? 'outline' : 'default'}
             size="sm"
@@ -400,23 +420,120 @@ export default function Admin() {
             <Icon name="Archive" size={16} className="mr-2" />
             Архив
           </Button>
-        </div>
+          </div>
+        )}
 
-        <div className="space-y-4">
-          {hotels.filter(h => h.is_archived === showArchived).map(hotel => (
-            <HotelCard
-              key={hotel.id}
-              hotel={hotel}
-              onTogglePublish={togglePublish}
-              onToggleArchive={toggleArchive}
-              onEdit={setSelectedHotel}
-              onAddRoom={handleAddRoom}
-              onEditRoom={setEditingRoom}
-              onToggleRoomArchive={toggleRoomArchive}
-              onDeleteRoom={deleteRoom}
-            />
-          ))}
-        </div>
+        {activeTab === 'hotels' ? (
+          <div className="space-y-4">
+            {hotels.filter(h => h.is_archived === showArchived).map(hotel => (
+              <HotelCard
+                key={hotel.id}
+                hotel={hotel}
+                onTogglePublish={togglePublish}
+                onToggleArchive={toggleArchive}
+                onEdit={setSelectedHotel}
+                onAddRoom={handleAddRoom}
+                onEditRoom={setEditingRoom}
+                onToggleRoomArchive={toggleRoomArchive}
+                onDeleteRoom={deleteRoom}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {owners.map(owner => {
+              const ownerHotels = hotels.filter(h => h.owner_id === owner.id);
+              const availableHotels = hotels.filter(h => !h.owner_id);
+              
+              return (
+                <div key={owner.id} className="bg-white p-6 rounded-lg shadow">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold">{owner.name}</h3>
+                      {owner.phone && <p className="text-sm text-gray-600">Телефон: {owner.phone}</p>}
+                      {owner.telegram && <p className="text-sm text-gray-600">Telegram: {owner.telegram}</p>}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Объекты собственника:</h4>
+                    {ownerHotels.length > 0 ? (
+                      <div className="space-y-2">
+                        {ownerHotels.map(hotel => (
+                          <div key={hotel.id} className="bg-gray-50 p-3 rounded flex justify-between items-center">
+                            <div>
+                              <p className="font-medium">{hotel.name}</p>
+                              <p className="text-sm text-gray-600">{hotel.address}</p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={async () => {
+                                if (confirm('Отвязать этот объект от собственника?')) {
+                                  await fetch(`${API_URL}?entity=hotels&id=${hotel.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ owner_id: null })
+                                  });
+                                  loadHotels();
+                                  toast({ title: 'Объект отвязан' });
+                                }
+                              }}
+                            >
+                              <Icon name="Unlink" size={14} />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500">Нет привязанных объектов</p>
+                    )}
+                    
+                    {availableHotels.length > 0 && (
+                      <div className="mt-4">
+                        <Label>Привязать существующий объект:</Label>
+                        <div className="flex gap-2 mt-2">
+                          <select
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                            id={`hotel-select-${owner.id}`}
+                          >
+                            <option value="">Выберите объект</option>
+                            {availableHotels.map(hotel => (
+                              <option key={hotel.id} value={hotel.id}>
+                                {hotel.name}
+                              </option>
+                            ))}
+                          </select>
+                          <Button
+                            size="sm"
+                            onClick={async () => {
+                              const select = document.getElementById(`hotel-select-${owner.id}`) as HTMLSelectElement;
+                              const hotelId = select.value;
+                              if (!hotelId) {
+                                toast({ title: 'Выберите объект', variant: 'destructive' });
+                                return;
+                              }
+                              await fetch(`${API_URL}?entity=hotels&id=${hotelId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ owner_id: owner.id })
+                              });
+                              loadHotels();
+                              toast({ title: 'Объект привязан' });
+                            }}
+                          >
+                            <Icon name="Link" size={14} className="mr-1" />
+                            Привязать
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <HotelDialogs
           showNewOwnerDialog={showNewOwnerDialog}
