@@ -33,6 +33,7 @@ export interface Hotel {
   is_published: boolean;
   is_archived: boolean;
   rooms: Room[];
+  images?: string[];
 }
 
 export interface ImageUpload {

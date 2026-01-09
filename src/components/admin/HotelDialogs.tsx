@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import Icon from '@/components/ui/icon';
 import {
   Select,
   SelectContent,
@@ -16,7 +17,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Hotel, Owner } from '@/types/admin';
+import { Hotel, Owner, ImageUpload } from '@/types/admin';
 
 interface HotelDialogsProps {
   showNewOwnerDialog: boolean;
@@ -57,6 +58,9 @@ interface HotelDialogsProps {
   showNewRoomDialog: boolean;
   owners: Owner[];
   loading: boolean;
+  hotelImages: ImageUpload[];
+  setHotelImages: (images: ImageUpload[]) => void;
+  handleHotelImageSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function HotelDialogs({
@@ -75,7 +79,10 @@ export default function HotelDialogs({
   updateHotel,
   showNewRoomDialog,
   owners,
-  loading
+  loading,
+  hotelImages,
+  setHotelImages,
+  handleHotelImageSelect
 }: HotelDialogsProps) {
   return (
     <>
@@ -149,6 +156,32 @@ export default function HotelDialogs({
                 <Input value={hotelForm.telegram} onChange={e => setHotelForm({...hotelForm, telegram: e.target.value})} />
               </div>
             </div>
+            <div>
+              <Label>Фотографии объекта</Label>
+              <input type="file" accept="image/*" multiple onChange={handleHotelImageSelect} className="hidden" id="hotel-images-new" />
+              <label htmlFor="hotel-images-new">
+                <Button type="button" variant="outline" asChild>
+                  <span><Icon name="Upload" size={16} className="mr-2" />Выбрать фото</span>
+                </Button>
+              </label>
+              {hotelImages.length > 0 && (
+                <div className="grid grid-cols-4 gap-2 mt-2">
+                  {hotelImages.map((img, idx) => (
+                    <div key={idx} className="relative">
+                      <img src={img.preview} className="w-full h-20 object-cover rounded" alt="" />
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="absolute top-1 right-1 h-6 w-6 p-0"
+                        onClick={() => setHotelImages(hotelImages.filter((_, i) => i !== idx))}
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <DialogFooter>
             <Button onClick={createHotel} disabled={loading}>Создать</Button>
@@ -177,11 +210,12 @@ export default function HotelDialogs({
               </div>
               <div>
                 <Label>Владелец</Label>
-                <Select value={selectedHotel.owner_id?.toString() || ''} onValueChange={value => setSelectedHotel({...selectedHotel, owner_id: parseInt(value)})}>
+                <Select value={selectedHotel.owner_id?.toString() || ''} onValueChange={value => setSelectedHotel({...selectedHotel, owner_id: value ? parseInt(value) : undefined})}>
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите владельца" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="">Без владельца</SelectItem>
                     {owners.map(owner => (
                       <SelectItem key={owner.id} value={owner.id.toString()}>{owner.name}</SelectItem>
                     ))}
@@ -201,6 +235,32 @@ export default function HotelDialogs({
                   <Label>Telegram</Label>
                   <Input value={selectedHotel.telegram || ''} onChange={e => setSelectedHotel({...selectedHotel, telegram: e.target.value})} />
                 </div>
+              </div>
+              <div>
+                <Label>Добавить фото объекта</Label>
+                <input type="file" accept="image/*" multiple onChange={handleHotelImageSelect} className="hidden" id="hotel-images-edit" />
+                <label htmlFor="hotel-images-edit">
+                  <Button type="button" variant="outline" asChild>
+                    <span><Icon name="Upload" size={16} className="mr-2" />Выбрать фото</span>
+                  </Button>
+                </label>
+                {hotelImages.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2 mt-2">
+                    {hotelImages.map((img, idx) => (
+                      <div key={idx} className="relative">
+                        <img src={img.preview} className="w-full h-20 object-cover rounded" alt="" />
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className="absolute top-1 right-1 h-6 w-6 p-0"
+                          onClick={() => setHotelImages(hotelImages.filter((_, i) => i !== idx))}
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <DialogFooter>

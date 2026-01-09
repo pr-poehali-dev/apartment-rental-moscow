@@ -16,6 +16,7 @@ export default function Admin() {
   const [showNewHotelDialog, setShowNewHotelDialog] = useState(false);
   const [showNewRoomDialog, setShowNewRoomDialog] = useState(false);
   const [showNewOwnerDialog, setShowNewOwnerDialog] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
   
   const [hotelForm, setHotelForm] = useState({
     name: '',
@@ -43,6 +44,7 @@ export default function Admin() {
   });
 
   const [roomImages, setRoomImages] = useState<ImageUpload[]>([]);
+  const [hotelImages, setHotelImages] = useState<ImageUpload[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -106,12 +108,19 @@ export default function Admin() {
 
     setLoading(true);
     try {
+      const uploadedUrls: string[] = [];
+      for (const img of hotelImages) {
+        const url = await uploadImage(img);
+        uploadedUrls.push(url);
+      }
+
       const response = await fetch(`${API_URL}?entity=hotels`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...hotelForm,
-          owner_id: hotelForm.owner_id ? parseInt(hotelForm.owner_id) : null
+          owner_id: hotelForm.owner_id ? parseInt(hotelForm.owner_id) : null,
+          images: uploadedUrls
         })
       });
 
@@ -119,6 +128,7 @@ export default function Admin() {
         toast({ title: 'Успех', description: 'Отель создан' });
         setShowNewHotelDialog(false);
         setHotelForm({ name: '', address: '', metro: '', description: '', phone: '', telegram: '', owner_id: '', category: 'hotels' });
+        setHotelImages([]);
         loadHotels();
       }
     } catch (error) {
@@ -131,6 +141,13 @@ export default function Admin() {
   const updateHotel = async (hotel: Hotel) => {
     setLoading(true);
     try {
+      const uploadedUrls: string[] = hotel.images || [];
+      
+      for (const img of hotelImages) {
+        const url = await uploadImage(img);
+        uploadedUrls.push(url);
+      }
+
       const response = await fetch(`${API_URL}?entity=hotels&id=${hotel.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -142,12 +159,14 @@ export default function Admin() {
           phone: hotel.phone,
           telegram: hotel.telegram,
           owner_id: hotel.owner_id,
-          category: hotel.category || 'hotels'
+          category: hotel.category || 'hotels',
+          images: uploadedUrls
         })
       });
 
       if (response.ok) {
         toast({ title: 'Успех', description: 'Изменения сохранены' });
+        setHotelImages([]);
         loadHotels();
       }
     } catch (error) {
@@ -329,6 +348,20 @@ export default function Admin() {
     setRoomImages([...roomImages, ...newImages]);
   };
 
+  const handleHotelImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newImages: ImageUpload[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.startsWith('image/')) {
+        newImages.push({ file, preview: URL.createObjectURL(file) });
+      }
+    }
+    setHotelImages([...hotelImages, ...newImages]);
+  };
+
   const handleAddRoom = (hotel: Hotel) => {
     setSelectedHotel(hotel);
     setShowNewRoomDialog(true);
@@ -351,8 +384,26 @@ export default function Admin() {
           </div>
         </div>
 
+        <div className="mb-4 flex gap-2">
+          <Button
+            variant={showArchived ? 'outline' : 'default'}
+            size="sm"
+            onClick={() => setShowArchived(false)}
+          >
+            Активные
+          </Button>
+          <Button
+            variant={showArchived ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setShowArchived(true)}
+          >
+            <Icon name="Archive" size={16} className="mr-2" />
+            Архив
+          </Button>
+        </div>
+
         <div className="space-y-4">
-          {hotels.map(hotel => (
+          {hotels.filter(h => h.is_archived === showArchived).map(hotel => (
             <HotelCard
               key={hotel.id}
               hotel={hotel}
@@ -384,6 +435,9 @@ export default function Admin() {
           showNewRoomDialog={showNewRoomDialog}
           owners={owners}
           loading={loading}
+          hotelImages={hotelImages}
+          setHotelImages={setHotelImages}
+          handleHotelImageSelect={handleHotelImageSelect}
         />
 
         <RoomDialogs
