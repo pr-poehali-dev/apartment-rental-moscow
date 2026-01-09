@@ -12,6 +12,7 @@ def handler(event: dict, context) -> dict:
     query = event.get('queryStringParameters') or {}
     entity = query.get('entity', 'hotels')
     entity_id = query.get('id')
+    action = query.get('action')
     
     if method == 'OPTIONS':
         return {
@@ -46,6 +47,20 @@ def handler(event: dict, context) -> dict:
             body = json.loads(event.get('body', '{}'))
             return update_hotel(conn, entity_id, body)
         
+        # PUT ?entity=hotels&id=123&action=publish - опубликовать/снять с публикации
+        elif method == 'PUT' and entity == 'hotels' and entity_id and action == 'publish':
+            body = json.loads(event.get('body', '{}'))
+            return toggle_hotel_publish(conn, entity_id, body.get('is_published'))
+        
+        # PUT ?entity=hotels&id=123&action=archive - архивировать/разархивировать
+        elif method == 'PUT' and entity == 'hotels' and entity_id and action == 'archive':
+            body = json.loads(event.get('body', '{}'))
+            return toggle_hotel_archive(conn, entity_id, body.get('is_archived'))
+        
+        # GET ?entity=rooms&id=123 - получить номер по ID
+        elif method == 'GET' and entity == 'rooms' and entity_id:
+            return get_room(conn, entity_id)
+        
         # POST ?entity=rooms - создать номер
         elif method == 'POST' and entity == 'rooms':
             body = json.loads(event.get('body', '{}'))
@@ -55,6 +70,20 @@ def handler(event: dict, context) -> dict:
         elif method == 'PUT' and entity == 'rooms' and entity_id:
             body = json.loads(event.get('body', '{}'))
             return update_room(conn, entity_id, body)
+        
+        # PUT ?entity=rooms&id=123&action=publish - опубликовать/снять с публикации
+        elif method == 'PUT' and entity == 'rooms' and entity_id and action == 'publish':
+            body = json.loads(event.get('body', '{}'))
+            return toggle_room_publish(conn, entity_id, body.get('is_published'))
+        
+        # PUT ?entity=rooms&id=123&action=archive - архивировать/разархивировать
+        elif method == 'PUT' and entity == 'rooms' and entity_id and action == 'archive':
+            body = json.loads(event.get('body', '{}'))
+            return toggle_room_archive(conn, entity_id, body.get('is_archived'))
+        
+        # DELETE ?entity=rooms&id=123 - удалить номер
+        elif method == 'DELETE' and entity == 'rooms' and entity_id:
+            return delete_room(conn, entity_id)
         
         # GET ?entity=owners - получить всех владельцев
         elif method == 'GET' and entity == 'owners':
@@ -87,7 +116,7 @@ def handler(event: dict, context) -> dict:
 def get_hotels(conn):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            SELECT h.*, o.name as owner_name 
+            SELECT h.*, o.name as owner_name, o.telegram as owner_telegram
             FROM hotels h 
             LEFT JOIN owners o ON h.owner_id = o.id 
             ORDER BY h.created_at DESC
@@ -95,7 +124,11 @@ def get_hotels(conn):
         hotels = cur.fetchall()
         
         for hotel in hotels:
-            cur.execute('SELECT * FROM rooms WHERE hotel_id = %s ORDER BY price', (hotel['id'],))
+            cur.execute('''
+                SELECT * FROM rooms 
+                WHERE hotel_id = %s 
+                ORDER BY price
+            ''', (hotel['id'],))
             hotel['rooms'] = cur.fetchall()
         
         return {
@@ -107,7 +140,12 @@ def get_hotels(conn):
 
 def get_hotel(conn, hotel_id):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        cur.execute('SELECT h.*, o.name as owner_name FROM hotels h LEFT JOIN owners o ON h.owner_id = o.id WHERE h.id = %s', (hotel_id,))
+        cur.execute('''
+            SELECT h.*, o.name as owner_name, o.telegram as owner_telegram 
+            FROM hotels h 
+            LEFT JOIN owners o ON h.owner_id = o.id 
+            WHERE h.id = %s
+        ''', (hotel_id,))
         hotel = cur.fetchone()
         
         if not hotel:
@@ -143,8 +181,8 @@ def get_hotel(conn, hotel_id):
 def create_hotel(conn, data):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            INSERT INTO hotels (owner_id, name, address, metro, description, phone, telegram, latitude, longitude, category, published)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO hotels (owner_id, name, address, metro, description, phone, telegram, latitude, longitude, category, is_published, is_archived)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *
         ''', (
             data.get('owner_id'),
@@ -157,7 +195,8 @@ def create_hotel(conn, data):
             data.get('latitude'),
             data.get('longitude'),
             data.get('category', 'hotels'),
-            data.get('published', False)
+            data.get('is_published', False),
+            data.get('is_archived', False)
         ))
         hotel = cur.fetchone()
         conn.commit()
@@ -175,7 +214,7 @@ def update_hotel(conn, hotel_id, data):
             UPDATE hotels 
             SET owner_id = %s, name = %s, address = %s, metro = %s, description = %s, 
                 phone = %s, telegram = %s, latitude = %s, longitude = %s, 
-                category = %s, published = %s, updated_at = CURRENT_TIMESTAMP
+                category = %s, updated_at = CURRENT_TIMESTAMP
             WHERE id = %s
             RETURNING *
         ''', (
@@ -189,7 +228,6 @@ def update_hotel(conn, hotel_id, data):
             data.get('latitude'),
             data.get('longitude'),
             data.get('category', 'hotels'),
-            data.get('published', False),
             hotel_id
         ))
         hotel = cur.fetchone()
@@ -210,11 +248,92 @@ def update_hotel(conn, hotel_id, data):
             'isBase64Encoded': False
         }
 
+def toggle_hotel_publish(conn, hotel_id, is_published):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('''
+            UPDATE hotels 
+            SET is_published = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            RETURNING *
+        ''', (is_published, hotel_id))
+        hotel = cur.fetchone()
+        conn.commit()
+        
+        if not hotel:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Hotel not found'}),
+                'isBase64Encoded': False
+            }
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(hotel, default=str),
+            'isBase64Encoded': False
+        }
+
+def toggle_hotel_archive(conn, hotel_id, is_archived):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('''
+            UPDATE hotels 
+            SET is_archived = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            RETURNING *
+        ''', (is_archived, hotel_id))
+        hotel = cur.fetchone()
+        conn.commit()
+        
+        if not hotel:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Hotel not found'}),
+                'isBase64Encoded': False
+            }
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(hotel, default=str),
+            'isBase64Encoded': False
+        }
+
+def get_room(conn, room_id):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('SELECT * FROM rooms WHERE id = %s', (room_id,))
+        room = cur.fetchone()
+        
+        if not room:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Room not found'}),
+                'isBase64Encoded': False
+            }
+        
+        cur.execute('SELECT * FROM room_features WHERE room_id = %s', (room_id,))
+        room['features'] = cur.fetchall()
+        
+        cur.execute('SELECT amenity FROM room_amenities WHERE room_id = %s', (room_id,))
+        room['amenities'] = [r['amenity'] for r in cur.fetchall()]
+        
+        cur.execute('SELECT image_url FROM room_images WHERE room_id = %s ORDER BY sort_order', (room_id,))
+        room['images'] = [r['image_url'] for r in cur.fetchall()]
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(room, default=str),
+            'isBase64Encoded': False
+        }
+
 def create_room(conn, data):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            INSERT INTO rooms (hotel_id, name, price, area, description, min_hours, telegram, phone, published)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO rooms (hotel_id, name, price, area, description, min_hours, telegram, phone, is_published, is_archived)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *
         ''', (
             data['hotel_id'],
@@ -222,34 +341,27 @@ def create_room(conn, data):
             data['price'],
             data['area'],
             data.get('description'),
-            data.get('min_hours', 2),
+            data.get('min_hours'),
             data.get('telegram'),
             data.get('phone'),
-            data.get('published', False)
+            data.get('is_published', False),
+            data.get('is_archived', False)
         ))
         room = cur.fetchone()
         room_id = room['id']
         
-        # Добавляем особенности
-        for feature in data.get('features', []):
-            cur.execute(
-                'INSERT INTO room_features (room_id, icon, label) VALUES (%s, %s, %s)',
-                (room_id, feature['icon'], feature['label'])
-            )
+        if 'amenities' in data:
+            for amenity in data['amenities']:
+                cur.execute('INSERT INTO room_amenities (room_id, amenity) VALUES (%s, %s)', (room_id, amenity))
         
-        # Добавляем удобства
-        for amenity in data.get('amenities', []):
-            cur.execute(
-                'INSERT INTO room_amenities (room_id, amenity) VALUES (%s, %s)',
-                (room_id, amenity)
-            )
+        if 'images' in data:
+            for idx, image_url in enumerate(data['images']):
+                cur.execute('INSERT INTO room_images (room_id, image_url, sort_order) VALUES (%s, %s, %s)', (room_id, image_url, idx))
         
-        # Добавляем изображения
-        for i, image_url in enumerate(data.get('images', [])):
-            cur.execute(
-                'INSERT INTO room_images (room_id, image_url, sort_order) VALUES (%s, %s, %s)',
-                (room_id, image_url, i)
-            )
+        if 'features' in data:
+            for feature in data['features']:
+                cur.execute('INSERT INTO room_features (room_id, feature_name, feature_value) VALUES (%s, %s, %s)', 
+                          (room_id, feature.get('feature_name'), feature.get('feature_value')))
         
         conn.commit()
         
@@ -265,7 +377,7 @@ def update_room(conn, room_id, data):
         cur.execute('''
             UPDATE rooms 
             SET name = %s, price = %s, area = %s, description = %s, 
-                min_hours = %s, telegram = %s, phone = %s, published = %s, updated_at = CURRENT_TIMESTAMP
+                min_hours = %s, telegram = %s, phone = %s, updated_at = CURRENT_TIMESTAMP
             WHERE id = %s
             RETURNING *
         ''', (
@@ -273,10 +385,9 @@ def update_room(conn, room_id, data):
             data['price'],
             data['area'],
             data.get('description'),
-            data.get('min_hours', 2),
+            data.get('min_hours'),
             data.get('telegram'),
             data.get('phone'),
-            data.get('published', False),
             room_id
         ))
         room = cur.fetchone()
@@ -289,32 +400,21 @@ def update_room(conn, room_id, data):
                 'isBase64Encoded': False
             }
         
-        # Обновляем особенности
-        if 'features' in data:
-            cur.execute('DELETE FROM room_features WHERE room_id = %s', (room_id,))
-            for feature in data['features']:
-                cur.execute(
-                    'INSERT INTO room_features (room_id, icon, label) VALUES (%s, %s, %s)',
-                    (room_id, feature['icon'], feature['label'])
-                )
-        
-        # Обновляем удобства
         if 'amenities' in data:
             cur.execute('DELETE FROM room_amenities WHERE room_id = %s', (room_id,))
             for amenity in data['amenities']:
-                cur.execute(
-                    'INSERT INTO room_amenities (room_id, amenity) VALUES (%s, %s)',
-                    (room_id, amenity)
-                )
+                cur.execute('INSERT INTO room_amenities (room_id, amenity) VALUES (%s, %s)', (room_id, amenity))
         
-        # Обновляем изображения
         if 'images' in data:
             cur.execute('DELETE FROM room_images WHERE room_id = %s', (room_id,))
-            for i, image_url in enumerate(data['images']):
-                cur.execute(
-                    'INSERT INTO room_images (room_id, image_url, sort_order) VALUES (%s, %s, %s)',
-                    (room_id, image_url, i)
-                )
+            for idx, image_url in enumerate(data['images']):
+                cur.execute('INSERT INTO room_images (room_id, image_url, sort_order) VALUES (%s, %s, %s)', (room_id, image_url, idx))
+        
+        if 'features' in data:
+            cur.execute('DELETE FROM room_features WHERE room_id = %s', (room_id,))
+            for feature in data['features']:
+                cur.execute('INSERT INTO room_features (room_id, feature_name, feature_value) VALUES (%s, %s, %s)', 
+                          (room_id, feature.get('feature_name'), feature.get('feature_value')))
         
         conn.commit()
         
@@ -322,6 +422,83 @@ def update_room(conn, room_id, data):
             'statusCode': 200,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
             'body': json.dumps(room, default=str),
+            'isBase64Encoded': False
+        }
+
+def toggle_room_publish(conn, room_id, is_published):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('''
+            UPDATE rooms 
+            SET is_published = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            RETURNING *
+        ''', (is_published, room_id))
+        room = cur.fetchone()
+        conn.commit()
+        
+        if not room:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Room not found'}),
+                'isBase64Encoded': False
+            }
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(room, default=str),
+            'isBase64Encoded': False
+        }
+
+def toggle_room_archive(conn, room_id, is_archived):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('''
+            UPDATE rooms 
+            SET is_archived = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            RETURNING *
+        ''', (is_archived, room_id))
+        room = cur.fetchone()
+        conn.commit()
+        
+        if not room:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Room not found'}),
+                'isBase64Encoded': False
+            }
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps(room, default=str),
+            'isBase64Encoded': False
+        }
+
+def delete_room(conn, room_id):
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute('DELETE FROM room_amenities WHERE room_id = %s', (room_id,))
+        cur.execute('DELETE FROM room_images WHERE room_id = %s', (room_id,))
+        cur.execute('DELETE FROM room_features WHERE room_id = %s', (room_id,))
+        cur.execute('DELETE FROM rooms WHERE id = %s RETURNING *', (room_id,))
+        room = cur.fetchone()
+        
+        if not room:
+            return {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Room not found'}),
+                'isBase64Encoded': False
+            }
+        
+        conn.commit()
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'message': 'Room deleted successfully'}),
             'isBase64Encoded': False
         }
 
@@ -340,14 +517,13 @@ def get_owners(conn):
 def create_owner(conn, data):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            INSERT INTO owners (name, telegram, phone, email)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO owners (name, phone, telegram)
+            VALUES (%s, %s, %s)
             RETURNING *
         ''', (
             data['name'],
-            data.get('telegram'),
             data.get('phone'),
-            data.get('email')
+            data.get('telegram')
         ))
         owner = cur.fetchone()
         conn.commit()
