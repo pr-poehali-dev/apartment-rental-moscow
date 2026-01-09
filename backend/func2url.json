@@ -1,4 +1,5 @@
 {
+  "properties": "https://functions.poehali.dev/8eb079f0-28eb-4577-ad8b-d039599cff88",
   "auth-admin": "https://functions.poehali.dev/ef7fca24-35ed-4ce8-94fe-6d7de475aae3",
   "upload-image": "https://functions.poehali.dev/1f01a2cb-8661-4f11-b90a-dae6dcb16df0",
   "hotels-api": "https://functions.poehali.dev/1961571b-26cd-4f80-9709-45455d336430",

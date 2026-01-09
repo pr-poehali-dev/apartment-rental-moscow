@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import type { User, Property, PropertyType, PropertyStatus } from '@/types/admin';
 import PropertyForm from './PropertyForm';
+
+const API_URL = 'https://functions.poehali.dev/8eb079f0-28eb-4577-ad8b-d039599cff88';
 
 interface AdminDashboardProps {
   user: User;
@@ -28,11 +30,51 @@ const PROPERTY_TYPE_ICONS: Record<PropertyType, string> = {
 
 export default function AdminDashboard({ user, onLogout }: AdminDashboardProps) {
   const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<PropertyType | 'all'>('all');
   const [filterStatus, setFilterStatus] = useState<PropertyStatus | 'all'>('all');
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    loadProperties();
+  }, []);
+
+  const loadProperties = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setProperties(data.map((p: any) => ({
+        id: String(p.id),
+        type: p.type,
+        status: p.status,
+        name: p.name,
+        description: p.description || '',
+        address: p.address,
+        metro: p.metro || '',
+        price: p.price ? Number(p.price) : 0,
+        rating: p.rating ? Number(p.rating) : 0,
+        owner: {
+          name: p.owner_name,
+          phone: p.owner_phone,
+          telegram: p.owner_telegram || '',
+        },
+        mainPhoto: p.main_photo || '',
+        photos: p.photos || [],
+        amenities: p.amenities || [],
+        rooms: [],
+        createdAt: p.created_at,
+        updatedAt: p.updated_at,
+        createdBy: p.created_by || '',
+      })));
+    } catch (error) {
+      console.error('Failed to load properties:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredProperties = properties.filter((property) => {
     const matchesSearch =
@@ -43,30 +85,56 @@ export default function AdminDashboard({ user, onLogout }: AdminDashboardProps) 
     return matchesSearch && matchesType && matchesStatus;
   });
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (user.role !== 'admin') {
       alert('Только администратор может удалять объекты');
       return;
     }
     if (confirm('Вы уверены, что хотите удалить этот объект?')) {
-      setProperties(properties.filter((p) => p.id !== id));
+      try {
+        await fetch(`${API_URL}?id=${id}`, { method: 'DELETE' });
+        await loadProperties();
+      } catch (error) {
+        console.error('Failed to delete property:', error);
+        alert('Ошибка при удалении объекта');
+      }
     }
   };
 
-  const handleArchive = (id: string) => {
-    setProperties(
-      properties.map((p) =>
-        p.id === id ? { ...p, status: p.status === 'archived' ? 'active' : 'archived' } : p
-      )
-    );
+  const handleArchive = async (id: string) => {
+    const property = properties.find((p) => p.id === id);
+    if (!property) return;
+
+    try {
+      const newStatus = property.status === 'archived' ? 'active' : 'archived';
+      await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...property, id: Number(id), status: newStatus }),
+      });
+      await loadProperties();
+    } catch (error) {
+      console.error('Failed to archive property:', error);
+      alert('Ошибка при архивировании объекта');
+    }
   };
 
-  const handlePublish = (id: string) => {
-    setProperties(
-      properties.map((p) =>
-        p.id === id ? { ...p, status: p.status === 'active' ? 'draft' : 'active' } : p
-      )
-    );
+  const handlePublish = async (id: string) => {
+    const property = properties.find((p) => p.id === id);
+    if (!property) return;
+
+    try {
+      const newStatus = property.status === 'active' ? 'draft' : 'active';
+      await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...property, id: Number(id), status: newStatus }),
+      });
+      await loadProperties();
+    } catch (error) {
+      console.error('Failed to publish property:', error);
+      alert('Ошибка при публикации объекта');
+    }
   };
 
   return (
@@ -87,20 +155,26 @@ export default function AdminDashboard({ user, onLogout }: AdminDashboardProps) 
       </header>
 
       <main className="max-w-7xl mx-auto p-4 space-y-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <div className="flex-1 w-full">
-            <Input
-              placeholder="Поиск по названию или адресу..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-md"
-            />
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Icon name="Loader2" size={32} className="animate-spin text-primary" />
           </div>
-          <Button onClick={() => setIsCreating(true)}>
-            <Icon name="Plus" size={16} className="mr-2" />
-            Создать объект
-          </Button>
-        </div>
+        ) : (
+          <>
+            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+              <div className="flex-1 w-full">
+                <Input
+                  placeholder="Поиск по названию или адресу..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="max-w-md"
+                />
+              </div>
+              <Button onClick={() => setIsCreating(true)}>
+                <Icon name="Plus" size={16} className="mr-2" />
+                Создать объект
+              </Button>
+            </div>
 
         <div className="flex flex-wrap gap-2">
           <Button
@@ -252,6 +326,8 @@ export default function AdminDashboard({ user, onLogout }: AdminDashboardProps) 
             </Card>
           ))}
         </div>
+          </>
+        )}
       </main>
 
       {(isCreating || editingProperty) && (
@@ -263,22 +339,34 @@ export default function AdminDashboard({ user, onLogout }: AdminDashboardProps) 
               </h2>
               <PropertyForm
                 property={editingProperty}
-                onSave={(property) => {
-                  if (isCreating) {
-                    const newProperty: Property = {
-                      id: Date.now().toString(),
-                      ...property,
-                    } as Property;
-                    setProperties([...properties, newProperty]);
-                  } else if (editingProperty) {
-                    setProperties(
-                      properties.map((p) =>
-                        p.id === editingProperty.id ? { ...p, ...property } : p
-                      )
-                    );
+                onSave={async (property) => {
+                  try {
+                    if (isCreating) {
+                      await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          ...property,
+                          createdBy: user.email,
+                        }),
+                      });
+                    } else if (editingProperty) {
+                      await fetch(API_URL, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.dumps({
+                          ...property,
+                          id: Number(editingProperty.id),
+                        }),
+                      });
+                    }
+                    await loadProperties();
+                    setIsCreating(false);
+                    setEditingProperty(null);
+                  } catch (error) {
+                    console.error('Failed to save property:', error);
+                    alert('Ошибка при сохранении объекта');
                   }
-                  setIsCreating(false);
-                  setEditingProperty(null);
                 }}
                 onCancel={() => {
                   setIsCreating(false);

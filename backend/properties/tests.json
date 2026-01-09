@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "Create property",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "type": "hotel",
+        "status": "draft",
+        "name": "Тестовый отель",
+        "description": "Описание",
+        "address": "Москва, ул. Тестовая, 1",
+        "metro": "Тестовская",
+        "price": 5000,
+        "owner": {
+          "name": "Иван Иванов",
+          "phone": "+7 900 123 45 67",
+          "telegram": "@testuser"
+        },
+        "amenities": ["wifi", "parking"],
+        "rooms": []
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "message": "Property created"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all properties",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}
