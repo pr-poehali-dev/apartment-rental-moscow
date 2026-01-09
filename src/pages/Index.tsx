@@ -5,7 +5,6 @@ import styles from '@/components/NavButton.module.scss';
 import RentTab from '@/components/RentTab';
 import OwnersTab from '@/components/OwnersTab';
 import AboutTab from '@/components/AboutTab';
-import DashboardTab from '@/components/DashboardTab';
 
 interface Apartment {
   id: number;
@@ -85,7 +84,7 @@ const initialCleaningTasks: CleaningTask[] = [
 ];
 
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about' | 'dashboard'>('rent');
+  const [activeTab, setActiveTab] = useState<'rent' | 'owners' | 'about'>('rent');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
   const [apartmentStats, setApartmentStats] = useState<Apartment[]>(apartments);
@@ -185,14 +184,6 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button 
-              size="sm" 
-              className="rounded-full font-medium shadow-sm text-xs sm:text-sm h-9 sm:h-10 px-3 sm:px-4"
-              onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
-            >
-              <Icon name="LayoutDashboard" size={14} className="sm:mr-1" />
-              <span className="hidden sm:inline">Личный кабинет</span>
-            </Button>
             <Button
               size="sm"
               variant="ghost"
@@ -247,8 +238,6 @@ export default function Index() {
         {activeTab === 'owners' && <OwnersTab />}
 
         {activeTab === 'about' && <AboutTab />}
-
-        {activeTab === 'dashboard' && <DashboardTab />}
       </main>
 
       <footer className="border-t border-gray-200 py-8 mt-20">
