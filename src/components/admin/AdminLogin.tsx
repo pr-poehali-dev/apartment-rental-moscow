@@ -9,9 +9,9 @@ interface AdminLoginProps {
   onLogin: (user: User) => void;
 }
 
-const DEMO_USERS = {
-  'admin@example.com': { id: '1', name: 'Главный администратор', email: 'admin@example.com', role: 'admin' as const },
-  'employee@example.com': { id: '2', name: 'Сотрудник', email: 'employee@example.com', role: 'employee' as const },
+const DEMO_USERS: Record<string, { id: string; name: string; email: string; role: 'admin' | 'employee'; password: string }> = {
+  'hab-agent@mail.ru': { id: '1', name: 'Главный администратор', email: 'hab-agent@mail.ru', role: 'admin', password: '3Dyzaape29938172' },
+  'hab-employee@mail.ru': { id: '2', name: 'Сотрудник', email: 'hab-employee@mail.ru', role: 'employee', password: '29938172' },
 };
 
 export default function AdminLogin({ onLogin }: AdminLoginProps) {
@@ -23,9 +23,9 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
     e.preventDefault();
     setError('');
 
-    const user = DEMO_USERS[email as keyof typeof DEMO_USERS];
+    const user = DEMO_USERS[email];
     
-    if (user && password === 'demo') {
+    if (user && password === user.password) {
       onLogin(user);
     } else {
       setError('Неверный email или пароль');
@@ -51,7 +51,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@example.com"
+                placeholder="hab-agent@mail.ru"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -83,9 +83,9 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
             </Button>
 
             <div className="text-xs text-muted-foreground bg-blue-50 p-3 rounded-lg space-y-1">
-              <p className="font-medium">Демо-доступы:</p>
-              <p>👑 Админ: admin@example.com / demo</p>
-              <p>👤 Сотрудник: employee@example.com / demo</p>
+              <p className="font-medium">Доступы:</p>
+              <p>👑 Админ: hab-agent@mail.ru / 3Dyzaape29938172</p>
+              <p>👤 Сотрудник: hab-employee@mail.ru / 29938172</p>
             </div>
           </form>
         </CardContent>
