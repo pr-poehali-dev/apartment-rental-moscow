@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
@@ -48,6 +49,13 @@ export default function Admin() {
   const [roomImages, setRoomImages] = useState<ImageUpload[]>([]);
   const [hotelImages, setHotelImages] = useState<ImageUpload[]>([]);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_auth');
+    navigate('/admin/login');
+    toast({ title: 'Вы вышли из системы' });
+  };
 
   useEffect(() => {
     loadHotels();
@@ -384,6 +392,10 @@ export default function Admin() {
             <Button onClick={() => setShowNewHotelDialog(true)}>
               <Icon name="Plus" size={18} className="mr-2" />
               Новый объект
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              <Icon name="LogOut" size={18} className="mr-2" />
+              Выход
             </Button>
           </div>
         </div>
