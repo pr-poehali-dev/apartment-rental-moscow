@@ -158,6 +158,7 @@ export default function RentTab({
         temperature={temperature}
         weatherCode={weatherCode}
         getWeatherIcon={getWeatherIcon}
+        onCategoryClick={handleCategoryClick}
       />
       
       <CategoryFilters
