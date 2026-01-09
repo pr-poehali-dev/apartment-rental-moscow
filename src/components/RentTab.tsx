@@ -73,23 +73,25 @@ export default function RentTab({
     try {
       const response = await fetch(`${API_URL}?entity=hotels`);
       const data = await response.json();
-      const publishedHotels = data.filter((h: any) => h.is_published && !h.is_archived);
-      const mapped: Apartment[] = publishedHotels.map((hotel: any) => ({
+      
+      const mapped: Apartment[] = data.map((hotel: any) => ({
         id: hotel.id,
         title: hotel.name,
-        image: hotel.images && hotel.images[0] ? hotel.images[0] : 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
-        price: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].price : 0,
-        metro: hotel.metro,
+        image: hotel.images && hotel.images.length > 0 && hotel.images[0] 
+          ? hotel.images[0] 
+          : 'https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg',
+        price: hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0].price : Number(hotel.price || 0),
+        metro: hotel.metro || '',
         address: hotel.address,
-        area: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].area : 0,
-        telegram: hotel.telegram || '',
+        area: hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0].area : 0,
+        telegram: hotel.owner_telegram || '',
         views: 0,
         telegramClicks: 0,
         lat: 55.7558,
         lon: 37.6173,
         category: 'hotels' as const,
-        minHours: hotel.rooms && hotel.rooms[0] ? hotel.rooms[0].min_hours : 2,
-        phone: hotel.phone
+        minHours: 2,
+        phone: hotel.owner_phone
       }));
       setHotelsFromDB(mapped);
     } catch (error) {

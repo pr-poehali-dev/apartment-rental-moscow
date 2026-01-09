@@ -116,25 +116,36 @@ def handler(event: dict, context) -> dict:
 def get_hotels(conn):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            SELECT h.*, o.name as owner_name, o.telegram as owner_telegram
-            FROM hotels h 
-            LEFT JOIN owners o ON h.owner_id = o.id 
-            ORDER BY h.created_at DESC
+            SELECT p.*,
+                   array_agg(DISTINCT ph.photo_url) FILTER (WHERE ph.photo_url IS NOT NULL) as images
+            FROM t_p27119953_apartment_rental_mos.properties p
+            LEFT JOIN t_p27119953_apartment_rental_mos.property_photos ph ON p.id = ph.property_id
+            WHERE p.type = 'hotel' AND p.status = 'active'
+            GROUP BY p.id
+            ORDER BY p.created_at DESC
         ''')
         hotels = cur.fetchall()
         
         for hotel in hotels:
             cur.execute('''
-                SELECT * FROM rooms 
-                WHERE hotel_id = %s 
-                ORDER BY price
+                SELECT pr.id, pr.name, pr.type, pr.price, pr.capacity, pr.area, 
+                       pr.description, pr.amenities, pr.is_published, pr.is_archived,
+                       array_agg(prp.photo_url) FILTER (WHERE prp.photo_url IS NOT NULL) as images
+                FROM t_p27119953_apartment_rental_mos.property_rooms pr
+                LEFT JOIN t_p27119953_apartment_rental_mos.property_room_photos prp ON pr.id = prp.room_id
+                WHERE pr.property_id = %s AND pr.is_published = true AND pr.is_archived = false
+                GROUP BY pr.id
+                ORDER BY pr.price
             ''', (hotel['id'],))
             hotel['rooms'] = cur.fetchall()
+            
+            if not hotel['images']:
+                hotel['images'] = []
         
         return {
             'statusCode': 200,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps(hotels, default=str),
+            'body': json.dumps([dict(h) for h in hotels], default=str),
             'isBase64Encoded': False
         }
 
