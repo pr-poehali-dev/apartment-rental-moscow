@@ -1,19 +1,80 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HotelHeader from '@/components/hotel/HotelHeader';
 import HotelInfo from '@/components/hotel/HotelInfo';
 import RoomCard from '@/components/hotel/RoomCard';
-import { hotelsData } from '@/data/hotelsData';
+
+const API_URL = 'https://functions.poehali.dev/29a1c7f3-8c8b-4b84-b43e-cf13a34c4a3a/hotels-api';
 
 export default function HotelDetails() {
   const { hotelId } = useParams<{ hotelId: string }>();
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [roomImageIndexes, setRoomImageIndexes] = useState<Record<number, number>>({});
+  const [hotel, setHotel] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const hotel = hotelId ? hotelsData[hotelId] : null;
+  useEffect(() => {
+    const loadHotel = async () => {
+      try {
+        const response = await fetch(`${API_URL}?entity=hotels&id=${hotelId}`);
+        const data = await response.json();
+        
+        if (data && data.id) {
+          const mappedHotel = {
+            id: data.id,
+            name: data.name,
+            address: data.address,
+            metro: data.metro,
+            description: data.description,
+            phone: data.owner_phone,
+            rooms: (data.rooms || []).map((room: any) => ({
+              id: room.id,
+              name: room.name,
+              images: room.images && room.images.length > 0 
+                ? room.images 
+                : ['https://cdn.poehali.dev/projects/432e7c51-cea3-442e-b82d-2ac77f4ff46d/files/2644c7d5-13e5-4838-b53a-5b82cda63881.jpg'],
+              price: Number(room.price),
+              area: Number(room.area),
+              description: room.description || '',
+              features: [
+                { icon: 'Users', label: `До ${room.capacity} гостей` },
+                { icon: 'Wifi', label: 'Wi-Fi' }
+              ],
+              amenities: room.amenities || [],
+              telegram: data.owner_telegram || '',
+              phone: data.owner_phone,
+              minHours: 2
+            }))
+          };
+          setHotel(mappedHotel);
+        } else {
+          setHotel(null);
+        }
+      } catch (error) {
+        console.error('Failed to load hotel:', error);
+        setHotel(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (hotelId) {
+      loadHotel();
+    }
+  }, [hotelId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-gray-600">Загрузка...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!hotel) {
     return (

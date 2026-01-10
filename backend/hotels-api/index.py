@@ -152,10 +152,12 @@ def get_hotels(conn):
 def get_hotel(conn, hotel_id):
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute('''
-            SELECT h.*, o.name as owner_name, o.telegram as owner_telegram 
-            FROM hotels h 
-            LEFT JOIN owners o ON h.owner_id = o.id 
-            WHERE h.id = %s
+            SELECT p.*,
+                   array_agg(DISTINCT ph.photo_url) FILTER (WHERE ph.photo_url IS NOT NULL) as images
+            FROM t_p27119953_apartment_rental_mos.properties p
+            LEFT JOIN t_p27119953_apartment_rental_mos.property_photos ph ON p.id = ph.property_id
+            WHERE p.id = %s AND p.type = 'hotel'
+            GROUP BY p.id
         ''', (hotel_id,))
         hotel = cur.fetchone()
         
@@ -167,25 +169,27 @@ def get_hotel(conn, hotel_id):
                 'isBase64Encoded': False
             }
         
-        cur.execute('SELECT * FROM rooms WHERE hotel_id = %s ORDER BY price', (hotel_id,))
+        cur.execute('''
+            SELECT pr.id, pr.name, pr.type, pr.price, pr.capacity, pr.area, 
+                   pr.description, pr.amenities, pr.is_published, pr.is_archived,
+                   array_agg(prp.photo_url) FILTER (WHERE prp.photo_url IS NOT NULL) as images
+            FROM t_p27119953_apartment_rental_mos.property_rooms pr
+            LEFT JOIN t_p27119953_apartment_rental_mos.property_room_photos prp ON pr.id = prp.room_id
+            WHERE pr.property_id = %s
+            GROUP BY pr.id
+            ORDER BY pr.price
+        ''', (hotel_id,))
         rooms = cur.fetchall()
         
-        for room in rooms:
-            cur.execute('SELECT * FROM room_features WHERE room_id = %s', (room['id'],))
-            room['features'] = cur.fetchall()
-            
-            cur.execute('SELECT amenity FROM room_amenities WHERE room_id = %s', (room['id'],))
-            room['amenities'] = [r['amenity'] for r in cur.fetchall()]
-            
-            cur.execute('SELECT image_url FROM room_images WHERE room_id = %s ORDER BY sort_order', (room['id'],))
-            room['images'] = [r['image_url'] for r in cur.fetchall()]
+        if not hotel['images']:
+            hotel['images'] = []
         
-        hotel['rooms'] = rooms
+        hotel['rooms'] = [dict(r) for r in rooms]
         
         return {
             'statusCode': 200,
             'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps(hotel, default=str),
+            'body': json.dumps(dict(hotel), default=str),
             'isBase64Encoded': False
         }
 
