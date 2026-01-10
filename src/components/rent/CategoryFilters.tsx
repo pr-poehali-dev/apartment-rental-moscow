@@ -10,9 +10,6 @@ export default function CategoryFilters({ activeCategory, onCategoryClick }: Cat
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-          Что вы ищете?
-        </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <Button 
             onClick={() => onCategoryClick('hotels')}
