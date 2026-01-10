@@ -65,7 +65,10 @@ export default function RentTab({
       loadHotels();
     }
     setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const section = document.getElementById('results-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 100);
   };
 
